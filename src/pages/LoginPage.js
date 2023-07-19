@@ -15,9 +15,9 @@ export function LoginPage() {
                             <div className="col-md-8 col-lg-6 col-xxl-3">
                                 <div className="card mb-0">
                                     <div className="card-body">
-                                        <h1 className="mb-0"><a href="index.html"
+                                        <h1 className="mb-0"><Link to="/"
                                                                 className="text-dark h2 mb-0"><strong>Homeland<span
-                                            className="text-danger">.</span></strong></a></h1>
+                                            className="text-danger">.</span></strong></Link></h1>
                                         <p className="text-center">Slogan here</p>
                                         <form className={"mt-5"}>
                                             <div className="mb-4 text-start">
