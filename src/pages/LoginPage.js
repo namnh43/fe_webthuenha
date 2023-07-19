@@ -1,10 +1,38 @@
 import {useNavigate} from "react-router";
 import {Link} from "react-router-dom";
+import {Field, Form, Formik} from "formik";
+import axios from "axios";
+import * as Yup from "yup";
+import React from "react";
+
+const LoginSchema = Yup.object().shape({
+    username: Yup.string().required('* Required'),
+    password: Yup.string()
+        .required('* Required')
+});
 
 export function LoginPage() {
-    const navigage = useNavigate();
+    const navigate = useNavigate();
+
     return (
-        <>
+        <Formik
+            initialValues={{username: '', password: ''}}
+            validationSchema={LoginSchema}
+            onSubmit={values => {
+                axios.post('http://localhost:8080/jwt/signin', values)
+                    .then((res) => {
+                        console.log(res)
+                        localStorage.setItem("token", res.data.token)
+                        localStorage.setItem("currentUser", JSON.stringify(res.data.user))
+                        navigate('/')
+                    })
+                    .catch(() => {
+                        navigate('/login')
+                        alert('Login failed')
+                    })
+            }}
+        >
+            {({ errors, touched }) => (
             <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
                  data-sidebartype="full"
                  data-sidebar-position="fixed" data-header-position="fixed">
@@ -19,17 +47,23 @@ export function LoginPage() {
                                                                 className="text-dark h2 mb-0"><strong>Homeland<span
                                             className="text-danger">.</span></strong></Link></h1>
                                         <p className="text-center">Slogan here</p>
-                                        <form className={"mt-5"}>
+                                        <Form className={"mt-5"}>
                                             <div className="mb-4 text-start">
                                                 <label htmlFor="exampleInputEmail1" className="form-label">Username</label>
-                                                <input type="email" className="form-control" id="exampleInputEmail1"
+                                                <Field type="text" name="username" className="form-control" id="exampleInputEmail1"
                                                        aria-describedby="emailHelp"/>
+                                                {errors.username && touched.username ? (
+                                                    <div style={{color: "red", fontSize: 'small'}}>{errors.username}</div>
+                                                ) : null}
                                             </div>
                                             <div className="mb-4 text-start">
                                                 <label htmlFor="exampleInputPassword1"
                                                        className="form-label">Password</label>
-                                                <input type="password" className="form-control"
+                                                <Field type="password" name="password" className="form-control"
                                                        id="exampleInputPassword1"/>
+                                                {errors.password && touched.password ? (
+                                                    <div style={{color: "red", fontSize: 'small'}}>{errors.password}</div>
+                                                ) : null}
                                             </div>
                                             <div className="d-flex align-items-center justify-content-between mb-4">
                                                 <div className="form-check">
@@ -43,21 +77,21 @@ export function LoginPage() {
                                                 <a className="text-primary fw-bold" href="./index.html">Forgot Password
                                                     ?</a>
                                             </div>
-                                            <Link to="/"
-                                               className="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</Link>
+                                            <button
+                                               className="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</button>
                                             <div className="d-flex align-items-center justify-content-end">
                                                 New on us?
                                                 <Link className="text-primary fw-bold ms-2"
                                                    to="/register">Create an account</Link>
                                             </div>
-                                        </form>
+                                        </Form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
+            </div>)}
+        </Formik>
     )
 }
