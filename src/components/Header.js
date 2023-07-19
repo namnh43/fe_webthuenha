@@ -1,8 +1,20 @@
 import {Link} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export function Header() {
-    const [login, setLogin] = useState(true);
+    const [login, setLogin] = useState(false);
+
+    useEffect(() => {
+        if (localStorage.getItem("currentUser") !== null) {
+            setLogin(true)
+        }
+    }, []);
+
+    const clearAllInfo = () => {
+        localStorage.clear()
+        setLogin(false)
+    }
+
     const handleClick = () => {
         console.log('login state',login)
     }
@@ -81,8 +93,8 @@ export function Header() {
                                                             <i className="ti ti-list-check fs-6"></i>
                                                             <p className="mb-0 ">List Agency</p>
                                                         </a>
-                                                        <Link to="/login"
-                                                              className="btn btn-outline-primary mx-3 mt-2 d-block">Logout</Link>
+                                                        <button
+                                                              className="btn btn-outline-primary mx-3 mt-2 d-block" onClick={clearAllInfo}>Logout</button>
                                                     </div>
                                                 </div>
                                             </li>
