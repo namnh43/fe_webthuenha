@@ -32,8 +32,7 @@ export function Header() {
                                                 <li>
                                                     <a href="#">Home</a>
                                                 </li>
-                                                <li><a href="#">Buy</a></li>
-                                                <li className="active"><a href="rent.html">Rent</a></li>
+                                                <li className="active"><a href="#">Rent</a></li>
                                                 <li className="has-children">
                                                     <a href="#">Properties</a>
                                                     <ul className="dropdown arrow-top">
@@ -50,9 +49,16 @@ export function Header() {
                                                         </li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="blog.html">Blog</a></li>
-                                                <li><a href="about.html">About</a></li>
-                                                <li><a href="contact.html">Contact</a></li>
+                                                <li><a href="#">About</a></li>
+                                                <li className="has-children">
+                                                    <a href="#">House List</a>
+                                                    <ul className="dropdown arrow-top">
+                                                        <li><a href="#">Managed houses</a></li>
+                                                        <li><a href="#">Rented History</a></li>
+
+                                                    </ul>
+                                                </li>
+                                                <li></li>
                                             </ul>
                                         </nav>
                                     </div>
