@@ -14,81 +14,31 @@ export function AdminSidebar() {
                     <ul id="sidebarnav">
                         <li className="nav-small-cap">
                             <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                            <span className="hide-menu">Home</span>
+                            <span className="hide-menu">USERS</span>
                         </li>
                         <li className="sidebar-item">
-                            <a className="sidebar-link" href="./index.html" aria-expanded="false">
-                <span>
-                  <i className="ti ti-layout-dashboard"></i>
-                </span>
-                                <span className="hide-menu">Dashboard</span>
-                            </a>
-                        </li>
-                        <li className="nav-small-cap">
-                            <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                            <span className="hide-menu">UI COMPONENTS</span>
+                            <Link className="sidebar-link" to="users" aria-expanded="false">
+                                <span>
+                                  <i className="ti ti-article"></i>
+                                </span>
+                                <span className="hide-menu">User List</span>
+                            </Link>
                         </li>
                         <li className="sidebar-item">
-                            <a className="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
-                <span>
-                  <i className="ti ti-article"></i>
-                </span>
-                                <span className="hide-menu">Buttons</span>
-                            </a>
+                            <Link className="sidebar-link" to="hosts" aria-expanded="false">
+                                <span>
+                                  <i className="ti ti-list"></i>
+                                </span>
+                                <span className="hide-menu">Host List</span>
+                            </Link>
                         </li>
                         <li className="sidebar-item">
-                            <a className="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
-                <span>
-                  <i className="ti ti-alert-circle"></i>
-                </span>
-                                <span className="hide-menu">Alerts</span>
-                            </a>
-                        </li>
-                        <li className="sidebar-item">
-                            <a className="sidebar-link" href="./ui-card.html" aria-expanded="false">
-                <span>
-                  <i className="ti ti-cards"></i>
-                </span>
-                                <span className="hide-menu">Card</span>
-                            </a>
-                        </li>
-                        <li className="sidebar-item">
-                            <a className="sidebar-link" href="./ui-forms.html" aria-expanded="false">
-                <span>
-                  <i className="ti ti-file-description"></i>
-                </span>
-                                <span className="hide-menu">Forms</span>
-                            </a>
-                        </li>
-                        <li className="sidebar-item">
-                            <a className="sidebar-link" href="./ui-typography.html" aria-expanded="false">
-                <span>
-                  <i className="ti ti-typography"></i>
-                </span>
-                                <span className="hide-menu">Typography</span>
-                            </a>
-                        </li>
-                        <li className="nav-small-cap">
-                            <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                            <span className="hide-menu">AUTH</span>
-                        </li>
-                        <li className="sidebar-item">
-                            <a className="sidebar-link" href="./authentication-login.html"
-                               aria-expanded="false">
-                <span>
-                  <i className="ti ti-login"></i>
-                </span>
-                                <span className="hide-menu">Login</span>
-                            </a>
-                        </li>
-                        <li className="sidebar-item">
-                            <a className="sidebar-link" href="./authentication-register.html"
-                               aria-expanded="false">
-                <span>
-                  <i className="ti ti-user-plus"></i>
-                </span>
-                                <span className="hide-menu">Register</span>
-                            </a>
+                            <Link className="sidebar-link" to="waiting-hosts" aria-expanded="false">
+                                <span>
+                                  <i className="ti ti-coffee"></i>
+                                </span>
+                                <span className="hide-menu">Waiting Lounge</span>
+                            </Link>
                         </li>
                         <li className="nav-small-cap">
                             <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
