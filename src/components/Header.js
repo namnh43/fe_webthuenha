@@ -6,7 +6,7 @@ export function Header() {
 
     useEffect(() => {
         if (localStorage.getItem("currentUser") !== null) {
-            // setLogin(true)
+            setLogin(true)
 
         }
         console.log('initialize state', login)

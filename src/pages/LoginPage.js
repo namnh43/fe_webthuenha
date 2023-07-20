@@ -18,19 +18,19 @@ export function LoginPage() {
         <Formik
             initialValues={{username: '', password: ''}}
             validationSchema={LoginSchema}
-            // onSubmit={values => {
-            //     axios.post('http://localhost:8080/jwt/signin', values)
-            //         .then((res) => {
-            //             console.log(res)
-            //             localStorage.setItem("token", res.data.token)
-            //             localStorage.setItem("currentUser", JSON.stringify(res.data.user))
-            //             navigate('/')
-            //         })
-            //         .catch(() => {
-            //             navigate('/login')
-            //             alert('Login failed')
-            //         })
-            // }}
+            onSubmit={values => {
+                axios.post('http://localhost:8080/jwt/signin', values)
+                    .then((res) => {
+                        console.log(res)
+                        localStorage.setItem("token", res.data.token)
+                        localStorage.setItem("currentUser", JSON.stringify(res.data.user))
+                        navigate('/')
+                    })
+                    .catch(() => {
+                        navigate('/login')
+                        alert('Login failed')
+                    })
+            }}
             onSubmit={values => {
                 navigate('/')
             }}
