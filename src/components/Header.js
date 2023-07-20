@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
+import axios from "axios";
 
 export function Header() {
     const [login, setLogin] = useState(false);
@@ -11,8 +12,9 @@ export function Header() {
     }, []);
 
     const clearAllInfo = () => {
-        localStorage.clear()
-        setLogin(false)
+        axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
+            .then(() => localStorage.clear())
+            .then(() => setLogin(false))
     }
 
     const handleClick = () => {
