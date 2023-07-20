@@ -6,6 +6,9 @@ import {HouseList} from "./components/HouseList";
 import {RegisterPage} from "./pages/RegisterPage";
 import {LoginPage} from "./pages/LoginPage";
 import {AdminPage} from "./pages/AdminPage";
+import {AdminUserList} from "./components/AdminUserList";
+import {AdminHostList} from "./components/AdminHostList";
+import {AdminWaitingHost} from "./components/AdminWaitingHost";
 
 function App() {
   return (
@@ -17,7 +20,9 @@ function App() {
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/admin' element={<AdminPage/>}>
-
+                <Route path='users' element={<AdminUserList/>}/>
+                <Route path='hosts' element={<AdminHostList/>}/>
+                <Route path='waiting-hosts' element={<AdminWaitingHost/>}/>
           </Route>
       </Routes>
     </div>
