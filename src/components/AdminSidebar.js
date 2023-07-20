@@ -1,14 +1,13 @@
+import {Link} from "react-router-dom";
+
 export function AdminSidebar() {
     return (
         <>
             <div>
                 <div className="brand-logo d-flex align-items-center justify-content-between">
-                    <a href="./index.html" className="text-nowrap logo-img">
-                        <img src="../assets/images/logos/dark-logo.svg" width="180" alt=""/>
-                    </a>
-                    <div className="close-btn d-xl-none d-block sidebartoggler cursor-pointer"
-                         id="sidebarCollapse">
-                        <i className="ti ti-x fs-8"></i>
+                    <div className="col-8 col-md-8 col-lg-4">
+                        <h1 className="mb-0"><Link to="/" className="h2 mb-0"><strong>Homeland<span
+                            className="text-danger">.</span></strong></Link></h1>
                     </div>
                 </div>
                 <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
