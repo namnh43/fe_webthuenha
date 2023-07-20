@@ -31,6 +31,9 @@ export function LoginPage() {
                         alert('Login failed')
                     })
             }}
+            onSubmit={values => {
+                navigate('/')
+            }}
         >
             {({ errors, touched }) => (
             <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"

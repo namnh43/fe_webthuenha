@@ -20,9 +20,6 @@ export function AdminPage() {
                     </div>
                 </div>
             </div>
-            {/*<AdminNavbar/>*/}
-            {/*<AdminSidebar/>*/}
-            {/*<AdminFooter/>*/}
         </>
     )
 }

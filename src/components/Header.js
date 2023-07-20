@@ -8,7 +8,9 @@ export function Header() {
     useEffect(() => {
         if (localStorage.getItem("currentUser") !== null) {
             setLogin(true)
+
         }
+        console.log('initialize state', login)
     }, []);
 
     const clearAllInfo = () => {
@@ -18,6 +20,7 @@ export function Header() {
     }
 
     const handleClick = () => {
+        setLogin(true)
         console.log('login state',login)
     }
     return (
@@ -40,7 +43,7 @@ export function Header() {
                                     className="text-danger">.</span></strong></a></h1>
                             </div>
                             <div className="col-4 col-md-4 col-lg-8">
-                                <nav className="site-navigation text-right text-md-right" role="navigation">
+                                <nav className="site-navigation text-right text-md-right text-end" role="navigation">
 
                                     <div className="d-inline-block d-lg-none ml-md-0 mr-auto py-3"><a href="#"
                                                                                                       className="site-menu-toggle js-menu-toggle text-white"><span
@@ -69,7 +72,7 @@ export function Header() {
                                         </li>
                                         <li><a href="#">About</a></li>
                                         {
-                                            !login ? <li><Link to="/login">Login</Link></li> :
+                                            !login ? <li><Link to="/login" onClick={handleClick}>Login</Link></li> :
                                             <li className="nav-item dropdown">
                                                 <a className="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
                                                    data-bs-toggle="dropdown"
