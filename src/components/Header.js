@@ -2,6 +2,10 @@ import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+
 export function Header() {
     const [login, setLogin] = useState(false);
 
@@ -112,9 +116,15 @@ export function Header() {
                     </div>
                 </div>
             </div>
-            <div className="slide-one-item home-slider owl-carousel">
+            {/*<div className="slide-one-item home-slider owl-carousel">*/}
+            <OwlCarousel items={1}
+                         className="owl-theme"
+                         loop
+                         dots={false}
+                         autoplay
+                         margin={8} >
 
-                <div className="site-blocks-cover overlay" style={{backgroundImage: `url(images/hero_bg_1.jpg)`}}
+            <div className="site-blocks-cover overlay" style={{backgroundImage: `url(images/hero_bg_1.jpg)`}}
                      data-aos="fade" data-stellar-background-ratio="0.5">
                     <div className="container">
                         <div className="row align-items-center justify-content-center text-center">
@@ -148,7 +158,7 @@ export function Header() {
                     </div>
                 </div>
 
-            </div>
+            </OwlCarousel>
 
         </>
     )

@@ -10,7 +10,7 @@ export function AdminWaitingHost() {
                 const url = 'http://localhost:8080/admin/apply-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
-                        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYW0iLCJpYXQiOjE2ODk4MjcyMzYsImV4cCI6MTY4OTkxMzYzNn0.PL3u_vAWgqznMeV8_jSA9hqA1F9kghjxauyY9JdsyLo",
+                        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYWlkbyIsImlhdCI6MTY4OTg0MzQ4NywiZXhwIjoxNjg5OTI5ODg3fQ.PK2qIfY8aBAJXTGo9VBSqucmmDZX7iax72DobDjs8PU",
                     }
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
@@ -39,7 +39,12 @@ export function AdminWaitingHost() {
                     'http://localhost:8080/admin/reject-host/' + id;
                 console.log('url ',url)
                 const msg = {msg:data.value};
-                postData(url, msg).then(data => {
+                const params = {
+                    headers: {
+                        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYWlkbyIsImlhdCI6MTY4OTg0MzQ4NywiZXhwIjoxNjg5OTI5ODg3fQ.PK2qIfY8aBAJXTGo9VBSqucmmDZX7iax72DobDjs8PU",
+                    }
+                }; // Các tham số truyền cho API (nếu cần)
+                postData(url, msg, params ).then(data => {
                     //remove item from list
                     const newList = hosts.filter((item) => {
                         return item.id != id;
@@ -47,7 +52,6 @@ export function AdminWaitingHost() {
                     setHosts(newList);
                 })
             }
-            return 'dismiss';
         }).then((data) => {
             console.log(data)
         }).catch((err) => {
@@ -84,13 +88,13 @@ export function AdminWaitingHost() {
                                         className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
                                         aria-labelledby="drop2">
                                         <div className="message-body">
-                                            <a href="javascript:void(0)"
+                                            <a
                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                 <i className="ti ti-user fs-6"></i>
                                                 <p className="mb-0 ">View
                                                     Profile</p>
                                             </a>
-                                            <a href="javascript:void(0)" onClick={() => handleAction(item.id)}
+                                            <a  onClick={() => handleAction(item.id)}
                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                 <i className="ti ti-analyze fs-6"></i>
                                                 <p className="mb-0 ">Duyệt yêu

@@ -2,7 +2,7 @@ export function HouseList() {
     return (
         <>
             <div className="site-section site-section-sm bg-light">
-                <div className="container">
+                <div className="container-fluid">
                     <div className="row mb-5">
                         <div className="col-md-6 col-lg-4 mb-4">
                             <div className="property-entry h-100">
