@@ -23,3 +23,7 @@ export const postData = async (url, data) => {
         throw error;
     }
 };
+
+export const removeById = (list,id) => {
+
+}

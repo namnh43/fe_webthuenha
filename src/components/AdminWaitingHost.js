@@ -34,14 +34,18 @@ export function AdminWaitingHost() {
             confirmButtonText: 'Approve',
             denyButtonText: 'Deny',
         }).then(data => {
-            console.log(data);
-            console.log(id);
             if (data.isConfirmed || data.isDenied) {
                 const url = data.isConfirmed ?  'http://localhost:8080/admin/accept-host/' + id :
                     'http://localhost:8080/admin/reject-host/' + id;
                 console.log('url ',url)
                 const msg = {msg:data.value};
-                return postData(url, msg);
+                postData(url, msg).then(data => {
+                    //remove item from list
+                    const newList = hosts.filter((item) => {
+                        return item.id != id;
+                    })
+                    setHosts(newList);
+                })
             }
             return 'dismiss';
         }).then((data) => {
