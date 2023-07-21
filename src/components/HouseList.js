@@ -6,7 +6,7 @@ export function HouseList() {
     useEffect(()=>{
         axios.get(`http://localhost:8080/house`, {
             headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYW0iLCJpYXQiOjE2ODk4MjcyMzYsImV4cCI6MTY4OTkxMzYzNn0.PL3u_vAWgqznMeV8_jSA9hqA1F9kghjxauyY9JdsyLo",
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         }).then(res=>{
             console.log(res.data.content)

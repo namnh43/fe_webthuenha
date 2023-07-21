@@ -84,6 +84,9 @@ export function Header() {
                                                     <img src="./images/profile/user-1.jpg" alt="" width="35"
                                                          height="35" className="rounded-circle" onClick={handleClick}/>
                                                 </a>
+                                                {() => {
+                                                    console.log('test')
+                                                }}
                                                 <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
                                                      aria-labelledby="drop2">
                                                     <div className="message-body">
