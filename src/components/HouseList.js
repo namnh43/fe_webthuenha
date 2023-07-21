@@ -5,12 +5,9 @@ export function HouseList() {
     const [list,setList]=useState([]);
     useEffect(()=>{
         axios.get(`http://localhost:8080/house`, {
-            headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0dWFuIiwiaWF0IjoxNjg5ODQzMDg5LCJleHAiOjE2ODk5Mjk0ODl9.8oul8X_sZjo1ib1XfrmBJcdJ4_D8mlXfSr4NwF6jsI0",
-            },
         }).then(res=>{
-            console.log(res.data.content)
-            setList(res.data.content)
+            console.log(res.data)
+            setList(res.data)
         })
     },[])
     return(
@@ -23,11 +20,11 @@ export function HouseList() {
                         <>
                             <div className="col-md-6 col-lg-4 mb-4">
                                                          <div className="property-entry h-100">
-                                                             <a href="property-details.html" className="property-thumbnail">
+                                                             <a href="property-details" className="property-thumbnail">
                                                                  <div className="offer-type-wrap">
                                                                      <span className="offer-type bg-success">Rent</span>
                                                                  </div>
-                                                                 <img src={item.images[0].fileUrl} alt="Image" className="img-fluid"/>
+                                                                 <img src={item.images.length > 0 ? item.images[0].fileUrl : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"} alt="Image" className="img-fluid"/>
                                                              </a>
                                                              <div className="p-4 property-body">
                                                                  <a href="#" className="property-favorite"><span className="icon-heart-o"></span></a>
@@ -46,6 +43,10 @@ export function HouseList() {
                                                                      <li>
                                                                          <span className="property-specs">Baths</span>
                                                                          <span className="property-specs-number">{item.totalBathrooms}</span>
+                                                                     </li>
+                                                                     <li>
+                                                                         <span className="property-specs">SQ FT</span>
+                                                                         <span className="property-specs-number">7,000</span>
 
                                                                      </li>
                                                                  </ul>
