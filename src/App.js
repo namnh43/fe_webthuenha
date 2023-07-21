@@ -7,9 +7,7 @@ import {RegisterPage} from "./pages/RegisterPage";
 import {LoginPage} from "./pages/LoginPage";
 import {AdminPage} from "./pages/AdminPage";
 import OwnerPage from "./pages/OwnerPage";
-import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 import OwnerHouseList from "./components/OwnerHouseList";
-import UploadImageField from "./UploadImageField";
 
 function App() {
   return (
@@ -25,7 +23,6 @@ function App() {
           </Route>
           <Route path='/owner' element={<OwnerPage/>}>
               <Route path='' element={<OwnerHouseList/>}/>
-              <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
           </Route>
       </Routes>
     </div>
