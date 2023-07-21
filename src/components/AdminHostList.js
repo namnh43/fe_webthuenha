@@ -141,12 +141,12 @@ export function AdminHostList() {
                                         <a href="#" onClick={() => handleProfileEdit(item.user.id)} className="settings text-dark-light" title="Edit"
                                            data-toggle="tooltip"><i
                                             className="material-icons material-symbols-outlined">&#xe88e;</i></a>
-                                        {!item.user.blocked ?
-                                            <a href="#" onClick={() => lockHost(item.user.id)} className="settings"
-                                               title="Block" data-toggle="tooltip"><i
+                                        {item.user.blocked ?
+                                            <a href="#" onClick={() => unlockHost(item.user.id)} className="settings"
+                                               title="unlock" data-toggle="tooltip"><i
                                                 className="material-icons text-dark-light">&#xe897;</i></a> :
-                                            <a href="#" onClick={() => unlockHost(item.user.id)}
-                                               className="settings text-dark-light" title="Unlock"
+                                            <a href="#" onClick={() => lockHost(item.user.id)}
+                                               className="settings text-dark-light" title="block"
                                                data-toggle="tooltip"><i className="material-icons">&#xe898;</i></a>}
                                     </td>
                                 </tr>
