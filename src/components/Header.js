@@ -1,8 +1,30 @@
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from "@mui/material/Button";
 
 export function Header() {
+    const [openDialog, setOpenDialog] = useState(false);
+    const [openOwnerRequestSentDialog, setOpenOwnerRequestSentDialog] = useState(false);
+    const handleClickOpenDialog = () => {
+        if (localStorage.getItem('currentUserApplyHost') === 'false') {
+            setOpenDialog(true);
+        }
+        if (localStorage.getItem('currentUserApplyHost') === 'true') {
+            setOpenOwnerRequestSentDialog(true);
+        }
+
+    };
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setOpenOwnerRequestSentDialog(false)
+    };
+
     const [login, setLogin] = useState(false);
 
     useEffect(() => {
@@ -21,10 +43,77 @@ export function Header() {
 
     const handleClick = () => {
         setLogin(true)
-        console.log('login state',login)
+        console.log('login state', login)
     }
+
+
     return (
         <>
+            <div>
+                <Dialog
+                    open={openDialog}
+                    onClose={handleCloseDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Confirm"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            You will send a request to the administrator to become an owner.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog}>Cancel</Button>
+                        <Button onClick={() => {
+                            const config = {
+                                headers: {
+                                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                                }
+                            }
+
+                            axios.post('http://localhost:8080/user/apply-host', {}, config)
+                                .then((res) => {
+                                    handleCloseDialog()
+                                    console.log('haha')
+                                })
+                                .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
+                                    .then((res) => {
+                                        localStorage.setItem('currentUser', res.data)
+                                        localStorage.setItem("currentUserId", res.data.id)
+                                        localStorage.setItem("currentUserRole", res.data.role)
+                                        localStorage.setItem("currentUserApplyHost", res.data.applyHost)
+                                        console.log(localStorage.getItem("currentUserApplyHost"))
+                                    }))
+                                .catch(() => alert('Shit'))
+                        }} autoFocus>
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+            <div>
+                <Dialog
+                    open={openOwnerRequestSentDialog}
+                    onClose={handleCloseDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Confirm"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Your request has already sent. Please wait...
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog}>OK</Button>
+
+                    </DialogActions>
+                </Dialog>
+            </div>
             <div className="site-wrap">
                 <div className="site-mobile-menu">
                     <div className="site-mobile-menu-header">
@@ -73,36 +162,47 @@ export function Header() {
                                         <li><a href="#">About</a></li>
                                         {
                                             !login ? <li><Link to="/login" onClick={handleClick}>Login</Link></li> :
-                                            <li className="nav-item dropdown">
-                                                <a className="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
-                                                   data-bs-toggle="dropdown"
-                                                   aria-expanded="false">
-                                                    <img src="./images/profile/user-1.jpg" alt="" width="35"
-                                                         height="35" className="rounded-circle" onClick={handleClick}/>
-                                                </a>
-                                                <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
-                                                     aria-labelledby="drop2">
-                                                    <div className="message-body">
-                                                        <a href="javascript:void(0)"
-                                                           className="d-flex align-items-center gap-2 dropdown-item">
-                                                            <i className="ti ti-user fs-6"></i>
-                                                            <p className="mb-0 ">My Profile</p>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                           className="d-flex align-items-center gap-2 dropdown-item">
-                                                            <i className="ti ti-home fs-6"></i>
-                                                            <p className="mb-0 ">My houses</p>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                           className="d-flex align-items-center gap-2 dropdown-item">
-                                                            <i className="ti ti-list-check fs-6"></i>
-                                                            <p className="mb-0 ">List Agency</p>
-                                                        </a>
-                                                        <button
-                                                              className="btn btn-outline-primary mx-3 mt-2 d-block" onClick={clearAllInfo}>Logout</button>
+                                                <li className="nav-item dropdown">
+                                                    <a className="nav-link nav-icon-hover" href="javascript:void(0)"
+                                                       id="drop2"
+                                                       data-bs-toggle="dropdown"
+                                                       aria-expanded="false">
+                                                        <img src="./images/profile/user-1.jpg" alt="" width="35"
+                                                             height="35" className="rounded-circle"
+                                                             onClick={handleClick}/>
+                                                    </a>
+                                                    <div
+                                                        className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
+                                                        aria-labelledby="drop2">
+                                                        <div className="message-body">
+                                                            <a href="javascript:void(0)"
+                                                               className="d-flex align-items-center gap-2 dropdown-item">
+                                                                <i className="ti ti-user fs-6"></i>
+                                                                <p className="mb-0 ">My Profile</p>
+                                                            </a>
+                                                            <a href="javascript:void(0)"
+                                                               className="d-flex align-items-center gap-2 dropdown-item">
+                                                                <i className="ti ti-home fs-6"></i>
+                                                                {
+                                                                    localStorage.getItem('currentUserRole') === "USER" ?
+                                                                        <p className="mb-0 "
+                                                                           onClick={handleClickOpenDialog}>Become Owner</p> :
+                                                                        <p className="mb-0 ">My Houses</p>
+                                                                }
+
+                                                            </a>
+                                                            <a href="javascript:void(0)"
+                                                               className="d-flex align-items-center gap-2 dropdown-item">
+                                                                <i className="ti ti-list-check fs-6"></i>
+                                                                <p className="mb-0 ">List Agency</p>
+                                                            </a>
+                                                            <button
+                                                                className="btn btn-outline-primary mx-3 mt-2 d-block"
+                                                                onClick={clearAllInfo}>Logout
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
+                                                </li>
                                         }
                                         <li></li>
                                     </ul>
