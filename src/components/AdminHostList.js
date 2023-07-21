@@ -27,7 +27,7 @@ export function AdminHostList() {
     const [message, setMessage] = useState({
         id: '',
         msg: '',
-        block:false
+        blocked:false
     });
     const [openProfileDialog, setOpenProfileDialog] = useState(false);
     const [currentUserId,setCurrentUserId] = useState(null);
@@ -51,12 +51,12 @@ export function AdminHostList() {
     }, [])
     const lockHost = (id) => {
         console.log('lock_id', id)
-        setMessage({id: id, msg: "This account is gonna be blocked. Are you sure?",block:false})
+        setMessage({id: id, msg: "This account is gonna be blocked. Are you sure?",blocked:false})
         setOpenDialog(true)
     }
     const unlockHost = (id) => {
         console.log('unlock_id', id)
-        setMessage({id: id, msg: "This account is gonna be re-activated. Are you sure?",block: true})
+        setMessage({id: id, msg: "This account is gonna be re-activated. Are you sure?",blocked: true})
         setOpenDialog(true)
     }
     const handleCloseDialog = (event, reason) => {
@@ -86,7 +86,7 @@ export function AdminHostList() {
             const newList = hosts.map((item,key) => {
                 console.log(item)
                 if(item.user.id == id) {
-                    item.user.block = !item.user.block;
+                    item.user.blocked = !item.user.blocked;
                 }
                 return item;
             })
@@ -132,7 +132,7 @@ export function AdminHostList() {
                                     <td>{item.user.phoneNumber}</td>
                                     <td>{item.houseCount}</td>
                                     <td>10000</td>
-                                    {!item.user.block ?
+                                    {!item.user.blocked ?
                                         <td><span className="status text-success">&bull;</span> Active</td> :
                                         <td><span className="status text-danger">&bull;</span> Suspended</td>}
                                     {/*{item.enable ? <td><button type="button" className="btn btn-danger">Block</button></td> :*/}
@@ -141,7 +141,7 @@ export function AdminHostList() {
                                         <a href="#" onClick={() => handleProfileEdit(item.user.id)} className="settings text-dark-light" title="Edit"
                                            data-toggle="tooltip"><i
                                             className="material-icons material-symbols-outlined">&#xe88e;</i></a>
-                                        {!item.user.block ?
+                                        {!item.user.blocked ?
                                             <a href="#" onClick={() => lockHost(item.user.id)} className="settings"
                                                title="Block" data-toggle="tooltip"><i
                                                 className="material-icons text-dark-light">&#xe897;</i></a> :
@@ -184,7 +184,7 @@ export function AdminHostList() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog}>Cancel</Button>
-                    <Button onClick={() => handlleCloseDialogOK(message.id,message.block)} autoFocus>
+                    <Button onClick={() => handlleCloseDialogOK(message.id,message.blocked)} autoFocus>
                         OK
                     </Button>
                 </DialogActions>
