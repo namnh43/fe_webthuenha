@@ -1,6 +1,6 @@
 import React from 'react';
 
-function LoginForm() {
+function OwnerFooter() {
     return (
         <>
 
@@ -8,4 +8,4 @@ function LoginForm() {
     );
 }
 
-export default LoginForm;
+export default OwnerFooter;
