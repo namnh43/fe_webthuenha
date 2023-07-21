@@ -83,7 +83,7 @@ export function AdminWaitingHost() {
                                 <td>
                                     <a href="#" className="settings" title="Settings" id="drop2"
                                        data-bs-toggle="dropdown" data-toggle="tooltip"><i
-                                        className="material-icons">&#xE8B8;</i></a>
+                                        className="material-icons text-dark-light">&#xE8B8;</i></a>
                                     <div
                                         className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
                                         aria-labelledby="drop2">
