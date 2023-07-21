@@ -17,8 +17,8 @@ export function AdminPage() {
                         <AdminNavbar/>
                     </header>
                     <div className="container-fluid">
-                        {/*<h1>Admin main content</h1>*/}
                         <Outlet></Outlet>
+                        <AdminFooter/>
                     </div>
                 </div>
             </div>

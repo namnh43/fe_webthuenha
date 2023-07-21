@@ -8,6 +8,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from "@mui/material/Button";
 
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+
 export function Header() {
     const [openDialog, setOpenDialog] = useState(false);
     const [openOwnerRequestSentDialog, setOpenOwnerRequestSentDialog] = useState(false);
@@ -212,9 +216,15 @@ export function Header() {
                     </div>
                 </div>
             </div>
-            <div className="slide-one-item home-slider owl-carousel">
+            {/*<div className="slide-one-item home-slider owl-carousel">*/}
+            <OwlCarousel items={1}
+                         className="owl-theme"
+                         loop
+                         dots={false}
+                         autoplay
+                         margin={8} >
 
-                <div className="site-blocks-cover overlay" style={{backgroundImage: `url(images/hero_bg_1.jpg)`}}
+            <div className="site-blocks-cover overlay" style={{backgroundImage: `url(images/hero_bg_1.jpg)`}}
                      data-aos="fade" data-stellar-background-ratio="0.5">
                     <div className="container">
                         <div className="row align-items-center justify-content-center text-center">
@@ -248,7 +258,7 @@ export function Header() {
                     </div>
                 </div>
 
-            </div>
+            </OwlCarousel>
 
         </>
     )
