@@ -1,7 +1,6 @@
 import './AdminHostList.css'
-import {fetchData} from "../utils/api";
+import {fetchData, postData} from "../utils/api";
 import {useEffect, useState} from "react";
-// import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 // @mui
 import {
     Grid,
@@ -20,20 +19,26 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
+import HostProfileDialog from "./dialog/HostProfileDialog";
+
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [message, setMessage] = useState({
         id: '',
-        msg: ''
+        msg: '',
+        block:false
     });
+    const [openProfileDialog, setOpenProfileDialog] = useState(false);
+    const [currentUserId,setCurrentUserId] = useState(null);
+
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
                 const url = 'http://localhost:8080/admin/list-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
-                        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYWlkbyIsImlhdCI6MTY4OTkxNDgyOSwiZXhwIjoxNjkwMDAxMjI5fQ.MB0NaNT0dR5AZup2At9zrfs6gkEy5vP7yS6wqamAdy0",
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
                     }
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
@@ -46,20 +51,55 @@ export function AdminHostList() {
     }, [])
     const lockHost = (id) => {
         console.log('lock_id', id)
-        setMessage({id:id,msg:"This account is gonna be blocked. Are you sure?"})
+        setMessage({id: id, msg: "This account is gonna be blocked. Are you sure?",block:false})
         setOpenDialog(true)
     }
     const unlockHost = (id) => {
         console.log('unlock_id', id)
-        setMessage({id:id,msg:"This account is gonna be re-activated. Are you sure?"})
+        setMessage({id: id, msg: "This account is gonna be re-activated. Are you sure?",block: true})
         setOpenDialog(true)
     }
-    const handleCloseDialog = () => {
+    const handleCloseDialog = (event, reason) => {
+        // if (reason && reason == "backdropClick")
+        //     return;
         setOpenDialog(false);
     };
-    const handlleCloseDialogOK = (id) => {
-        console.log('ok',id)
+    const handleCloseProfileDialog = (event,reason) => {
+        setOpenProfileDialog(false);
+    }
+    const handlleCloseDialogOK = (id, current_block) => {
+        let url = '';
+        if (current_block) {//is blocking -> then unlock
+            url = 'http://localhost:8080/admin/unlock-user/'+ id;
+        } else {
+            url = 'http://localhost:8080/admin/block-user/'+ id;
+        }
+        console.log('url',url)
+        const params = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+        }; // Các tham số truyền cho API (nếu cần)
+        postData(url, {}, params ).then(() => {
+            //update hosts list after
+            //remove item from list
+            const newList = hosts.map((item,key) => {
+                console.log(item)
+                if(item.user.id == id) {
+                    item.user.block = !item.user.block;
+                }
+                return item;
+            })
+            console.log('done here',newList)
+            setHosts(newList);
+        })
+        //call api to block
         setOpenDialog(false);
+    }
+
+    const handleProfileEdit = (id) => {
+        setCurrentUserId(id);
+        setOpenProfileDialog(true);
     }
 
     return (
@@ -82,28 +122,30 @@ export function AdminHostList() {
                         <tbody>
                         {hosts.map((item, key) => {
                             return (
+
                                 <tr>
                                     <td>{key}</td>
                                     <td><img src="./images/profile/user-1.jpg" alt=""
-                                             className="avatar"/>{item.username}
+                                             className="avatar"/>{item.user.username}
                                     </td>
                                     <td>04/10/2013</td>
-                                    <td>{item.phoneNumber}</td>
-                                    <td>10</td>
+                                    <td>{item.user.phoneNumber}</td>
+                                    <td>{item.houseCount}</td>
                                     <td>10000</td>
-                                    {item.active ? <td><span className="status text-success">&bull;</span> Active</td> :
+                                    {!item.user.block ?
+                                        <td><span className="status text-success">&bull;</span> Active</td> :
                                         <td><span className="status text-danger">&bull;</span> Suspended</td>}
-                                    {/*{item.active ? <td><button type="button" className="btn btn-danger">Block</button></td> :*/}
+                                    {/*{item.enable ? <td><button type="button" className="btn btn-danger">Block</button></td> :*/}
                                     {/*    <td><button type="button" className="btn btn-primary">Allow</button></td>}*/}
                                     <td>
-                                        <a href="#" className="settings text-dark-light" title="Edit"
+                                        <a href="#" onClick={() => handleProfileEdit(item.user.id)} className="settings text-dark-light" title="Edit"
                                            data-toggle="tooltip"><i
-                                            className="material-icons material-symbols-outlined">&#xe3c9;</i></a>
-                                        {item.active ?
-                                            <a href="#" onClick={() => lockHost(item.id)} className="settings"
+                                            className="material-icons material-symbols-outlined">&#xe88e;</i></a>
+                                        {!item.user.block ?
+                                            <a href="#" onClick={() => lockHost(item.user.id)} className="settings"
                                                title="Block" data-toggle="tooltip"><i
                                                 className="material-icons text-dark-light">&#xe897;</i></a> :
-                                            <a href="#" onClick={() => unlockHost(item.id)}
+                                            <a href="#" onClick={() => unlockHost(item.user.id)}
                                                className="settings text-dark-light" title="Unlock"
                                                data-toggle="tooltip"><i className="material-icons">&#xe898;</i></a>}
                                     </td>
@@ -133,7 +175,7 @@ export function AdminHostList() {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title">
-                    {"Confirmation Dialog?"}
+                    {"Confirmation Dialog"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -142,11 +184,12 @@ export function AdminHostList() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog}>Cancel</Button>
-                    <Button onClick={() => handlleCloseDialogOK(message.id)} autoFocus>
+                    <Button onClick={() => handlleCloseDialogOK(message.id,message.block)} autoFocus>
                         OK
                     </Button>
                 </DialogActions>
             </Dialog>
+            <HostProfileDialog open={openProfileDialog} onClose={handleCloseProfileDialog} id={currentUserId}/>
         </>
     )
 }
