@@ -15,8 +15,8 @@ export function HouseList() {
     },[])
     return(
         <>
-            <div className="site-section site-section-sm bg-light">
-                <div className="container-fluid bg-body-secondary">
+            <div className="site-section site-section-sm bg-light-gray">
+                <div className="container">
                     <div className="row mb-5">
                         {list.map((item) => {
                             return (
