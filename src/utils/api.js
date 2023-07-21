@@ -13,9 +13,9 @@ export const fetchData = async (url, params = {}) => {
 };
 
 // Hàm utility sử dụng Axios để thực hiện yêu cầu POST
-export const postData = async (url, data) => {
+export const postData = async (url, data, params) => {
     try {
-        const response = await axios.post(url, data);
+        const response = await axios.post(url, data, params);
         return response.data;
     } catch (error) {
         // Xử lý lỗi ở đây nếu cần thiết
@@ -23,3 +23,7 @@ export const postData = async (url, data) => {
         throw error;
     }
 };
+
+export const removeById = (list,id) => {
+
+}
