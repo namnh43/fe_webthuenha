@@ -10,7 +10,7 @@ export function AdminWaitingHost() {
                 const url = 'http://localhost:8080/admin/apply-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
-                        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYWlkbyIsImlhdCI6MTY4OTg0MzQ4NywiZXhwIjoxNjg5OTI5ODg3fQ.PK2qIfY8aBAJXTGo9VBSqucmmDZX7iax72DobDjs8PU",
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
                     }
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
@@ -41,7 +41,7 @@ export function AdminWaitingHost() {
                 const msg = {msg:data.value};
                 const params = {
                     headers: {
-                        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYWlkbyIsImlhdCI6MTY4OTg0MzQ4NywiZXhwIjoxNjg5OTI5ODg3fQ.PK2qIfY8aBAJXTGo9VBSqucmmDZX7iax72DobDjs8PU",
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
                     }
                 }; // Các tham số truyền cho API (nếu cần)
                 postData(url, msg, params ).then(data => {

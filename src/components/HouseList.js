@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 
@@ -14,7 +14,9 @@ export function HouseList() {
     return(
         <>
             <div className="site-section site-section-sm bg-light">
-                             <div className="container">
+                <h1>Houses List</h1>
+
+                <div className="container">
                                  <div className="row mb-5">
                 {list.map((item) => {
                     return (
