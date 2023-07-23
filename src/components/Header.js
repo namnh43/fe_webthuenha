@@ -197,7 +197,7 @@ export function Header() {
                                                                     <p className="mb-0 ">Admin Dashboard</p>
                                                                 </Link>}
 
-                                                            <a href="javascript:void(0)"
+                                                            <Link to={"/owner"}
                                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                                 <i className="ti ti-home fs-6"></i>
                                                                 {
@@ -207,7 +207,7 @@ export function Header() {
                                                                             Owner</p> :
                                                                         <p className="mb-0 ">My Houses</p>
                                                                 }
-                                                            </a>
+                                                            </Link>
                                                             <a href="javascript:void(0)"
                                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                                 <i className="ti ti-list-check fs-6"></i>
