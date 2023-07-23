@@ -9,6 +9,7 @@ import {AdminPage} from "./pages/AdminPage";
 import {AdminUserList} from "./components/AdminUserList";
 import {AdminHostList} from "./components/AdminHostList";
 import {AdminWaitingHost} from "./components/AdminWaitingHost";
+import {HouseDetail} from "./components/HouseDetail";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
           <Route path='/' element={<HomePage/>}>
               <Route path='' element={<HouseList/>}/>
+              <Route path='/detail/:id' element={<HouseDetail/>}/>
           </Route>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>

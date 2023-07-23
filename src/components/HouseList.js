@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 export function HouseList() {
     const [list,setList]=useState([]);
@@ -20,11 +21,13 @@ export function HouseList() {
                         <>
                             <div className="col-md-6 col-lg-4 mb-4">
                                                          <div className="property-entry h-100">
-                                                             <a href="property-details" className="property-thumbnail">
+                                                             <a href="/detail" className="property-thumbnail">
                                                                  <div className="offer-type-wrap">
                                                                      <span className="offer-type bg-success">Rent</span>
                                                                  </div>
-                                                                 <img src={item.images.length > 0 ? item.images[0].fileUrl : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"} alt="Image" className="img-fluid"/>
+                                                                 <Link to={"/detail/" +item.id}><img src={item.images.length > 0 ? item.images[0].fileUrl
+                                                                     : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
+                                                                      alt="Image" className="img-fluid"></img></Link>
                                                              </a>
                                                              <div className="p-4 property-body">
                                                                  <a href="#" className="property-favorite"><span className="icon-heart-o"></span></a>
