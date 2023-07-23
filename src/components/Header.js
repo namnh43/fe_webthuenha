@@ -34,7 +34,6 @@ export function Header() {
     useEffect(() => {
         if (localStorage.getItem("currentUser") !== null) {
             setLogin(true)
-
         }
         console.log('initialize state', login)
     }, []);
@@ -171,9 +170,15 @@ export function Header() {
                                                        id="drop2"
                                                        data-bs-toggle="dropdown"
                                                        aria-expanded="false">
-                                                        <img src="./images/profile/user-1.jpg" alt="" width="35"
-                                                             height="35" className="rounded-circle"
-                                                             onClick={handleClick}/>
+                                                        {JSON.parse(localStorage.getItem('currentUser')).profileImage ?
+                                                            <img
+                                                                src={JSON.parse(localStorage.getItem('currentUser')).profileImage}
+                                                                alt="avatar" width="35"
+                                                                height="35" className="rounded-circle"
+                                                                onClick={handleClick}/>
+                                                            : <img src="./images/profile/user-1.jpg" alt="" width="35"
+                                                                   height="35" className="rounded-circle"
+                                                                   onClick={handleClick}/>}
                                                     </a>
                                                     <div
                                                         className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
@@ -184,16 +189,24 @@ export function Header() {
                                                                 <i className="ti ti-user fs-6"></i>
                                                                 <p className="mb-0 ">My Profile</p>
                                                             </a>
+
+                                                            {localStorage.getItem('currentUserRole') === "ADMIN" &&
+                                                                <Link to={"/admin"}
+                                                                      className="d-flex align-items-center gap-2 dropdown-item">
+                                                                    <i className="ti ti-user-circle fs-6"></i>
+                                                                    <p className="mb-0 ">Admin Dashboard</p>
+                                                                </Link>}
+
                                                             <a href="javascript:void(0)"
                                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                                 <i className="ti ti-home fs-6"></i>
                                                                 {
                                                                     localStorage.getItem('currentUserRole') === "USER" ?
                                                                         <p className="mb-0 "
-                                                                           onClick={handleClickOpenDialog}>Become Owner</p> :
+                                                                           onClick={handleClickOpenDialog}>Become
+                                                                            Owner</p> :
                                                                         <p className="mb-0 ">My Houses</p>
                                                                 }
-
                                                             </a>
                                                             <a href="javascript:void(0)"
                                                                className="d-flex align-items-center gap-2 dropdown-item">
@@ -222,9 +235,9 @@ export function Header() {
                          loop
                          dots={false}
                          autoplay
-                         margin={8} >
+                         margin={8}>
 
-            <div className="site-blocks-cover overlay" style={{backgroundImage: `url(images/hero_bg_1.jpg)`}}
+                <div className="site-blocks-cover overlay" style={{backgroundImage: `url(images/hero_bg_1.jpg)`}}
                      data-aos="fade" data-stellar-background-ratio="0.5">
                     <div className="container">
                         <div className="row align-items-center justify-content-center text-center">
