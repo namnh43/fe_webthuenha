@@ -1,9 +1,20 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {fetchData,postData} from "../utils/api";
 import Swal from "sweetalert2";
+import ReactPaginate from "react-paginate";
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
+    //pagination
+    const [pageNumber, setPageNumber] = useState(0);
+    const housesPerPage = 5;
+    const pagesVisited = pageNumber * housesPerPage;
+    const pageCount = Math.ceil(hosts.length / housesPerPage);
+    let [currentDisplayNumber,setCurrentDisplayNumber] = useState(0);
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
+        setCurrentDisplayNumber(hosts.slice(selected*housesPerPage, selected*housesPerPage + housesPerPage).length);
+    };
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
@@ -15,6 +26,8 @@ export function AdminWaitingHost() {
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
+                //set current pagination
+                setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
             } catch (error) {
                 console.log(error)
             }
@@ -72,7 +85,7 @@ export function AdminWaitingHost() {
                     </tr>
                     </thead>
                     <tbody>
-                    {hosts.map((item, key) => {
+                    {hosts.slice(pagesVisited, pagesVisited + housesPerPage).map((item,key) => {
                         return (
                             <tr>
                                 <td>{key}</td>
@@ -109,15 +122,19 @@ export function AdminWaitingHost() {
                     </tbody>
                 </table>
                 <div className="clearfix">
-                    <div className="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <div className="hint-text">Showing <b>{currentDisplayNumber}</b> out of <b>{hosts.length}</b> entries</div>
                     <ul className="pagination">
-                        <li className="page-item disabled"><a href="#">Previous</a></li>
-                        <li className="page-item"><a href="#" className="page-link">1</a></li>
-                        <li className="page-item"><a href="#" className="page-link">2</a></li>
-                        <li className="page-item active"><a href="#" className="page-link">3</a></li>
-                        <li className="page-item"><a href="#" className="page-link">4</a></li>
-                        <li className="page-item"><a href="#" className="page-link">5</a></li>
-                        <li className="page-item"><a href="#" className="page-link">Next</a></li>
+                        <ReactPaginate
+                            previousLabel={"Previous"}
+                            nextLabel={"Next"}
+                            pageCount={pageCount}
+                            onPageChange={changePage}
+                            containerClassName={"paginationBttns"}
+                            previousLinkClassName={"previousBttn"}
+                            nextLinkClassName={"nextBttn"}
+                            disabledClassName={"paginationDisabled"}
+                            activeClassName={"paginationActive"}
+                        />
                     </ul>
                 </div>
             </section>)
