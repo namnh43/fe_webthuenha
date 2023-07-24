@@ -10,7 +10,7 @@ export function HostProfileContent(props) {
             <Typography variant="subtitle1">Họ và tên: {firstName} {lastName}</Typography>
             <Typography variant="subtitle1">Số điện thoại: {phoneNumber}</Typography>
             <Typography variant="subtitle1">Địa chỉ: {addressId}</Typography>
-            <Typography variant="subtitle1">Trạng thái: {blocked ? 'Đang hoạt động' : 'Bị khóa'}</Typography>
+            <Typography variant="subtitle1">Trạng thái: {blocked ? 'Bị khóa' : 'Đang hoạt động'}</Typography>
             {/*<Typography variant="subtitle1">Tổng doanh thu: {totalRevenue}</Typography>*/}
         </div>
     );
