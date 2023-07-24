@@ -142,25 +142,8 @@ export function Header() {
                                         className="icon-menu h3"></span></a></div>
 
                                     <ul className="site-menu js-clone-nav d-none d-lg-block">
-                                        <li>
-                                            <a href="#">Home</a>
-                                        </li>
-                                        <li className="active"><a href="#">Rent</a></li>
-                                        <li className="has-children">
-                                            <a href="#">Properties</a>
-                                            <ul className="dropdown arrow-top">
-                                                <li><a href="#">Condo</a></li>
-                                                <li><a href="#">Property Land</a></li>
-                                                <li><a href="#">Commercial Building</a></li>
-                                                <li className="has-children">
-                                                    <a href="#">Sub Menu</a>
-                                                    <ul className="dropdown">
-                                                        <li><a href="#">Menu One</a></li>
-                                                        <li><a href="#">Menu Two</a></li>
-                                                        <li><a href="#">Menu Three</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
+                                        <li className="active">
+                                            <Link to="/">Home</Link>
                                         </li>
                                         <li><a href="#">About</a></li>
                                         {
