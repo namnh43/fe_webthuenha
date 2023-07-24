@@ -5,7 +5,7 @@ import MapWithSearch from "./Map";
 import OwlCarousel from "react-owl-carousel";
 
 export function HouseDetail() {
-    const [list, setList] = useState([""]);
+    const [list, setList] = useState([]);
     const [house, setHouse] = useState([]);
     const {id} = useParams()
     useEffect(() => {
@@ -22,10 +22,7 @@ export function HouseDetail() {
                     <div className="row">
                         <div className="col-lg-8">
                             <div>
-                                {/*<div className="slide-one-item home-slider owl-carousel">*/}
-                                <div>
-                                    <img src={list[0].fileUrl} alt="Image" className="img-fluid"/>
-                                </div>
+                                <img src={house.featuredImage} alt="Image" className="img-fluid"/>
                             </div>
                             <div className="bg-white property-body border-bottom border-left border-right">
                                 <div className="row mb-5">
@@ -70,6 +67,7 @@ export function HouseDetail() {
                                     <div className="col-12">
                                         <h2 className="h4 text-black mb-3">Gallery</h2>
                                     </div>
+                                    {list.length > 0 &&
                                     <OwlCarousel items={1}
                                                  className="owl-theme"
                                                  loop
@@ -79,12 +77,13 @@ export function HouseDetail() {
                                         {list.map((item) => {
                                             return (
                                                 <div className="col-sm-12 col-md-12 col-lg-12">
-                                                    <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
+                                                    <a target="_blank" href={item.fileUrl}
+                                                       className="image-popup gal-item"><img
                                                         src={item.fileUrl} alt="Image" className="img-fluid"/></a>
                                                 </div>
                                             )
                                         })}
-                                    </OwlCarousel>
+                                    </OwlCarousel>}
                                     {list.map((item) => {
                                         return (
                                             <div className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-2">

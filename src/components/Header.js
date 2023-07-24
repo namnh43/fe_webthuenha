@@ -83,7 +83,7 @@ export function Header() {
                                 })
                                 .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
                                     .then((res) => {
-                                        localStorage.setItem('currentUser', res.data)
+                                        localStorage.setItem('currentUser', JSON.stringify(res.data))
                                         localStorage.setItem("currentUserId", res.data.id)
                                         localStorage.setItem("currentUserRole", res.data.role)
                                         localStorage.setItem("currentUserApplyHost", res.data.applyHost)
@@ -197,7 +197,7 @@ export function Header() {
                                                                     <p className="mb-0 ">Admin Dashboard</p>
                                                                 </Link>}
 
-                                                            <Link to={"/owner"}
+                                                            <a href="javascript:void(0)"
                                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                                 <i className="ti ti-home fs-6"></i>
                                                                 {
@@ -205,9 +205,9 @@ export function Header() {
                                                                         <p className="mb-0 "
                                                                            onClick={handleClickOpenDialog}>Become
                                                                             Owner</p> :
-                                                                        <p className="mb-0 ">My Houses</p>
+                                                                        <Link to={"/owner"} className="mb-0 ">My Houses</Link>
                                                                 }
-                                                            </Link>
+                                                            </a>
                                                             <a href="javascript:void(0)"
                                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                                 <i className="ti ti-list-check fs-6"></i>
