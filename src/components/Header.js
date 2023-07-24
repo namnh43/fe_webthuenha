@@ -83,7 +83,7 @@ export function Header() {
                                 })
                                 .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
                                     .then((res) => {
-                                        localStorage.setItem('currentUser', res.data)
+                                        localStorage.setItem('currentUser', JSON.stringify(res.data))
                                         localStorage.setItem("currentUserId", res.data.id)
                                         localStorage.setItem("currentUserRole", res.data.role)
                                         localStorage.setItem("currentUserApplyHost", res.data.applyHost)
@@ -131,8 +131,8 @@ export function Header() {
                     <div className="container py-1">
                         <div className="row align-items-center">
                             <div className="col-8 col-md-8 col-lg-4">
-                                <h1 className="mb-0"><a href="index.html" className="text-white h2 mb-0"><strong>Homeland<span
-                                    className="text-danger">.</span></strong></a></h1>
+                                <h1 className="mb-0"><Link to="/" className="text-white h2 mb-0"><strong>Homeland<span
+                                    className="text-danger">.</span></strong></Link></h1>
                             </div>
                             <div className="col-4 col-md-4 col-lg-8">
                                 <nav className="site-navigation text-right text-md-right text-end" role="navigation">
@@ -142,25 +142,8 @@ export function Header() {
                                         className="icon-menu h3"></span></a></div>
 
                                     <ul className="site-menu js-clone-nav d-none d-lg-block">
-                                        <li>
-                                            <a href="#">Home</a>
-                                        </li>
-                                        <li className="active"><a href="#">Rent</a></li>
-                                        <li className="has-children">
-                                            <a href="#">Properties</a>
-                                            <ul className="dropdown arrow-top">
-                                                <li><a href="#">Condo</a></li>
-                                                <li><a href="#">Property Land</a></li>
-                                                <li><a href="#">Commercial Building</a></li>
-                                                <li className="has-children">
-                                                    <a href="#">Sub Menu</a>
-                                                    <ul className="dropdown">
-                                                        <li><a href="#">Menu One</a></li>
-                                                        <li><a href="#">Menu Two</a></li>
-                                                        <li><a href="#">Menu Three</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
+                                        <li className="active">
+                                            <Link to="/">Home</Link>
                                         </li>
                                         <li><a href="#">About</a></li>
                                         {
@@ -197,7 +180,7 @@ export function Header() {
                                                                     <p className="mb-0 ">Admin Dashboard</p>
                                                                 </Link>}
 
-                                                            <Link to={"/owner"}
+                                                            <a href="javascript:void(0)"
                                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                                 <i className="ti ti-home fs-6"></i>
                                                                 {
@@ -205,9 +188,9 @@ export function Header() {
                                                                         <p className="mb-0 "
                                                                            onClick={handleClickOpenDialog}>Become
                                                                             Owner</p> :
-                                                                        <p className="mb-0 ">My Houses</p>
+                                                                        <Link to={"/owner"} className="mb-0 ">My Houses</Link>
                                                                 }
-                                                            </Link>
+                                                            </a>
                                                             <a href="javascript:void(0)"
                                                                className="d-flex align-items-center gap-2 dropdown-item">
                                                                 <i className="ti ti-list-check fs-6"></i>

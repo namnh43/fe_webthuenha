@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import './searchBar.css';
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 function SearchBar() {
     const [address, setAddress] = useState('');
     const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(1000000000);
     const [bedrooms, setBedrooms] = useState(0);
     const [bathrooms, setBathrooms] = useState(0);
     const [listSearch, setListSearch] = useState([]);
@@ -110,9 +111,7 @@ function SearchBar() {
                         </td>
                     </tr>
                     </tbody>
-
                 </table>
-
             </div>
 
             {listSearch.length > 0 &&
@@ -125,14 +124,14 @@ function SearchBar() {
                                     <>
                                         <div className="col-md-6 col-lg-4 mb-4">
                                             <div className="property-entry h-100">
-                                                <a href="property-details" className="property-thumbnail">
+                                                <Link to={"/detail/"+item.id} className="property-thumbnail">
                                                     <div className="offer-type-wrap">
                                                         <span className="offer-type bg-success">Rent</span>
                                                     </div>
                                                     <img
                                                         src={item.images.length > 0 ? item.images[0].fileUrl : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
                                                         alt="Image" className="img-fluid"/>
-                                                </a>
+                                                </Link>
                                                 <div className="p-4 property-body">
                                                     <a href="#" className="property-favorite"><span
                                                         className="icon-heart-o"></span></a>
