@@ -11,6 +11,7 @@ import OwnerHouseList from "./components/OwnerHouseList";
 import {AdminUserList} from "./components/AdminUserList";
 import {AdminHostList} from "./components/AdminHostList";
 import {AdminWaitingHost} from "./components/AdminWaitingHost";
+import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           </Route>
           <Route path='/owner' element={<OwnerPage/>}>
               <Route path='' element={<OwnerHouseList/>}/>
+              <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
           </Route>
       </Routes>
     </div>

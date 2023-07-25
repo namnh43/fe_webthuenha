@@ -23,7 +23,7 @@ export function LoginPage() {
                     .then((res) => {
                         console.log(res)
                         localStorage.setItem("token", res.data.token)
-                        localStorage.setItem("currentUser", res.data.user)
+                        localStorage.setItem("currentUser", JSON.stringify(res.data.user))
                         localStorage.setItem("currentUserId", res.data.user.id)
                         localStorage.setItem("currentUserRole", res.data.user.role)
                         localStorage.setItem("currentUserApplyHost", res.data.user.applyHost)
