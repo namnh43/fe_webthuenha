@@ -14,6 +14,7 @@ import {AdminWaitingHost} from "./components/AdminWaitingHost";
 import {HouseDetail} from "./components/HouseDetail";
 import TestJS from "./components/test";
 import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
+import {AdminPage2} from "./pages/AdminPage2";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
           </Route>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
-          <Route path='/admin' element={<AdminPage/>}>
+          <Route path='/admin' element={<AdminPage2/>}>
                 <Route path='users' element={<AdminUserList/>}/>
                 <Route path='hosts' element={<AdminHostList/>}/>
                 <Route path='waiting-hosts' element={<AdminWaitingHost/>}/>
