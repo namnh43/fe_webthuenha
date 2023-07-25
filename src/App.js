@@ -13,7 +13,6 @@ import {AdminHostList} from "./components/AdminHostList";
 import {AdminWaitingHost} from "./components/AdminWaitingHost";
 import {HouseDetail} from "./components/HouseDetail";
 import TestJS from "./components/test";
-
 function App() {
   return (
     <div className="App">
@@ -32,7 +31,7 @@ function App() {
           <Route path='/owner' element={<OwnerPage/>}>
               <Route path='' element={<OwnerHouseList/>}/>
           </Route>
-          <Route path='/test' element={<TestJS/>}/>
+          <Route path='/test' element={<HouseDetail/>}/>
       </Routes>
     </div>
   );
