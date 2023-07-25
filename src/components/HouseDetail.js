@@ -8,13 +8,53 @@ export function HouseDetail() {
     const [list, setList] = useState([]);
     const [house, setHouse] = useState([]);
     const {id} = useParams()
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [result, setResult] = useState({});
+    function handleStartDateChange(event) {
+        setStartDate(event.target.value);
+    }
+
+    function handleEndDateChange(event) {
+        setEndDate(event.target.value);
+    }
+    let config = {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }
+    }
+    function booking(){
+        setResult({
+            startDate:startDate,
+            endDate:endDate,
+            price:house.price,
+            total:house.price *calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100,
+        });
+    }
+
+    useEffect(() => {
+        if (result === null) return
+        postResult()
+    },[result])
+    function postResult(){
+        axios.post(`http://localhost:8080/booking/create`,result,config).then((res) => {
+            console.log(res)
+        })
+    }
+
     useEffect(() => {
         axios.get(`http://localhost:8080/house/` + id, {}).then(res => {
-            console.log(res.data)
             setHouse(res.data)
             setList(res.data.images)
         })
     }, [])
+    function calculateDiff(startDate,endDate) {
+        const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
+        const firstDate = new Date(startDate);
+        const secondDate = new Date(endDate);
+        const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+        return diffDays;
+    }
     return (
         <>
             <div className="site-section site-section-sm">
@@ -103,23 +143,38 @@ export function HouseDetail() {
                                 </div>}
                             <br/><br/>
                             <div className="bg-white widget border rounded">
-                                <h3 className="h4 text-black widget-title mb-3">Contact Agent</h3>
+                                <h3 className="h4 text-black widget-title mb-3">${house.price}/Day</h3>
                                 <form action="#" className="form-contact-agent">
+                                    <div >
                                     <div className="form-group">
-                                        <label htmlFor="name">Name</label>
-                                        <input type="text" id="name" className="form-control"/>
+                                        <label htmlFor="Booking">Booking Date</label>
+                                        <input type="Date" id="Booking" className="form-control" value={startDate} onChange={handleStartDateChange} />
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="email">Email</label>
-                                        <input type="email" id="email" className="form-control"/>
+                                        <label htmlFor="EndDate">End Date</label>
+                                        <input type="Date" id="EndDate" className="form-control" value={endDate} onChange={handleEndDateChange} />
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="message">Message</label>
-                                        <textarea name="message" id="message" cols="30" rows="5"
-                                                  className="form-control"></textarea>
                                     </div>
-                                    <div className="form-group">
-                                        <input type="submit" value="Send Message" className="btn btn-primary"/>
+                                  <div>
+                                      {startDate!=""&&endDate!=""&&  <div><tr><td>
+                                          ${house.price} X {calculateDiff(startDate,endDate)} Day :</td>
+                                          <td>${house.price*calculateDiff(startDate,endDate)}</td>
+                                      </tr>
+                                          <tr>
+                                              <td>
+                                                  Service charge :
+                                              </td>
+                                              <td>${house.price*calculateDiff(startDate,endDate)*5/100}</td>
+                                          </tr>
+                                          <tr>
+                                              <th>Total money :</th>
+                                              <th>${house.price*calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100}</th>
+                                          </tr>
+                                      </div>}
+                                  </div>
+                                    <br/>
+                                    <div className="form-group" >
+                                        <input type="button" value="Booking" className="btn btn-primary" onClick={booking}/>
                                     </div>
                                 </form>
                             </div>
