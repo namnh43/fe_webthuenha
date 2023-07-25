@@ -13,6 +13,7 @@ import {AdminHostList} from "./components/AdminHostList";
 import {AdminWaitingHost} from "./components/AdminWaitingHost";
 import {HouseDetail} from "./components/HouseDetail";
 import TestJS from "./components/test";
+import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           </Route>
           <Route path='/owner' element={<OwnerPage/>}>
               <Route path='' element={<OwnerHouseList/>}/>
+              <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
           </Route>
           <Route path='/test' element={<TestJS/>}/>
       </Routes>
