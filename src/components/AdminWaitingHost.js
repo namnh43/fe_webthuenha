@@ -74,6 +74,7 @@ export function AdminWaitingHost() {
     return (
         <>{hosts.length <= 0 ? <h1>There no data</h1> : (
             <section className="main">
+                <h2 className="mb-3">Waiting confirmation hosts</h2>
                 <table className="table table-striped table-hover">
                     <thead>
                     <tr>
