@@ -23,13 +23,13 @@ function UploadImageField({ name, images }) {
 
     useEffect(() => {
         if (images && images.length > 0) {
-            // Set the previewUrls initially to display the existing images
             setPreviewUrls(images.map((image) => image.fileUrl));
+            setSelectedFiles(images.map((image) => image.fileUrl));
         }
     }, [images]);
 
     const handleImageUpload = (urls) => {
-        setFieldValue(name, urls);
+        setFieldValue(name, urls.map(url => ({ fileUrl: url })));
     };
 
     const changeHandler = (event) => {
@@ -39,6 +39,7 @@ function UploadImageField({ name, images }) {
         for (const element of files) {
             const fileUrl = URL.createObjectURL(element);
             fileUrls.push(fileUrl);
+            console.log(fileUrls);
         }
 
         setSelectedFiles([...selectedFiles, ...files]);
@@ -46,18 +47,30 @@ function UploadImageField({ name, images }) {
     };
 
     const handleRemoveImage = (index) => {
-        const updatedSelectedFiles = [...selectedFiles];
-        const updatedPreviewUrls = [...previewUrls];
-        updatedSelectedFiles.splice(index, 1);
-        updatedPreviewUrls.splice(index, 1);
-        setSelectedFiles(updatedSelectedFiles);
-        setPreviewUrls(updatedPreviewUrls);
+        setSelectedFiles((prevSelectedFiles) => {
+            const updatedSelectedFiles = [...prevSelectedFiles];
+            updatedSelectedFiles.splice(index, 1);
+            return updatedSelectedFiles;
+        });
+
+        setPreviewUrls((prevPreviewUrls) => {
+            const updatedPreviewUrls = [...prevPreviewUrls];
+            updatedPreviewUrls.splice(index, 1);
+            return updatedPreviewUrls;
+        });
     };
 
+    useEffect(() => {
+        console.log(selectedFiles);
+    }, [selectedFiles]);
+
     const handleSubmission = () => {
+        const newFiles = selectedFiles.filter((file) => !(typeof file === "string")); // Lọc ra những file mới từ máy tính
+        const existingFiles = selectedFiles.filter((file) => typeof file === "string"); // Lọc ra những file đã có URL
+
         const promises = [];
 
-        for (const file of selectedFiles) {
+        for (const file of newFiles) {
             const storageRef = ref(storage, "md6/" + file.name);
             const promise = uploadBytes(storageRef, file)
                 .then((snapshot) => {
@@ -73,12 +86,7 @@ function UploadImageField({ name, images }) {
 
         Promise.all(promises)
             .then((urls) => {
-                // Filter out any images that were removed
-                const remainingImages = images.filter((image) => typeof image === "object");
-
-                // Combine the remaining images with the newly uploaded images
-                const newImages = [...remainingImages, ...urls.map((url) => ({ fileUrl: url }))];
-
+                const newImages = [...existingFiles, ...urls]; // Kết hợp những file đã có URL và những file mới
                 handleImageUpload(newImages);
                 alert("Uploaded successfully");
             })
@@ -86,7 +94,6 @@ function UploadImageField({ name, images }) {
                 console.error("Error getting file URLs:", error);
             });
     };
-
 
     return (
         <div style={{ border: "1px solid black" }}>
@@ -96,10 +103,23 @@ function UploadImageField({ name, images }) {
             {previewUrls.length > 0 && (
                 <div className="d-inline-flex" style={{ flexWrap: "wrap" }}>
                     {previewUrls.map((url, index) => (
-                        <div key={url} style={{ margin: "10px" }}>
+                        <div key={url} style={{ margin: "10px", position: "relative" }}>
                             <img src={url} alt={"Preview" + index} style={{ maxWidth: "450px" }} />
-                            <button type="button" onClick={() => handleRemoveImage(index)}>
-                                Remove
+                            <button
+                                style={{
+                                    position: "absolute",
+                                    top: "3px",
+                                    right: "3px",
+                                    width: "25px",
+                                    height: "25px",
+                                    background: "red",
+                                    color: "white",
+                                    borderRadius: "50%",
+                                    cursor: "pointer",
+                                }}
+                                className="remove-button"
+                                type="button" onClick={() => handleRemoveImage(index)}>
+                                <b>X</b>
                             </button>
                         </div>
                     ))}
@@ -108,9 +128,10 @@ function UploadImageField({ name, images }) {
 
             <div>
                 <button type="button" onClick={handleSubmission} className="btn btn-success">
-                    Upload
+                    Confirm
                 </button>
             </div>
+            <br/>
         </div>
     );
 }

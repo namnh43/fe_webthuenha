@@ -16,7 +16,6 @@ function OwnerAddHouseForm() {
         setBathrooms(event.target.value);
     }
 
-
     return (
         <>
             <Formik
@@ -39,7 +38,9 @@ function OwnerAddHouseForm() {
                     console.log(values);
                     axios.post(`http://localhost:8080/house/create/${JSON.parse(localStorage.getItem('currentUser')).id}`,
                         values,
-                        config)
+                        config).then(res => {
+                            alert('Added House')
+                        })
                 }}
             >
                 <Form>
