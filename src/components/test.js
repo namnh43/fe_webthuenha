@@ -31,21 +31,23 @@ function TestJS() {
                   }) => (
                     <div className="upload__image-wrapper">
                         <button
+                            className="btn btn-primary"
                             style={isDragging ? { color: "red" } : null}
                             onClick={onImageUpload}
                             {...dragProps}
                         >
                             Click or Drop here
                         </button>
-                        &nbsp;
-                        <button onClick={onImageRemoveAll}>Remove all images</button>
+                        &nbsp;&nbsp;
+                        <button onClick={onImageRemoveAll} className="btn btn-danger">Remove all images</button>
                         {imageList.map((image, index) => (
                             <div key={index} className="image-item">
-                                <img src={image.data_url} alt="" width="100" />
+                                <div><img src={image.data_url} alt="" width="300" /></div>
                                 <div className="image-item__btn-wrapper">
-                                    <button onClick={() => onImageUpdate(index)}>Update</button>
-                                    <button onClick={() => onImageRemove(index)}>Remove</button>
+                                    <button onClick={() => onImageUpdate(index)} className="btn btn-success">Change</button>&nbsp;&nbsp;
+                                    <button onClick={() => onImageRemove(index)} className="btn btn-danger right">Remove</button>
                                 </div>
+                                <br/>
                             </div>
                         ))}
                     </div>

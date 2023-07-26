@@ -18,6 +18,7 @@ import {AdminPage2} from "./pages/AdminPage2";
 import {UserPage} from "./pages/UserPage";
 import {UserProfile} from "./components/user/UserProfileContent";
 import BookingHistory from "./components/user/BookingHistory";
+import FormWithImageUpload from "./components/demoFormUploadImg";
 
 function App() {
   return (
@@ -42,7 +43,7 @@ function App() {
               <Route path='' element={<UserProfile/>}/>
               <Route path='booking-history' element={<BookingHistory/>}/>
           </Route>
-          <Route path='/test' element={<TestJS/>}/>
+          <Route path='/test' element={<FormWithImageUpload/>}/>
       </Routes>
     </div>
   );
