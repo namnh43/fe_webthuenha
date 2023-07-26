@@ -10,7 +10,7 @@ export function HouseDetail() {
     const {id} = useParams()
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [result, setResult] = useState({});
+    const [result, setResult] = useState(null);
     function handleStartDateChange(event) {
         setStartDate(event.target.value);
     }

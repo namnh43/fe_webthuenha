@@ -13,14 +13,15 @@ import {AdminHostList} from "./components/AdminHostList";
 import {AdminWaitingHost} from "./components/AdminWaitingHost";
 import {HouseDetail} from "./components/HouseDetail";
 import TestJS from "./components/test";
+import {HouseDetailPage} from "./pages/HouseDetailPage";
 function App() {
   return (
     <div className="App">
       <Routes>
           <Route path='/' element={<HomePage/>}>
               <Route path='' element={<HouseList/>}/>
-              <Route path='/detail/:id' element={<HouseDetail/>}/>
           </Route>
+          <Route path='/houses/:id/detail' element={<HouseDetailPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/admin' element={<AdminPage/>}>
