@@ -11,6 +11,7 @@ export function HouseDetail() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [result, setResult] = useState(null);
+
     function handleStartDateChange(event) {
         setStartDate(event.target.value);
     }
@@ -18,17 +19,19 @@ export function HouseDetail() {
     function handleEndDateChange(event) {
         setEndDate(event.target.value);
     }
+
     let config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
     }
-    function booking(){
+
+    function booking() {
         setResult({
-            startDate:startDate,
-            endDate:endDate,
-            price:house.price,
-            total:house.price *calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100,
+            startDate: startDate,
+            endDate: endDate,
+            price: house.price,
+            total: house.price * calculateDiff(startDate, endDate) + house.price * calculateDiff(startDate, endDate) * 5 / 100,
         });
     }
 
@@ -36,11 +39,10 @@ export function HouseDetail() {
         console.log('result',result)
         if (result === null) return
         postResult()
-    },[result])
+    }, [result])
 
-    function postResult(){
-        console.log('post_result',result)
-        axios.post(`http://localhost:8080/booking/create`,result,config).then((res) => {
+    function postResult() {
+        axios.post(`http://localhost:8080/booking/create`, result, config).then((res) => {
             console.log(res)
         })
     }
@@ -53,13 +55,15 @@ export function HouseDetail() {
             setList(res.data.images)
         })
     }, [])
-    function calculateDiff(startDate,endDate) {
+
+    function calculateDiff(startDate, endDate) {
         const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
         const firstDate = new Date(startDate);
         const secondDate = new Date(endDate);
         const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
         return diffDays;
     }
+
     return (
         <>
             <div className="site-section site-section-sm">

@@ -16,7 +16,7 @@ import TestJS from "./components/test";
 import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 import {AdminPage2} from "./pages/AdminPage2";
 import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
-
+import {HouseDetailPage} from "./pages/HouseDetailPage";
 function App() {
   return (
     <div className="App">
@@ -24,7 +24,7 @@ function App() {
           <Route path='/' element={<HomePage/>}>
               <Route path='' element={<HouseList/>}/>
           </Route>
-          <Route path='/houses/:id/detail' element={<HouseDetail/>}/>
+          <Route path='/houses/:id/detail' element={<HouseDetailPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/admin' element={<AdminPage2/>}>
