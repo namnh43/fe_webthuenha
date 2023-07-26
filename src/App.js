@@ -35,6 +35,10 @@ function App() {
           <Route path='/owner' element={<OwnerPage/>}>
               <Route path='' element={<OwnerHouseList/>}/>
           </Route>
+          <Route path='/user' element={<UserPage/>}>
+              <Route path='' element={<UserProfile/>}/>
+              <Route path='booking-history' element={<BookingHistory/>}/>
+          </Route>
           <Route path='/test' element={<TestJS/>}/>
       </Routes>
     </div>
