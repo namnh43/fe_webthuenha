@@ -3,6 +3,17 @@ import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "./OwnerHouseList.css"
 import {useNavigate} from "react-router";
+import Dialog from "@mui/material/Dialog";
+
+function setMaintenance() {
+    return(
+        <>
+            <Dialog>
+
+            </Dialog>
+        </>
+    )
+}
 
 function OwnerHouseList() {
 
@@ -21,7 +32,6 @@ function OwnerHouseList() {
         setPageNumber(selected);
     };
 
-
     let config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -33,6 +43,11 @@ function OwnerHouseList() {
             .then((res) => setHouseList(res.data))
     }, []);
 
+    const deleteHouse = (itemId) => {
+        axios.delete(`http://localhost:8080/house/delete/${itemId}`, config)
+            .then(() => axios.get('http://localhost:8080/house', config)
+                .then(res => setHouseList(res.data)))
+    }
 
     return (
         <>
@@ -48,8 +63,6 @@ function OwnerHouseList() {
                         <th>Sale</th>
                         <th>Status</th>
                         <th></th>
-                        <th></th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -64,22 +77,13 @@ function OwnerHouseList() {
                                     <td>{item.address}</td>
                                     <td>add later</td>
                                     <td>{item.status}</td>
-                                    <td><i className="material-icons">&#xe88e;</i></td>
-                                    <td><i className="material-icons"
-                                    onClick={() => {
-                                        const config = {
-                                            headers: {
-                                                Authorization: `Bearer ${localStorage.getItem('token')}`
-                                            }
-                                        }
-
-                                        axios.delete(`http://localhost:8080/house/delete/${item.id}`,config)
-                                            .then(() => axios.get('http://localhost:8080/house', config)
-                                                .then(res => setHouseList(res.data)))
-                                    }}>&#xe872;</i></td>
-                                    <td><i className="material-icons"
-                                           onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}
-                                    >&#xe3c9;</i></td>
+                                    <td className="col-2">
+                                        <i className="material-icons">&#xe88e;</i>
+                                        <i className="material-icons"
+                                            onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>&#xe3c9;</i>
+                                        <i className="material-icons">&#xea3c;</i>
+                                        <i className="material-icons" onClick={() => deleteHouse(item.id)}>&#xe872;</i>
+                                    </td>
                                 </tr>
                             )
                         })}
