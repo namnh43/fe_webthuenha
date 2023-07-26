@@ -12,6 +12,10 @@ export function HouseDetail() {
     const [endDate, setEndDate] = useState("");
     const [result, setResult] = useState(null);
     function handleStartDateChange(event) {
+        if (new Date(event.target.value) < Date.now()) {
+            alert("startDate invalid")
+            return;
+        }
         setStartDate(event.target.value);
     }
 
@@ -29,6 +33,9 @@ export function HouseDetail() {
             endDate:endDate,
             price:house.price,
             total:house.price *calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100,
+            house:{
+                id:house.id
+            }
         });
     }
 
@@ -41,7 +48,7 @@ export function HouseDetail() {
     function postResult(){
         console.log('post_result',result)
         axios.post(`http://localhost:8080/booking/create`,result,config).then((res) => {
-            console.log(res)
+            alert("succssess")
         })
     }
 
