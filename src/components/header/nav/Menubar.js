@@ -159,7 +159,7 @@ export default function Menubar() {
                                                          navigate("/login");
                                                      }}> Login </ListItemButton> :
                                 <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                                    <ListItemText >Welcome user</ListItemText>
+                                    <ListItemText >Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
                                     <Tooltip title="Account settings">
                                         <IconButton
                                             onClick={handleClick}

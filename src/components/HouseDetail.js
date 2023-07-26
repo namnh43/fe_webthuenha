@@ -90,7 +90,7 @@ export function HouseDetail() {
                 const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
                 const firstDate = new Date(startDate);
                 const secondDate = new Date(endDate);
-                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay)));
+                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay))+1);
             }
         }
     }
