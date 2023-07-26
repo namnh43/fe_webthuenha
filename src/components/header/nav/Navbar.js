@@ -121,11 +121,11 @@ export function Navbar() {
                             </div>
                             <div className="col-4 col-md-4 col-lg-8">
                                 <nav className="site-navigation text-right text-md-right text-end" role="navigation">
-
-                                    <div className="d-inline-block d-lg-none ml-md-0 mr-auto py-3"><a href="src/components/header/nav#"
-                                                                                                      className="site-menu-toggle js-menu-toggle text-white"><span
-                                        className="icon-menu h3"></span></a></div>
-
+                                    <div className="d-inline-block d-lg-none ml-md-0 mr-auto py-3">
+                                        <a href="src/components/header/nav#" className="site-menu-toggle js-menu-toggle text-white">
+                                            <span className="icon-menu h3"/>
+                                        </a>
+                                    </div>
                                     <ul className="site-menu js-clone-nav d-none d-lg-block">
                                         <li className="active">
                                             <Link to="/">Home</Link>
