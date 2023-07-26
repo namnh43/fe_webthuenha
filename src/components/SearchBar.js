@@ -17,8 +17,12 @@ function SearchBar() {
         }
     }
     const handleSearch = () => {
+        console.log(bathrooms, bedrooms, address, minPrice, maxPrice);
         axios.get(`http://localhost:8080/house/search?address=${address}&minPrice=${minPrice}&maxPrice=${maxPrice}&totalBedrooms=${bedrooms}&totalBathrooms=${bathrooms}`, config)
-            .then((res) => setListSearch(res.data))
+            .then((res) => {
+                if (res.data.length == 0) alert("Not Found Any House")
+                setListSearch(res.data)
+            })
     };
 
     return (
@@ -84,6 +88,8 @@ function SearchBar() {
                                 <option value={1}>1</option>
                                 <option value={2}>2</option>
                                 <option value={3}>3</option>
+                                <option value={4}>4</option>
+                                <option value={5}>5</option>
                             </select>
                         </td>
                         <td>
@@ -97,6 +103,8 @@ function SearchBar() {
                                 <option value={1}>1</option>
                                 <option value={2}>2</option>
                                 <option value={3}>3</option>
+                                <option value={4}>4</option>
+                                <option value={5}>5</option>
                             </select>
                         </td>
                     </tr>
