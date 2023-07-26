@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useParams} from "react-router";
 import MapWithSearch from "./Map";
@@ -6,11 +6,11 @@ import OwlCarousel from "react-owl-carousel";
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
-    const [house, setHouse] = useState([]);
+    const [house, setHouse] = useState({});
     const {id} = useParams()
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [result, setResult] = useState({});
+    const [result, setResult] = useState(null);
     function handleStartDateChange(event) {
         setStartDate(event.target.value);
     }
@@ -33,17 +33,22 @@ export function HouseDetail() {
     }
 
     useEffect(() => {
+        console.log('result',result)
         if (result === null) return
         postResult()
     },[result])
+
     function postResult(){
+        console.log('post_result',result)
         axios.post(`http://localhost:8080/booking/create`,result,config).then((res) => {
             console.log(res)
         })
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/house/` + id, {}).then(res => {
+        console.log('get_house_id',id);
+        axios.get(`http://localhost:8080/house/` + id).then(res => {
+            console.log('get_data',res)
             setHouse(res.data)
             setList(res.data.images)
         })
@@ -60,54 +65,13 @@ export function HouseDetail() {
             <div className="site-section site-section-sm">
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-8">
-                            <div>
-                                <img src={house.featuredImage} alt="Image" className="img-fluid"/>
+                        <div className="col-8">
+                            <h1>{house.name}</h1>
+                            <div className="col-md-6">
+                                <strong className="text-success h1 mb-3">{house.address}</strong>
                             </div>
-                            <div className="bg-white property-body border-bottom border-left border-right">
-                                <div className="row mb-5">
-                                    <div className="col-md-6">
-                                        <strong className="text-success h1 mb-3">${house.price}</strong>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
-                                            <li>
-                                                <span className="property-specs">Beds</span>
-                                                <span className="property-specs-number">{house.totalBedrooms}
-                                                    <sup>+</sup></span>
-                                            </li>
-                                            <li>
-                                                <span className="property-specs">Baths</span>
-                                                <span className="property-specs-number">{house.totalBathrooms}</span>
-                                            </li>
-                                            <li>
-                                                <span className="property-specs">SQ FT</span>
-                                                <span className="property-specs-number">7,000</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="row mb-5">
-                                    <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                        <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
-                                        <strong className="d-block">Condo</strong>
-                                    </div>
-                                    <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                        <span className="d-inline-block text-black mb-0 caption-text">Year Built</span>
-                                        <strong className="d-block">2018</strong>
-                                    </div>
-                                    <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                        <span className="d-inline-block text-black mb-0 caption-text">Price/Sqft</span>
-                                        <strong className="d-block">$520</strong>
-                                    </div>
-                                </div>
-                                <h2 className="h4 text-black">More Info</h2>
-                                <p>{house.description}</p>
-                                <div className="row mt-5">
-                                    <div className="col-12">
-                                        <h2 className="h4 text-black mb-3">Gallery</h2>
-                                    </div>
-                                    {list.length > 0 &&
+                            <div className="row mt-5">
+                                {list.length > 0 &&
                                     <OwlCarousel items={1}
                                                  className="owl-theme"
                                                  loop
@@ -124,54 +88,47 @@ export function HouseDetail() {
                                             )
                                         })}
                                     </OwlCarousel>}
-                                    {list.map((item) => {
-                                        return (
-                                            <div className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-2">
-                                                <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
-                                                    src={item.fileUrl} alt="Image" className="img-fluid"/></a>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
+                                {list.map((item) => {
+                                    return (
+                                        <div className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-2">
+                                            <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
+                                                src={item.fileUrl} alt="Image" className="img-fluid"/></a>
+                                        </div>
+                                    )
+                                })}
                             </div>
                         </div>
-
-                        <div className="col-lg-4">
-                            {house.address
-                                && <div>
-                                    <MapWithSearch initialAddress={house.address}/>
-                                </div>}
-                            <br/><br/>
+                        <div className="col">
                             <div className="bg-white widget border rounded">
                                 <h3 className="h4 text-black widget-title mb-3">${house.price}/Day</h3>
                                 <form action="#" className="form-contact-agent">
                                     <div >
-                                    <div className="form-group">
-                                        <label htmlFor="Booking">Booking Date</label>
-                                        <input type="Date" id="Booking" className="form-control" value={startDate} onChange={handleStartDateChange} />
+                                        <div className="form-group">
+                                            <label htmlFor="Booking">Booking Date</label>
+                                            <input type="Date" id="Booking" className="form-control" value={startDate} onChange={handleStartDateChange} />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="EndDate">End Date</label>
+                                            <input type="Date" id="EndDate" className="form-control" value={endDate} onChange={handleEndDateChange} />
+                                        </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="EndDate">End Date</label>
-                                        <input type="Date" id="EndDate" className="form-control" value={endDate} onChange={handleEndDateChange} />
+                                    <div>
+                                        {startDate!=""&&endDate!=""&&  <div><tr><td>
+                                            ${house.price} X {calculateDiff(startDate,endDate)} Day :</td>
+                                            <td>${house.price*calculateDiff(startDate,endDate)}</td>
+                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    Service charge :
+                                                </td>
+                                                <td>${house.price*calculateDiff(startDate,endDate)*5/100}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total money :</th>
+                                                <th>${house.price*calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100}</th>
+                                            </tr>
+                                        </div>}
                                     </div>
-                                    </div>
-                                  <div>
-                                      {startDate!=""&&endDate!=""&&  <div><tr><td>
-                                          ${house.price} X {calculateDiff(startDate,endDate)} Day :</td>
-                                          <td>${house.price*calculateDiff(startDate,endDate)}</td>
-                                      </tr>
-                                          <tr>
-                                              <td>
-                                                  Service charge :
-                                              </td>
-                                              <td>${house.price*calculateDiff(startDate,endDate)*5/100}</td>
-                                          </tr>
-                                          <tr>
-                                              <th>Total money :</th>
-                                              <th>${house.price*calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100}</th>
-                                          </tr>
-                                      </div>}
-                                  </div>
                                     <br/>
                                     <div className="form-group" >
                                         <input type="button" value="Booking" className="btn btn-primary" onClick={booking}/>
@@ -189,6 +146,50 @@ export function HouseDetail() {
                                 </ul>
                             </div>
                         </div>
+                        <div className="bg-white property-body border-bottom border-left border-right">
+                            <div className="row mb-5">
+                                <h2>Host  {house && house.user ? house.user.firstName: ''} {house && house.user ? house.user.lastName : ''}</h2>
+                                <div className="col-md-6">
+                                    <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
+                                        <li>
+                                            <span className="property-specs">Bed room</span>
+                                            <span className="property-specs-number">{house.totalBedrooms}
+                                                <sup>+</sup></span>
+                                        </li>
+                                        <li>
+                                            <span className="property-specs">Bath room</span>
+                                            <span className="property-specs-number">{house.totalBathrooms}</span>
+                                        </li>
+                                        <li>
+                                            <span className="property-specs">Area</span>
+                                            <span className="property-specs-number">7,000</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="row mb-5">
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
+                                    <strong className="d-block">Condo</strong>
+                                </div>
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Year Built</span>
+                                    <strong className="d-block">2018</strong>
+                                </div>
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Price</span>
+                                    <strong className="d-block">${house.price}</strong>
+                                </div>
+                            </div>
+                            <h2 className="h4 text-black">More Info</h2>
+                            <p>{house.description}</p>
+                            <br/>
+                            {house.address
+                                && <div >
+                                    <MapWithSearch initialAddress={house.address}/>
+                                </div>}
+                        </div>
+
                     </div>
                 </div>
             </div>
