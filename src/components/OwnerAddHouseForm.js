@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
+import UploadImageField from "./upload";
 
 function OwnerAddHouseForm() {
-
 
     const [bedrooms, setBedrooms] = useState(2);
     const [bathrooms, setBathrooms] = useState(1);
@@ -27,7 +27,7 @@ function OwnerAddHouseForm() {
                     totalBathrooms: bathrooms,
                     description: '',
                     price: '',
-                    images: '',
+                    images: [],
                 }}
                 enableReinitialize={true}
                 onSubmit={values => {
@@ -36,8 +36,9 @@ function OwnerAddHouseForm() {
                             Authorization: `Bearer ${localStorage.getItem('token')}`
                         }
                     }
+                    console.log(values);
                     axios.post(`http://localhost:8080/house/create/${JSON.parse(localStorage.getItem('currentUser')).id}`,
-                        {...values, images: [{fileUrl: values.images}]},
+                        values,
                         config)
                 }}
             >
@@ -85,8 +86,7 @@ function OwnerAddHouseForm() {
                     </div>
                     <div>
                         <label className="form-label">Upload your photos</label>
-                        <Field type="text" className="form-control" name="images"
-                               placeholder="Enter image url here..."/>
+                        <Field name="images" as={UploadImageField} />
                     </div>
                     <button type="submit" className="btn btn-primary mt-3">Submit</button>
                 </Form>

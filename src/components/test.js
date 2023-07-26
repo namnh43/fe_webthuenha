@@ -1,11 +1,60 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import ReactImageUploading from "react-images-uploading";
+
 function TestJS() {
+    const [images, setImages] = React.useState([]);
+    const maxNumber = 69;
+    const onChange = (imageList, addUpdateIndex) => {
+        // data for submit
+        console.log(imageList, addUpdateIndex);
+        setImages(imageList);
+    };
+
     return (
-        <div className="slide-one-item home-slider owl-carousel">
-            <div><img src="https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Famazon.jpg?alt=media&token=23163c15-d5ce-4587-94b4-b9fb8e185613" alt="Image" className="img-fluid" /></div>
-            <div><img src="https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fapple.jpg?alt=media&token=deb194d6-0ea7-407d-b800-d590ff607e02" alt="Image" className="img-fluid" /></div>
-            <div><img src="https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fcoca.jpg?alt=media&token=5126ba5f-f981-40e8-b088-df293fde1991" alt="Image" className="img-fluid" /></div>
+        <div className="App">
+            <ReactImageUploading
+                multiple
+                value={images}
+                onChange={onChange}
+                maxNumber={maxNumber}
+                dataURLKey="data_url"
+            >
+                {({
+                      imageList,
+                      onImageUpload,
+                      onImageRemoveAll,
+                      onImageUpdate,
+                      onImageRemove,
+                      isDragging,
+                      dragProps
+                  }) => (
+                    <div className="upload__image-wrapper">
+                        <button
+                            className="btn btn-primary"
+                            style={isDragging ? { color: "red" } : null}
+                            onClick={onImageUpload}
+                            {...dragProps}
+                        >
+                            Click or Drop here
+                        </button>
+                        &nbsp;&nbsp;
+                        <button onClick={onImageRemoveAll} className="btn btn-danger">Remove all images</button>
+                        {imageList.map((image, index) => (
+                            <div key={index} className="image-item">
+                                <div><img src={image.data_url} alt="" width="300" /></div>
+                                <div className="image-item__btn-wrapper">
+                                    <button onClick={() => onImageUpdate(index)} className="btn btn-success">Change</button>&nbsp;&nbsp;
+                                    <button onClick={() => onImageRemove(index)} className="btn btn-danger right">Remove</button>
+                                </div>
+                                <br/>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </ReactImageUploading>
         </div>
-    )
+    );
 }
 
 export default TestJS;

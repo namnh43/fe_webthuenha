@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {useNavigate, useParams} from "react-router";
+import {useParams} from "react-router";
 import MapWithSearch from "./Map";
 import OwlCarousel from "react-owl-carousel";
 
@@ -12,8 +12,6 @@ export function HouseDetail() {
     const [endDate, setEndDate] = useState("");
     const [day, setDay] = useState(0);
     const [result, setResult] = useState(null);
-    const navigate = useNavigate();
-
     function handleStartDateChange(event) {
         if (new Date(event.target.value) < Date.now()) {
             alert("startDate invalid")
@@ -95,18 +93,18 @@ export function HouseDetail() {
             }
         }
     }
-
     return (
         <>
-            <div className="site-section site-section-sm">
-                <div className="container">
+            <div className="container">
+                    <div className="row">
+                        <div className="col-12">
+                            <h1 className="text-capitalize mb-0">{house.name}</h1>
+                            <p className="text-decoration-underline">{house.address}</p>
+                        </div>
+                    </div>
                     <div className="row">
                         <div className="col-8">
-                            <h1>{house.name}</h1>
-                            <div className="col-md-6">
-                                <strong className="text-success h1 mb-3">{house.address}</strong>
-                            </div>
-                            <div className="row mt-5">
+                            <div className="row">
                                 {list.length > 0 &&
                                     <OwlCarousel items={1}
                                                  className="owl-theme"
@@ -222,19 +220,20 @@ export function HouseDetail() {
                                     <span className="d-inline-block text-black mb-0 caption-text">Price</span>
                                     <strong className="d-block">${house.price}</strong>
                                 </div>
+                                <h2>Host  {house && house.user ? house.user.firstName: ''} {house && house.user ? house.user.lastName : ''}</h2>
+                                <p>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</p>
                             </div>
                             <h2 className="h4 text-black">More Info</h2>
                             <p>{house.description}</p>
                             <br/>
                             {house.address
-                                && <div>
+                                && <div >
                                     <MapWithSearch initialAddress={house.address}/>
                                 </div>}
                         </div>
 
                     </div>
                 </div>
-            </div>
             <div className="site-section site-section-sm bg-light">
                 <div className="container">
 

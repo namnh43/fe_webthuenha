@@ -15,6 +15,10 @@ import {HouseDetail} from "./components/HouseDetail";
 import TestJS from "./components/test";
 import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 import {AdminPage2} from "./pages/AdminPage2";
+import {UserPage} from "./pages/UserPage";
+import {UserProfile} from "./components/user/UserProfileContent";
+import BookingHistory from "./components/user/BookingHistory";
+import FormWithImageUpload from "./components/demoFormUploadImg";
 import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
 import {HouseDetailPage} from "./pages/HouseDetailPage";
 function App() {
@@ -37,7 +41,11 @@ function App() {
               <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
               <Route path='edit-house-form/:houseId' element={<OwnerEditHouseForm/>}/>
           </Route>
-          <Route path='/test' element={<TestJS/>}/>
+          <Route path='/user' element={<UserPage/>}>
+              <Route path='' element={<UserProfile/>}/>
+              <Route path='booking-history' element={<BookingHistory/>}/>
+          </Route>
+          <Route path='/test' element={<FormWithImageUpload/>}/>
       </Routes>
     </div>
   );
