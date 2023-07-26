@@ -15,6 +15,7 @@ import {HouseDetail} from "./components/HouseDetail";
 import TestJS from "./components/test";
 import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 import {AdminPage2} from "./pages/AdminPage2";
+import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path='/owner' element={<OwnerPage/>}>
               <Route path='' element={<OwnerHouseList/>}/>
               <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
+              <Route path='edit-house-form/:houseId' element={<OwnerEditHouseForm/>}/>
           </Route>
           <Route path='/test' element={<TestJS/>}/>
       </Routes>
