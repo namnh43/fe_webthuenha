@@ -13,6 +13,9 @@ import {AdminHostList} from "./components/AdminHostList";
 import {AdminWaitingHost} from "./components/AdminWaitingHost";
 import {HouseDetail} from "./components/HouseDetail";
 import TestJS from "./components/test";
+import {UserPage} from "./pages/UserPage";
+import {UserProfile} from "./components/user/UserProfileContent";
+import BookingHistory from "./components/user/BookingHistory";
 
 function App() {
   return (
