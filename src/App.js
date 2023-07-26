@@ -13,6 +13,10 @@ import {AdminHostList} from "./components/AdminHostList";
 import {AdminWaitingHost} from "./components/AdminWaitingHost";
 import {HouseDetail} from "./components/HouseDetail";
 import TestJS from "./components/test";
+import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
+import {AdminPage2} from "./pages/AdminPage2";
+import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
+import {HouseDetailPage} from "./pages/HouseDetailPage";
 function App() {
   return (
     <div className="App">
@@ -20,18 +24,20 @@ function App() {
           <Route path='/' element={<HomePage/>}>
               <Route path='' element={<HouseList/>}/>
           </Route>
-          <Route path='/houses/:id/detail' element={<HouseDetail/>}/>
+          <Route path='/houses/:id/detail' element={<HouseDetailPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
-          <Route path='/admin' element={<AdminPage/>}>
+          <Route path='/admin' element={<AdminPage2/>}>
                 <Route path='users' element={<AdminUserList/>}/>
                 <Route path='hosts' element={<AdminHostList/>}/>
                 <Route path='waiting-hosts' element={<AdminWaitingHost/>}/>
           </Route>
           <Route path='/owner' element={<OwnerPage/>}>
               <Route path='' element={<OwnerHouseList/>}/>
+              <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
+              <Route path='edit-house-form/:houseId' element={<OwnerEditHouseForm/>}/>
           </Route>
-          <Route path='/test' element={<HouseDetail/>}/>
+          <Route path='/test' element={<TestJS/>}/>
       </Routes>
     </div>
   );
