@@ -35,7 +35,7 @@ export function HouseDetail() {
             total:house.price *calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100,
             house:{
                 id:house.id
-            }
+            },
         });
     }
 
