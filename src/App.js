@@ -19,6 +19,7 @@ import {UserPage} from "./pages/UserPage";
 import {UserProfile} from "./components/user/UserProfileContent";
 import BookingHistory from "./components/user/BookingHistory";
 import FormWithImageUpload from "./components/demoFormUploadImg";
+import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path='/owner' element={<OwnerPage/>}>
               <Route path='' element={<OwnerHouseList/>}/>
               <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
+              <Route path='edit-house-form/:houseId' element={<OwnerEditHouseForm/>}/>
           </Route>
           <Route path='/user' element={<UserPage/>}>
               <Route path='' element={<UserProfile/>}/>
