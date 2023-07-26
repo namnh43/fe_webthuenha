@@ -11,6 +11,7 @@ export function HouseDetail() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [result, setResult] = useState(null);
+
     function handleStartDateChange(event) {
         setStartDate(event.target.value);
     }
@@ -18,26 +19,29 @@ export function HouseDetail() {
     function handleEndDateChange(event) {
         setEndDate(event.target.value);
     }
+
     let config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
     }
-    function booking(){
+
+    function booking() {
         setResult({
-            startDate:startDate,
-            endDate:endDate,
-            price:house.price,
-            total:house.price *calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100,
+            startDate: startDate,
+            endDate: endDate,
+            price: house.price,
+            total: house.price * calculateDiff(startDate, endDate) + house.price * calculateDiff(startDate, endDate) * 5 / 100,
         });
     }
 
     useEffect(() => {
         if (result === null) return
         postResult()
-    },[result])
-    function postResult(){
-        axios.post(`http://localhost:8080/booking/create`,result,config).then((res) => {
+    }, [result])
+
+    function postResult() {
+        axios.post(`http://localhost:8080/booking/create`, result, config).then((res) => {
             console.log(res)
         })
     }
@@ -48,66 +52,67 @@ export function HouseDetail() {
             setList(res.data.images)
         })
     }, [])
-    function calculateDiff(startDate,endDate) {
+
+    function calculateDiff(startDate, endDate) {
         const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
         const firstDate = new Date(startDate);
         const secondDate = new Date(endDate);
         const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
         return diffDays;
     }
+
     return (
         <>
-            <div className="site-section site-section-sm">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-8">
-                            <div>
-                                <img src={house.featuredImage} alt="Image" className="img-fluid"/>
+            <div className="container">
+                <div className="row">
+                    <div className="col-lg-8">
+                        <div>
+                            <img src={house.featuredImage} alt="Image" className="img-fluid"/>
+                        </div>
+                        <div className="bg-white property-body border-bottom border-left border-right">
+                            <div className="row mb-5">
+                                <div className="col-md-6">
+                                    <strong className="text-success h1 mb-3">${house.price}</strong>
+                                </div>
+                                <div className="col-md-6">
+                                    <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
+                                        <li>
+                                            <span className="property-specs">Beds</span>
+                                            <span className="property-specs-number">{house.totalBedrooms}
+                                                <sup>+</sup></span>
+                                        </li>
+                                        <li>
+                                            <span className="property-specs">Baths</span>
+                                            <span className="property-specs-number">{house.totalBathrooms}</span>
+                                        </li>
+                                        <li>
+                                            <span className="property-specs">SQ FT</span>
+                                            <span className="property-specs-number">7,000</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div className="bg-white property-body border-bottom border-left border-right">
-                                <div className="row mb-5">
-                                    <div className="col-md-6">
-                                        <strong className="text-success h1 mb-3">${house.price}</strong>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
-                                            <li>
-                                                <span className="property-specs">Beds</span>
-                                                <span className="property-specs-number">{house.totalBedrooms}
-                                                    <sup>+</sup></span>
-                                            </li>
-                                            <li>
-                                                <span className="property-specs">Baths</span>
-                                                <span className="property-specs-number">{house.totalBathrooms}</span>
-                                            </li>
-                                            <li>
-                                                <span className="property-specs">SQ FT</span>
-                                                <span className="property-specs-number">7,000</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                            <div className="row mb-5">
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
+                                    <strong className="d-block">Condo</strong>
                                 </div>
-                                <div className="row mb-5">
-                                    <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                        <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
-                                        <strong className="d-block">Condo</strong>
-                                    </div>
-                                    <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                        <span className="d-inline-block text-black mb-0 caption-text">Year Built</span>
-                                        <strong className="d-block">2018</strong>
-                                    </div>
-                                    <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                        <span className="d-inline-block text-black mb-0 caption-text">Price/Sqft</span>
-                                        <strong className="d-block">$520</strong>
-                                    </div>
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Year Built</span>
+                                    <strong className="d-block">2018</strong>
                                 </div>
-                                <h2 className="h4 text-black">More Info</h2>
-                                <p>{house.description}</p>
-                                <div className="row mt-5">
-                                    <div className="col-12">
-                                        <h2 className="h4 text-black mb-3">Gallery</h2>
-                                    </div>
-                                    {list.length > 0 &&
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Price/Sqft</span>
+                                    <strong className="d-block">$520</strong>
+                                </div>
+                            </div>
+                            <h2 className="h4 text-black">More Info</h2>
+                            <p>{house.description}</p>
+                            <div className="row mt-5">
+                                <div className="col-12">
+                                    <h2 className="h4 text-black mb-3">Gallery</h2>
+                                </div>
+                                {list.length > 0 &&
                                     <OwlCarousel items={1}
                                                  className="owl-theme"
                                                  loop
@@ -124,70 +129,74 @@ export function HouseDetail() {
                                             )
                                         })}
                                     </OwlCarousel>}
-                                    {list.map((item) => {
-                                        return (
-                                            <div className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-2">
-                                                <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
-                                                    src={item.fileUrl} alt="Image" className="img-fluid"/></a>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
+                                {list.map((item) => {
+                                    return (
+                                        <div className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-2">
+                                            <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
+                                                src={item.fileUrl} alt="Image" className="img-fluid"/></a>
+                                        </div>
+                                    )
+                                })}
                             </div>
                         </div>
+                    </div>
 
-                        <div className="col-lg-4">
-                            {house.address
-                                && <div>
-                                    <MapWithSearch initialAddress={house.address}/>
-                                </div>}
-                            <br/><br/>
-                            <div className="bg-white widget border rounded">
-                                <h3 className="h4 text-black widget-title mb-3">${house.price}/Day</h3>
-                                <form action="#" className="form-contact-agent">
-                                    <div >
+                    <div className="col-lg-4">
+                        {house.address
+                            && <div>
+                                <MapWithSearch initialAddress={house.address}/>
+                            </div>}
+                        <br/><br/>
+                        <div className="bg-white widget border rounded">
+                            <h3 className="h4 text-black widget-title mb-3">${house.price}/Day</h3>
+                            <form action="#" className="form-contact-agent">
+                                <div>
                                     <div className="form-group">
                                         <label htmlFor="Booking">Booking Date</label>
-                                        <input type="Date" id="Booking" className="form-control" value={startDate} onChange={handleStartDateChange} />
+                                        <input type="Date" id="Booking" className="form-control" value={startDate}
+                                               onChange={handleStartDateChange}/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="EndDate">End Date</label>
-                                        <input type="Date" id="EndDate" className="form-control" value={endDate} onChange={handleEndDateChange} />
+                                        <input type="Date" id="EndDate" className="form-control" value={endDate}
+                                               onChange={handleEndDateChange}/>
                                     </div>
-                                    </div>
-                                  <div>
-                                      {startDate!=""&&endDate!=""&&  <div><tr><td>
-                                          ${house.price} X {calculateDiff(startDate,endDate)} Day :</td>
-                                          <td>${house.price*calculateDiff(startDate,endDate)}</td>
-                                      </tr>
-                                          <tr>
-                                              <td>
-                                                  Service charge :
-                                              </td>
-                                              <td>${house.price*calculateDiff(startDate,endDate)*5/100}</td>
-                                          </tr>
-                                          <tr>
-                                              <th>Total money :</th>
-                                              <th>${house.price*calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100}</th>
-                                          </tr>
-                                      </div>}
-                                  </div>
-                                    <br/>
-                                    <div className="form-group" >
-                                        <input type="button" value="Booking" className="btn btn-primary" onClick={booking}/>
-                                    </div>
-                                </form>
-                            </div>
-                            <div className="bg-white widget border rounded mt-5">
-                                <h3 className="h4 text-black widget-title mb-3">Featured Properties</h3>
-                                <p>Address detail</p>
-                                <ul className="list-unstyled">
-                                    <li className="mb-2"><a href="#">1 Madison Street</a></li>
-                                    <li className="mb-2"><a href="#">42 Barington Drive</a></li>
-                                    <li className="mb-2"><a href="#">87 Alton Road</a></li>
-                                    <li className="mb-2"><a href="#">14 Brooketon Drive</a></li>
-                                </ul>
-                            </div>
+                                </div>
+                                <div>
+                                    {startDate != "" && endDate != "" && <div>
+                                        <tr>
+                                            <td>
+                                                ${house.price} X {calculateDiff(startDate, endDate)} Day :
+                                            </td>
+                                            <td>${house.price * calculateDiff(startDate, endDate)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Service charge :
+                                            </td>
+                                            <td>${house.price * calculateDiff(startDate, endDate) * 5 / 100}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total money :</th>
+                                            <th>${house.price * calculateDiff(startDate, endDate) + house.price * calculateDiff(startDate, endDate) * 5 / 100}</th>
+                                        </tr>
+                                    </div>}
+                                </div>
+                                <br/>
+                                <div className="form-group">
+                                    <input type="button" value="Booking" className="btn btn-primary" onClick={booking}/>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="bg-white widget border rounded mt-5">
+                            <h3 className="h4 text-black widget-title mb-3">Featured Properties</h3>
+                            <p>Address detail</p>
+                            <ul className="list-unstyled">
+                                <li className="mb-2"><a href="#">1 Madison Street</a></li>
+                                <li className="mb-2"><a href="#">42 Barington Drive</a></li>
+                                <li className="mb-2"><a href="#">87 Alton Road</a></li>
+                                <li className="mb-2"><a href="#">14 Brooketon Drive</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
