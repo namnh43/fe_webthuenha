@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import MapWithSearch from "./Map";
 import OwlCarousel from "react-owl-carousel";
 
@@ -10,62 +10,89 @@ export function HouseDetail() {
     const {id} = useParams()
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [day, setDay] = useState(0);
     const [result, setResult] = useState(null);
+    const navigate = useNavigate();
     function handleStartDateChange(event) {
         if (new Date(event.target.value) < Date.now()) {
             alert("startDate invalid")
             return;
         }
         setStartDate(event.target.value);
+        calculateDiff(event.target.value, endDate)
     }
 
     function handleEndDateChange(event) {
+        if (new Date(event.target.value) < Date.now()) {
+            alert("endDate invalid")
+            return;
+        }
         setEndDate(event.target.value);
+        calculateDiff(startDate, event.target.value)
     }
+
     let config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
     }
-    function booking(){
+
+    function booking() {
+        if (localStorage.getItem("currentUser") == null) {
+            navigate("/login")
+            return;
+        }
+        if (startDate === "" || endDate === "") {
+            alert("invite you enter Date")
+            return
+        }
         setResult({
-            startDate:startDate,
-            endDate:endDate,
-            price:house.price,
-            total:house.price *calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100,
-            house:{
-                id:house.id
+            startDate: startDate,
+            endDate: endDate,
+            price: house.price,
+            total: house.price * day + house.price * day * 5 / 100,
+            house: {
+                id: house.id
             }
         });
     }
 
     useEffect(() => {
-        console.log('result',result)
+        console.log('result', result)
         if (result === null) return
         postResult()
-    },[result])
+    }, [result])
 
-    function postResult(){
-        console.log('post_result',result)
-        axios.post(`http://localhost:8080/booking/create`,result,config).then((res) => {
+    function postResult() {
+        console.log('post_result', result)
+        axios.post(`http://localhost:8080/booking/create`, result, config).then((res) => {
             alert("succssess")
         })
     }
 
     useEffect(() => {
-        console.log('get_house_id',id);
+        console.log('get_house_id', id);
         axios.get(`http://localhost:8080/house/` + id).then(res => {
-            console.log('get_data',res)
+            console.log('get_data', res)
             setHouse(res.data)
             setList(res.data.images)
         })
     }, [])
-    function calculateDiff(startDate,endDate) {
-        const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
-        const firstDate = new Date(startDate);
-        const secondDate = new Date(endDate);
-        const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
-        return diffDays;
+
+    function calculateDiff(startDate, endDate) {
+        if (startDate !== "" && endDate !== "") {
+            if (new Date(startDate) > new Date(endDate)) {
+                alert("Date invalid")
+                setStartDate("")
+                setEndDate("")
+
+            } else {
+                const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
+                const firstDate = new Date(startDate);
+                const secondDate = new Date(endDate);
+                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay)));
+            }
+        }
     }
     return (
         <>
@@ -110,36 +137,42 @@ export function HouseDetail() {
                             <div className="bg-white widget border rounded">
                                 <h3 className="h4 text-black widget-title mb-3">${house.price}/Day</h3>
                                 <form action="#" className="form-contact-agent">
-                                    <div >
+                                    <div>
                                         <div className="form-group">
                                             <label htmlFor="Booking">Booking Date</label>
-                                            <input type="Date" id="Booking" className="form-control" value={startDate} onChange={handleStartDateChange} />
+                                            <input type="Date" id="Booking" className="form-control" value={startDate}
+                                                   onChange={handleStartDateChange}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="EndDate">End Date</label>
-                                            <input type="Date" id="EndDate" className="form-control" value={endDate} onChange={handleEndDateChange} />
+                                            <input type="Date" id="EndDate" className="form-control" value={endDate}
+                                                   onChange={handleEndDateChange}/>
                                         </div>
                                     </div>
                                     <div>
-                                        {startDate!=""&&endDate!=""&&  <div><tr><td>
-                                            ${house.price} X {calculateDiff(startDate,endDate)} Day :</td>
-                                            <td>${house.price*calculateDiff(startDate,endDate)}</td>
-                                        </tr>
+                                        {startDate !== "" && endDate !== "" && <div>
+                                            <tr>
+                                                <td>
+                                                    ${house.price} X {day} Day :
+                                                </td>
+                                                <td>${house.price * day}</td>
+                                            </tr>
                                             <tr>
                                                 <td>
                                                     Service charge :
                                                 </td>
-                                                <td>${house.price*calculateDiff(startDate,endDate)*5/100}</td>
+                                                <td>${house.price * day * 5 / 100}</td>
                                             </tr>
                                             <tr>
                                                 <th>Total money :</th>
-                                                <th>${house.price*calculateDiff(startDate,endDate)+house.price*calculateDiff(startDate,endDate)*5/100}</th>
+                                                <th>${house.price * day + house.price * day * 5 / 100}</th>
                                             </tr>
                                         </div>}
                                     </div>
                                     <br/>
-                                    <div className="form-group" >
-                                        <input type="button" value="Booking" className="btn btn-primary" onClick={booking}/>
+                                    <div className="form-group">
+                                        <input type="button" value="Booking" className="btn btn-primary"
+                                               onClick={booking}/>
                                     </div>
                                 </form>
                             </div>
@@ -156,6 +189,38 @@ export function HouseDetail() {
                         </div>
                         <div className="bg-white property-body border-bottom border-left border-right">
                             <div className="row mb-5">
+                                <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
+                                <div className="col-md-6">
+                                    <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
+                                        <li>
+                                            <span className="property-specs">Bed room</span>
+                                            <span className="property-specs-number">{house.totalBedrooms}
+                                                <sup>+</sup></span>
+                                        </li>
+                                        <li>
+                                            <span className="property-specs">Bath room</span>
+                                            <span className="property-specs-number">{house.totalBathrooms}</span>
+                                        </li>
+                                        <li>
+                                            <span className="property-specs">Area</span>
+                                            <span className="property-specs-number">7,000</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="row mb-5">
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
+                                    <strong className="d-block">Condo</strong>
+                                </div>
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Year Built</span>
+                                    <strong className="d-block">2018</strong>
+                                </div>
+                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
+                                    <span className="d-inline-block text-black mb-0 caption-text">Price</span>
+                                    <strong className="d-block">${house.price}</strong>
+                                </div>
                                 <h2>Host  {house && house.user ? house.user.firstName: ''} {house && house.user ? house.user.lastName : ''}</h2>
                                 <p>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</p>
                             </div>
