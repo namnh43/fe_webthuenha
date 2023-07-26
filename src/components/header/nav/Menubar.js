@@ -150,8 +150,7 @@ export default function Menubar() {
                         <ListItemButton sx={{minWidth: '100px', maxWidth: '100px'}}
                                         onClick={() => {
                                             navigate("/")
-                                        }}>
-                            <strong className="text-dark">Home</strong></ListItemButton>
+                                        }}><ListItemText >Home</ListItemText></ListItemButton>
                         {/*<ListItemButton sx={{minWidth: '100px', maxWidth: '100px'}}><strong className="text-dark">About</strong></ListItemButton>*/}
                         {
                             !login ? <ListItemButton sx={{minWidth: '100px', maxWidth: '100px'}}
