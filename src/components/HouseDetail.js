@@ -3,6 +3,8 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router";
 import MapWithSearch from "./Map";
 import OwlCarousel from "react-owl-carousel";
+import HomeIcon from '@mui/icons-material/Home';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -99,8 +101,9 @@ export function HouseDetail() {
             <div className="container">
                     <div className="row">
                         <div className="col-12">
-                            <h1 className="text-capitalize mb-0">{house.name}</h1>
-                            <p className="text-decoration-underline">{house.address}</p>
+                            <h3 className="text-capitalize mb-0 mt-3"> <HomeIcon color="secondary" /> {house.name}</h3>
+                            <p className="text-decoration-underline"><LocationOnIcon color="primary" /> {house.address}</p>
+
                         </div>
                     </div>
                     <div className="row">
@@ -135,7 +138,7 @@ export function HouseDetail() {
                         </div>
                         <div className="col">
                             <div className="bg-white widget border rounded">
-                                <h3 className="h4 text-black widget-title mb-3">${house.price}/Day</h3>
+                                <h3 className=" text-black widget-title mb-3 pt-2 ps-2">${house.price}/Day</h3>
                                 <form action="#" className="form-contact-agent">
                                     <div>
                                         <div className="form-group">
@@ -189,38 +192,6 @@ export function HouseDetail() {
                         </div>
                         <div className="bg-white property-body border-bottom border-left border-right">
                             <div className="row mb-5">
-                                <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
-                                <div className="col-md-6">
-                                    <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
-                                        <li>
-                                            <span className="property-specs">Bed room</span>
-                                            <span className="property-specs-number">{house.totalBedrooms}
-                                                <sup>+</sup></span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Bath room</span>
-                                            <span className="property-specs-number">{house.totalBathrooms}</span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Area</span>
-                                            <span className="property-specs-number">7,000</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="row mb-5">
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
-                                    <strong className="d-block">Condo</strong>
-                                </div>
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Year Built</span>
-                                    <strong className="d-block">2018</strong>
-                                </div>
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Price</span>
-                                    <strong className="d-block">${house.price}</strong>
-                                </div>
                                 <h2>Host  {house && house.user ? house.user.firstName: ''} {house && house.user ? house.user.lastName : ''}</h2>
                                 <p>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</p>
                             </div>
