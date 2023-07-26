@@ -2,10 +2,13 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "./OwnerHouseList.css"
+import {useNavigate} from "react-router";
 
 function OwnerHouseList() {
 
-    const[houseList, setHouseList] = useState([])
+    const navigate = useNavigate()
+
+    const [houseList, setHouseList] = useState([])
 
     const [pageNumber, setPageNumber] = useState(0);
 
@@ -14,7 +17,7 @@ function OwnerHouseList() {
 
     const pageCount = Math.ceil(houseList.length / housesPerPage);
 
-    const changePage = ({ selected }) => {
+    const changePage = ({selected}) => {
         setPageNumber(selected);
     };
 
@@ -44,29 +47,42 @@ function OwnerHouseList() {
                         <th>Address</th>
                         <th>Sale</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     {houseList
                         .slice(pagesVisited, pagesVisited + housesPerPage)
-                        .map((item,key) => {
-                        return (
-                            <tr>
-                                <td>{item.id}</td>
-                                {/*<td><img src="" alt="" className="avatar"/>{item.name}</td>*/}
-                                <td>{item.name}</td>
-                                <td>{item.price}</td>
-                                <td>{item.address}</td>
-                                <td>add later</td>
-                                <td>{item.status}</td>
-                                {/*{item.active ? <td><span className="status text-success">&bull;</span> Active</td> :*/}
-                                {/*    <td><span className="status text-danger">&bull;</span> Suspended</td>}*/}
-                                {item.active ? <td><button type="button" className="btn btn-danger">Block</button></td> :
-                                    <td><button type="button" className="btn btn-primary">Allow</button></td>}
-                            </tr>
-                        )
-                    })}
+                        .map((item, key) => {
+                            return (
+                                <tr>
+                                    <td>{item.id}</td>
+                                    <td>{item.name}</td>
+                                    <td>{item.price}</td>
+                                    <td>{item.address}</td>
+                                    <td>add later</td>
+                                    <td>{item.status}</td>
+                                    <td><i className="material-icons">&#xe88e;</i></td>
+                                    <td><i className="material-icons"
+                                    onClick={() => {
+                                        const config = {
+                                            headers: {
+                                                Authorization: `Bearer ${localStorage.getItem('token')}`
+                                            }
+                                        }
+
+                                        axios.delete(`http://localhost:8080/house/delete/${item.id}`,config)
+                                            .then(() => axios.get('http://localhost:8080/house', config)
+                                                .then(res => setHouseList(res.data)))
+                                    }}>&#xe872;</i></td>
+                                    <td><i className="material-icons"
+                                           onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}
+                                    >&#xe3c9;</i></td>
+                                </tr>
+                            )
+                        })}
 
                     </tbody>
                 </table>
