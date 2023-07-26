@@ -29,7 +29,7 @@ export function LoginPage() {
                         localStorage.setItem("currentUserRole", res.data.user.role)
                         localStorage.setItem("currentUserApplyHost", res.data.user.applyHost)
                         console.log(localStorage.getItem("currentUserApplyHost"))
-                        navigate('/')
+                        res.data.user.role === "ADMIN" ? navigate('/admin/hosts') : navigate('/');
                     })
                     .catch(() => {
                         navigate('/login')

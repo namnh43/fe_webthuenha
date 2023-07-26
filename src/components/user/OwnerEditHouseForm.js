@@ -60,10 +60,9 @@ function OwnerEditHouseForm() {
                 config
             )
             .then((response) => {
+                alert("House updated successfully!");
                 console.log("House updated successfully:", response.data);
-                // Handle success, show success message, etc.
 
-                // Optionally, you can update the editedHouse state with the latest data
                 setEditedHouse({ ...editedHouse, ...values });
 
                 setIsSubmitting(false);
@@ -71,7 +70,6 @@ function OwnerEditHouseForm() {
             })
             .catch((error) => {
                 console.error("Error updating house:", error);
-                // Handle error, show error message, etc.
 
                 setIsSubmitting(false);
                 setSubmitting(false);
@@ -89,7 +87,7 @@ function OwnerEditHouseForm() {
                         totalBathrooms: bathrooms,
                         description: editedHouse.description,
                         price: editedHouse.price,
-                        images: editedHouse.images,
+                        images: editedHouse.images.map(image => image.url),
                     }}
                     enableReinitialize={true}
                     onSubmit={handleSubmit}
@@ -174,7 +172,7 @@ function OwnerEditHouseForm() {
                                 <Field
                                     name="images"
                                     as={UploadImageField}
-                                    images={editedHouse.images}
+                                    images={editedHouse.images || []}
                                 />
                             </div>
                             <button
