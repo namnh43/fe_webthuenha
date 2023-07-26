@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import MapWithSearch from "./Map";
 import OwlCarousel from "react-owl-carousel";
 
@@ -12,6 +12,7 @@ export function HouseDetail() {
     const [endDate, setEndDate] = useState("");
     const [day, setDay] = useState(0);
     const [result, setResult] = useState(null);
+    const navigate = useNavigate();
     function handleStartDateChange(event) {
         if (new Date(event.target.value) < Date.now()) {
             alert("startDate invalid")
