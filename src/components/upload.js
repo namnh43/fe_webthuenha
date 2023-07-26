@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useFormikContext } from "formik";
 
-function UploadImageField({ name }) {
+function UploadImageField({ name, images }) {
     const { setFieldValue } = useFormikContext();
 
     const firebaseConfig = {
@@ -20,11 +20,16 @@ function UploadImageField({ name }) {
 
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [previewUrls, setPreviewUrls] = useState([]);
-    const [isDragOver, setIsDragOver] = useState(false);
+
+    useEffect(() => {
+        if (images && images.length > 0) {
+            // Set the previewUrls initially to display the existing images
+            setPreviewUrls(images.map((image) => image.fileUrl));
+        }
+    }, [images]);
 
     const handleImageUpload = (urls) => {
-        const fileUrlObjects = urls.map((url) => ({ fileUrl: url }));
-        setFieldValue(name, fileUrlObjects);
+        setFieldValue(name, urls);
     };
 
     const changeHandler = (event) => {
@@ -36,18 +41,17 @@ function UploadImageField({ name }) {
             fileUrls.push(fileUrl);
         }
 
-        setSelectedFiles(files);
-        setPreviewUrls(fileUrls);
+        setSelectedFiles([...selectedFiles, ...files]);
+        setPreviewUrls([...previewUrls, ...fileUrls]);
     };
 
-    const removeImage = (index) => {
-        const updatedFiles = [...selectedFiles];
-        updatedFiles.splice(index, 1);
-        setSelectedFiles(updatedFiles);
-
-        const updatedUrls = [...previewUrls];
-        updatedUrls.splice(index, 1);
-        setPreviewUrls(updatedUrls);
+    const handleRemoveImage = (index) => {
+        const updatedSelectedFiles = [...selectedFiles];
+        const updatedPreviewUrls = [...previewUrls];
+        updatedSelectedFiles.splice(index, 1);
+        updatedPreviewUrls.splice(index, 1);
+        setSelectedFiles(updatedSelectedFiles);
+        setPreviewUrls(updatedPreviewUrls);
     };
 
     const handleSubmission = () => {
@@ -55,7 +59,6 @@ function UploadImageField({ name }) {
 
         for (const file of selectedFiles) {
             const storageRef = ref(storage, "md6/" + file.name);
-
             const promise = uploadBytes(storageRef, file)
                 .then((snapshot) => {
                     console.log("File uploaded successfully");
@@ -70,7 +73,13 @@ function UploadImageField({ name }) {
 
         Promise.all(promises)
             .then((urls) => {
-                handleImageUpload(urls);
+                // Filter out any images that were removed
+                const remainingImages = images.filter((image) => typeof image === "object");
+
+                // Combine the remaining images with the newly uploaded images
+                const newImages = [...remainingImages, ...urls.map((url) => ({ fileUrl: url }))];
+
+                handleImageUpload(newImages);
                 alert("Uploaded successfully");
             })
             .catch((error) => {
@@ -78,82 +87,30 @@ function UploadImageField({ name }) {
             });
     };
 
-    const handleDragOver = (event) => {
-        event.preventDefault();
-        setIsDragOver(true);
-    };
-
-    const handleDragEnter = (event) => {
-        event.preventDefault();
-        setIsDragOver(true);
-    };
-
-    const handleDragLeave = () => {
-        setIsDragOver(false);
-    };
-
-    const handleDrop = (event) => {
-        event.preventDefault();
-        setIsDragOver(false);
-        const files = event.dataTransfer.files;
-        const fileUrls = [];
-
-        for (const element of files) {
-            const fileUrl = URL.createObjectURL(element);
-            fileUrls.push(fileUrl);
-        }
-
-        // Concatenate newly dropped files with existing files
-        setSelectedFiles((prevFiles) => [...prevFiles, ...files]);
-        setPreviewUrls((prevUrls) => [...prevUrls, ...fileUrls]);
-    };
 
     return (
-        <div
-            style={{ border: "1px solid black" }}
-            onDragOver={handleDragOver}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-        >
-
-            <div>
-                <input type="file" name="file" onChange={changeHandler} multiple />
-                <button type="button" onClick={handleSubmission} className="btn btn-success">
-                    Confirm
-                </button>
-            </div>
-            <br/>
-
-            {isDragOver && <div>Drop files here</div>}
+        <div style={{ border: "1px solid black" }}>
+            <input type="file" name="file" onChange={changeHandler} multiple />
+            <br />
 
             {previewUrls.length > 0 && (
                 <div className="d-inline-flex" style={{ flexWrap: "wrap" }}>
                     {previewUrls.map((url, index) => (
-                        <div key={url} style={{ position: "relative", margin: "10px" }}>
+                        <div key={url} style={{ margin: "10px" }}>
                             <img src={url} alt={"Preview" + index} style={{ maxWidth: "450px" }} />
-                            <button
-                                type="button"
-                                onClick={() => removeImage(index)}
-                                style={{
-                                    position: "absolute",
-                                    top: "3px",
-                                    right: "3px",
-                                    width: "25px",
-                                    height: "25px",
-                                    background: "red",
-                                    color: "white",
-                                    borderRadius: "50%",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                <b>X</b>
+                            <button type="button" onClick={() => handleRemoveImage(index)}>
+                                Remove
                             </button>
                         </div>
                     ))}
                 </div>
             )}
 
+            <div>
+                <button type="button" onClick={handleSubmission} className="btn btn-success">
+                    Upload
+                </button>
+            </div>
         </div>
     );
 }

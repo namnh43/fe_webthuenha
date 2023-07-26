@@ -72,6 +72,19 @@ function UploadImageField({ name }) {
             <div className="d-inline-flex">
                 <input type="file" name="file" onChange={changeHandler} multiple />
                 <br />
+                <button
+                    style={{
+                        position: "absolute",
+                        top: "3px",
+                        right: "3px",
+                        width: "25px",
+                        height: "25px",
+                        background: "red",
+                        color: "white",
+                        borderRadius: "50%",
+                        cursor: "pointer",
+                    }}
+                >X</button>
                 <button type="button" onClick={handleSubmission} className="btn btn-success">
                     Upload
                 </button>

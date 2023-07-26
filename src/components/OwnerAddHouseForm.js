@@ -5,7 +5,6 @@ import UploadImageField from "./upload";
 
 function OwnerAddHouseForm() {
 
-
     const [bedrooms, setBedrooms] = useState(2);
     const [bathrooms, setBathrooms] = useState(1);
 
