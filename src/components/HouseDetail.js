@@ -69,15 +69,16 @@ export function HouseDetail() {
     }
     return (
         <>
-            <div className="site-section site-section-sm">
-                <div className="container">
+            <div className="container">
+                    <div className="row">
+                        <div className="col-12">
+                            <h1 className="text-capitalize mb-0">{house.name}</h1>
+                            <p className="text-decoration-underline">{house.address}</p>
+                        </div>
+                    </div>
                     <div className="row">
                         <div className="col-8">
-                            <h1>{house.name}</h1>
-                            <div className="col-md-6">
-                                <strong className="text-success h1 mb-3">{house.address}</strong>
-                            </div>
-                            <div className="row mt-5">
+                            <div className="row">
                                 {list.length > 0 &&
                                     <OwlCarousel items={1}
                                                  className="owl-theme"
@@ -156,37 +157,7 @@ export function HouseDetail() {
                         <div className="bg-white property-body border-bottom border-left border-right">
                             <div className="row mb-5">
                                 <h2>Host  {house && house.user ? house.user.firstName: ''} {house && house.user ? house.user.lastName : ''}</h2>
-                                <div className="col-md-6">
-                                    <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
-                                        <li>
-                                            <span className="property-specs">Bed room</span>
-                                            <span className="property-specs-number">{house.totalBedrooms}
-                                                <sup>+</sup></span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Bath room</span>
-                                            <span className="property-specs-number">{house.totalBathrooms}</span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Area</span>
-                                            <span className="property-specs-number">7,000</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="row mb-5">
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
-                                    <strong className="d-block">Condo</strong>
-                                </div>
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Year Built</span>
-                                    <strong className="d-block">2018</strong>
-                                </div>
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Price</span>
-                                    <strong className="d-block">${house.price}</strong>
-                                </div>
+                                <p>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</p>
                             </div>
                             <h2 className="h4 text-black">More Info</h2>
                             <p>{house.description}</p>
@@ -199,7 +170,6 @@ export function HouseDetail() {
 
                     </div>
                 </div>
-            </div>
             <div className="site-section site-section-sm bg-light">
                 <div className="container">
 
