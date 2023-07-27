@@ -19,6 +19,8 @@ import FormWithImageUpload from "./components/demoFormUploadImg";
 import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
 import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/OwnerBookingList";
+import {SearchHouseResult} from "./components/search/SearchHouseResult";
+import {SearchResultPage} from "./pages/SearchResultPage";
 function App() {
   return (
     <div className="App">
@@ -26,6 +28,7 @@ function App() {
           <Route path='/' element={<HomePage/>}>
               <Route path='' element={<HouseList/>}/>
           </Route>
+          <Route path='/houses/search' element={<SearchResultPage/>}/>
           <Route path='/houses/:id/detail' element={<HouseDetailPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>

@@ -3,6 +3,9 @@ import './searchBar.css';
 import axios from "axios";
 import {Link} from "react-router-dom";
 import DateRangePickerComponent from "../datetime/DateRangePickerComponent";
+import {useDispatch, useSelector} from "react-redux";
+import {searchAction} from "../redux/searchSlice";
+import {useNavigate} from "react-router";
 
 function SearchBar() {
     const [address, setAddress] = useState('');
@@ -10,8 +13,14 @@ function SearchBar() {
     const [maxPrice, setMaxPrice] = useState(1000000000);
     const [bedrooms, setBedrooms] = useState(0);
     const [bathrooms, setBathrooms] = useState(0);
-    const [listSearch, setListSearch] = useState([]);
     const [selectedRange, setSelectedRange] = useState(['2023-01-01','2023-01-01']);
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const handleInputChange = (event) => {
+        dispatch(searchAction({bathrooms:bathrooms,bedrooms:bedrooms,address:address,minPrice:minPrice,maxPrice:maxPrice,startDate:selectedRange[0],endDate:selectedRange[1]}))
+        navigate("/houses/search")
+    }
 
     const handleDateRangeChange = (ranges) => {
         if (ranges && ranges.length === 2)
@@ -30,14 +39,14 @@ function SearchBar() {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
     }
-    const handleSearch = () => {
-        console.log(bathrooms, bedrooms, address, minPrice, maxPrice,selectedRange);
-        axios.get(`http://localhost:8080/house/search?address=${address}&minPrice=${minPrice}&maxPrice=${maxPrice}&totalBedrooms=${bedrooms}&totalBathrooms=${bathrooms}&startDate=${selectedRange[0]}&endDate=${selectedRange[1]}`, config)
-            .then((res) => {
-                if (res.data.length == 0) alert("Not Found Any House")
-                setListSearch(res.data)
-            })
-    };
+    // const handleSearch = () => {
+    //     console.log(bathrooms, bedrooms, address, minPrice, maxPrice,selectedRange);
+    //     axios.get(`http://localhost:8080/house/search?address=${address}&minPrice=${minPrice}&maxPrice=${maxPrice}&totalBedrooms=${bedrooms}&totalBathrooms=${bathrooms}&startDate=${selectedRange[0]}&endDate=${selectedRange[1]}`, config)
+    //         .then((res) => {
+    //             if (res.data.length == 0) alert("Not Found Any House")
+    //             setListSearch(res.data)
+    //         })
+    // };
 
     return (
         <section className="search-sec">
@@ -135,7 +144,7 @@ function SearchBar() {
                         <td colSpan='5'>
                             <div style={{width: 'fit-content', margin: 'auto'}}>
                                 <button style={{width: '400px'}} type="button" className="btn btn-primary wrn-btn"
-                                        onClick={handleSearch}>
+                                        onClick={handleInputChange}>
                                     Search
                                 </button>
                             </div>
@@ -144,63 +153,6 @@ function SearchBar() {
                     </tbody>
                 </table>
             </div>
-
-            {listSearch.length > 0 &&
-                <div className="site-section site-section-sm bg-light">
-                    <h1>Search Result</h1>
-                    <div className="container">
-                        <div className="row mb-5">
-                            {listSearch.map((item) => {
-                                return (
-                                    <>
-                                        <div className="col-md-6 col-lg-4 mb-4">
-                                            <div className="property-entry h-100">
-                                                <Link to={"/detail/"+item.id} className="property-thumbnail">
-                                                    <div className="offer-type-wrap">
-                                                        <span className="offer-type bg-success">Rent</span>
-                                                    </div>
-                                                    <img
-                                                        src={item.images.length > 0 ? item.images[0].fileUrl : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
-                                                        alt="Image" className="img-fluid"/>
-                                                </Link>
-                                                <div className="p-4 property-body">
-                                                    <a href="#" className="property-favorite"><span
-                                                        className="icon-heart-o"></span></a>
-                                                    <h2 className="property-title"><a
-                                                        href="property-details.html">{item.name}</a>
-                                                    </h2>
-                                                    <span className="property-location d-block mb-3"><span
-                                                        className="property-icon icon-room"></span> {item.address}</span>
-                                                    <strong
-                                                        className="property-price text-primary mb-3 d-block text-success">${item.price}</strong>
-                                                    <ul className="property-specs-wrap mb-3 mb-lg-0">
-                                                        <li>
-                                                            <span className="property-specs">Beds</span>
-                                                            <span className="property-specs-number">{item.totalBedrooms}
-                                                                <sup>+</sup></span>
-
-                                                        </li>
-                                                        <li>
-                                                            <span className="property-specs">Baths</span>
-                                                            <span
-                                                                className="property-specs-number">{item.totalBathrooms}</span>
-                                                        </li>
-                                                        <li>
-                                                            <span className="property-specs">SQ FT</span>
-                                                            <span className="property-specs-number">7,000</span>
-
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            }
         </section>
     );
 }
