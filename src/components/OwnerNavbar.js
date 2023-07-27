@@ -32,11 +32,11 @@ function OwnerNavbar() {
                             <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
                                  aria-labelledby="drop2">
                                 <div className="message-body">
-                                    <a href="javascript:void(0)"
+                                    <Link to="/user"
                                        className="d-flex align-items-center gap-2 dropdown-item">
                                         <i className="ti ti-user fs-6"></i>
                                         <p className="mb-0 ">My Profile</p>
-                                    </a>
+                                    </Link>
                                     <a href="javascript:void(0)"
                                        className="d-flex align-items-center gap-2 dropdown-item">
                                         <i className="ti ti-home fs-6"></i>
