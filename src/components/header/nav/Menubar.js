@@ -170,7 +170,7 @@ export default function Menubar() {
                                                          onClick={() => {
                                                              handleLoginClick();
                                                              navigate("/login");
-                                                         }}> Login </ListItemButton> :
+                                                         }}> <ListItemText >Login </ListItemText></ListItemButton> :
                                     <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
                                         <ListItemText >Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
                                         <Tooltip title="Account settings">

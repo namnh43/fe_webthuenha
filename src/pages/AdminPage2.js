@@ -9,7 +9,7 @@ export function AdminPage2() {
             <Menubar/>
             <Divider />
             <Grid container spacing={1}>
-                <Grid item xs={3}>
+                <Grid item xs={2.5}>
                     <AdminSidebar/>
                 </Grid>
                 <Divider

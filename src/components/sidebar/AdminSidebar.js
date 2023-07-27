@@ -1,11 +1,9 @@
-import {Divider, ListItemIcon, List, ListItem, ListItemButton, Drawer, Toolbar} from "@mui/material";
-import ListItemText from "@mui/material/ListItemText";
-import {Link} from "react-router-dom";
+import {List, ListItem, ListItemButton} from "@mui/material";
 import {useState} from "react";
 import {useNavigate} from "react-router";
-import GiteOutlinedIcon from '@mui/icons-material/GiteOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import HearingOutlinedIcon from '@mui/icons-material/HearingOutlined';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import VillaIcon from '@mui/icons-material/Villa';
 
 export function AdminSidebar() {
     // const drawerWidth = 240;
@@ -18,7 +16,7 @@ export function AdminSidebar() {
             </ListItem>
             <ListItemButton
                 key='user-list'
-                selected={selectedItem == 'user-list'}
+                selected={selectedItem === 'user-list'}
                 onClick={() => {
                     setSelectedItem('user-list');
                     navigate('users')
@@ -31,27 +29,27 @@ export function AdminSidebar() {
             </ListItemButton>
             <ListItemButton
                 key='user-list'
-                selected={selectedItem == 'host-list'}
+                selected={selectedItem === 'host-list'}
                 onClick={() => {
                     setSelectedItem('host-list');
                     navigate('hosts')
                 }}
             >
                 <span className="me-3">
-                  <GiteOutlinedIcon/>
+                  <VillaIcon/>
                 </span>
                 <span className="hide-menu">Host List</span>
             </ListItemButton>
             <ListItemButton
                 key='user-list'
-                selected={selectedItem == 'waiting-list'}
+                selected={selectedItem === 'waiting-list'}
                 onClick={() => {
                     setSelectedItem('waiting-list');
                     navigate('waiting-hosts');
                 }}
             >
                     <span className="me-3">
-                      <HearingOutlinedIcon/>
+                      <AccessAlarmIcon/>
                     </span>
                 <span className="hide-menu">Waiting Lounge</span>
             </ListItemButton>
