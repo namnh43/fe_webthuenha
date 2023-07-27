@@ -9,6 +9,9 @@ const DateRangePickerComponent = ({ onChange }) => {
         if (ranges && ranges.length > 0) {
             setSelectedRange([startOfDay(ranges[0]),endOfDay(ranges[1])]);
             onChange([startOfDay(ranges[0]),endOfDay(ranges[1])]); // Call the callback with the selected range
+        } else {
+            setSelectedRange(null);
+            onChange(null); // Call the callback with the selected range
         }
     };
 

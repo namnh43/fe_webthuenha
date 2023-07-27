@@ -2,7 +2,6 @@
 import {Outlet} from "react-router";
 import {UserSidebar} from "../components/user/UserSidebar";
 import {UserNavbar} from "../components/user/UserNavbar";
-import {UserFooter} from "../components/user/UserFooter";
 
 export function UserPage() {
     return (

@@ -4,7 +4,6 @@ import axios from "axios";
 import * as Yup from "yup";
 import React from "react";
 import {useNavigate} from "react-router";
-import {LoginPage} from "./LoginPage";
 
 const SignupSchema = Yup.object().shape({
     username: Yup.string()
