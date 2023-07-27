@@ -34,7 +34,6 @@ function OwnerBookingList() {
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th className="p-0 m-0"></th>
                     <th>House</th>
                     <th>Booking date</th>
                     <th>Duration</th>
@@ -48,12 +47,27 @@ function OwnerBookingList() {
                     .map((item, key) => {
                         return (<tr>
                             <td>{item.id}</td>
-                            <td><img src={item.house.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td>
                             <td>{item.house.name}</td>
                             <td>{item.createAt}</td>
                             <td>{item.startDate}/{item.endDate}</td>
                             <td>{item.price}/{item.total}</td>
                             <td>{item.bookingStatus}</td>
+                            {item.bookingStatus === "MAINTENANCE" && (
+                                <td><button className="btn btn-danger">Cancel</button></td>
+                            )}
+                            {item.bookingStatus === "BOOKING" && (
+                                    <td><button className="btn btn-primary">Check in</button></td>
+
+                            )}
+                            {item.bookingStatus === "CHECKED_IN" && (
+                                <td><button>Check out</button></td>
+                            )}
+                            {item.bookingStatus === "CANCELLED" && (
+                                <td></td>
+                            )}
+                            {item.bookingStatus === "CHECKED_OUT" && (
+                                <td></td>
+                            )}
                         </tr>)
                     })}
 

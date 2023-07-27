@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router";
 import {HomePage} from "./pages/HomePage";
@@ -12,7 +11,6 @@ import {AdminUserList} from "./components/AdminUserList";
 import {AdminHostList} from "./components/AdminHostList";
 import {AdminWaitingHost} from "./components/AdminWaitingHost";
 import {HouseDetail} from "./components/HouseDetail";
-import TestJS from "./components/test";
 import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 import {AdminPage2} from "./pages/AdminPage2";
 import {UserPage} from "./pages/UserPage";
