@@ -7,7 +7,7 @@ function OwnerAddHouseForm() {
 
     const [bedrooms, setBedrooms] = useState(2);
     const [bathrooms, setBathrooms] = useState(1);
-    const [isUpdateImg, setIsUpdateImg] = useState(false);
+    const [submittedValues, setSubmittedValues] = useState(null);
 
     function handleBedroomsRangeChange(event) {
         setBedrooms(event.target.value);
@@ -17,11 +17,7 @@ function OwnerAddHouseForm() {
         setBathrooms(event.target.value);
     }
 
-    const handleFormSubmit = (values, { setSubmitting }) => {
-        if (!isUpdateImg) {
-            setSubmitting(false);
-            return alert("Please confirm first!")
-        }
+    const handleFormSubmit = (values) => {
         const config = {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -38,7 +34,6 @@ function OwnerAddHouseForm() {
                 console.log(res.data);
             })
             .finally(() => {
-                setSubmitting(false);
             });
     };
 
@@ -55,9 +50,9 @@ function OwnerAddHouseForm() {
                     images: [],
                 }}
                 enableReinitialize={true}
-                onSubmit={handleFormSubmit}
+                onSubmit={(values)=> setSubmittedValues(values)}
             >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, values }) => (
                 <Form>
                     <h1>Add a new house</h1>
                     <div className="form-group">
@@ -105,7 +100,9 @@ function OwnerAddHouseForm() {
                         <Field
                             name="images"
                             as={UploadImageField}
-                            setIsUpdateImg={setIsUpdateImg}
+                            values={submittedValues}
+                            images={values.images}
+                            handleFormSubmit={handleFormSubmit}
                         />
                     </div>
                     <button

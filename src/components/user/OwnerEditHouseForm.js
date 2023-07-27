@@ -10,7 +10,7 @@ function OwnerEditHouseForm() {
     const [editedHouse, setEditedHouse] = useState(null);
     const [bedrooms, setBedrooms] = useState(0);
     const [bathrooms, setBathrooms] = useState(0);
-    const [isUpdateImg, setIsUpdateImg] = useState(false);
+    const [submittedValues, setSubmittedValues] = useState(null);
 
     useEffect(() => {
         const config = {
@@ -36,12 +36,7 @@ function OwnerEditHouseForm() {
         setBathrooms(event.target.value);
     }
 
-    const handleSubmit = (values, { setSubmitting }) => {
-
-        if (!isUpdateImg) {
-            setSubmitting(false);
-            return alert("Please confirm first!")
-        }
+    const handleSubmit = (values) => {
 
         const config = {
             headers: {
@@ -69,12 +64,10 @@ function OwnerEditHouseForm() {
 
                 setEditedHouse({ ...editedHouse, ...values });
 
-                setSubmitting(false);
             })
             .catch((error) => {
                 console.error("Error updating house:", error);
 
-                setSubmitting(false);
             });
     };
 
@@ -92,7 +85,7 @@ function OwnerEditHouseForm() {
                         images: editedHouse.images.map(image => image.url),
                     }}
                     enableReinitialize={true}
-                    onSubmit={handleSubmit}
+                    onSubmit={(values)=> setSubmittedValues(values)}
                 >
                     {({ isSubmitting }) => (
                         <Form>
@@ -174,8 +167,9 @@ function OwnerEditHouseForm() {
                                 <Field
                                     name="images"
                                     as={UploadImageField}
+                                    values={submittedValues}
                                     images={editedHouse.images || []}
-                                    setIsUpdateImg={setIsUpdateImg}
+                                    handleFormSubmit={handleSubmit}
                                 />
                             </div>
                             <button
