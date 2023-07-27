@@ -1,5 +1,5 @@
 import './AdminHostList.css'
-import {fetchData, postData} from "../utils/api";
+import {fetchData, postData} from "../../utils/api";
 import React, {useEffect, useState} from "react";
 // @mui
 import {
@@ -19,7 +19,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
-import HostProfileDialog from "./dialog/HostProfileDialog";
+import HostProfileDialog from "../dialog/HostProfileDialog";
 import ReactPaginate from "react-paginate";
 
 export function AdminHostList() {

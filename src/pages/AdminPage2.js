@@ -1,8 +1,8 @@
 import {AdminSidebar} from "../components/sidebar/AdminSidebar";
 import {Divider, Grid, Toolbar} from "@mui/material";
-import {AdminNavbar} from "../components/AdminNavbar";
+import {AdminNavbar} from "../components/admin/AdminNavbar";
 import {Outlet} from "react-router";
-import {AdminFooter} from "../components/AdminFooter";
+import {AdminFooter} from "../components/admin/AdminFooter";
 import Menubar from "../components/header/nav/Menubar";
 
 export function AdminPage2() {
