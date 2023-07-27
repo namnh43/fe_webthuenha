@@ -147,9 +147,9 @@ export function HouseDetail() {
                             </div>
                         </div>
                         <div className="col">
-                            <div className="bg-white widget border rounded">
-                                <h3 className=" text-black widget-title mb-3 pt-2 ps-2">${house.price}/Day</h3>
-                                <form action="#" className="form-contact-agent">
+                            <div className="bg-white p-3 border rounded">
+                                <h3 className=" text-black  mb-3 ">Price ${house.price}/Night</h3>
+                                <form action="#" className="">
                                     <div>
                                         <div className="form-group">
                                             <label htmlFor="Booking">Booking Date</label>

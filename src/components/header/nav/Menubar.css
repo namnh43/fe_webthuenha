@@ -1,0 +1,10 @@
+/*.MuiListItemText-root {*/
+/*    font-family: 'Noto Serif Vithkuqi', serif;*/
+/*    color: red;*/
+/*}*/
+/* Override styles for Typography component */
+.MuiTypography-root {
+    font-family: 'Roboto', sans-serif !important;
+    /*color: blue;*/
+    font-weight: bold !important;
+}
