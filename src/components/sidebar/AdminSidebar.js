@@ -12,18 +12,9 @@ export function AdminSidebar() {
     const [selectedItem, setSelectedItem] = useState('user-list');
     const navigate = useNavigate();
     const drawer = (<div>
-        <Toolbar>
-            <div className="col-8 col-md-8 col-lg-4">
-                <h1 className="mb-0"><a href="/" className="h2 mb-0"><strong>Homeland<span
-                    className="text-danger">.</span></strong></a></h1>
-            </div>
-        </Toolbar>
-        <Divider/>
         <List>
-            <ListItem className="nav-small-cap">
-                <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <ListItem className="">
                 <span><p className="h4">USERS</p></span>
-
             </ListItem>
             <ListItemButton
                 key='user-list'

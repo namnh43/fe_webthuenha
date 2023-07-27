@@ -1,11 +1,11 @@
 import {HouseDetail} from "../components/HouseDetail";
 import Menubar from "../components/header/nav/Menubar";
-import Grid from '@mui/material/Grid';
-
+import Divider from '@mui/material/Divider';
 export function HouseDetailPage() {
     return (
         <>
             <Menubar/>
+            <Divider />
             <HouseDetail/>
         </>
     )
