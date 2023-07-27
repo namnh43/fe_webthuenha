@@ -22,7 +22,8 @@ function OwnerSidebar() {
                 <span>
                   <i className="ti ti-layout-dashboard"></i>
                 </span>
-                                <Link to='/owner' style={{color: 'inherit'}}><span className="hide-menu">House List</span></Link>
+                                <Link to='/owner' style={{color: 'inherit'}}><span
+                                    className="hide-menu">House List</span></Link>
                             </a>
                         </li>
                         <li className="nav-small-cap">
@@ -38,12 +39,13 @@ function OwnerSidebar() {
                             </a>
                         </li>
                         <li className="sidebar-item">
+                            <Link to='/owner/booking'>
                             <a className="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
-                <span>
-                  <i className="ti ti-alert-circle"></i>
-                </span>
-                                <span className="hide-menu">Alerts</span>
-                            </a>
+                             <span>
+                                <i className="ti ti-alert-circle"></i>
+                             </span>
+                                <span className="hide-menu">Booking list</span>
+                            </a></Link>
                         </li>
                         <li className="sidebar-item">
                             <a className="sidebar-link" href="./ui-card.html" aria-expanded="false">
