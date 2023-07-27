@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useFormikContext } from "formik";
 
-function UploadImageField({ name, images }) {
+function UploadImageField({ name, images, setIsUpdateImg }) {
     const { setFieldValue } = useFormikContext();
 
     const firebaseConfig = {
@@ -30,6 +30,8 @@ function UploadImageField({ name, images }) {
 
     const handleImageUpload = (urls) => {
         setFieldValue(name, urls.map(url => ({ fileUrl: url })));
+        setIsUpdateImg(true);
+
     };
 
     const changeHandler = (event) => {
@@ -44,6 +46,8 @@ function UploadImageField({ name, images }) {
 
         setSelectedFiles([...selectedFiles, ...files]);
         setPreviewUrls([...previewUrls, ...fileUrls]);
+
+        setIsUpdateImg(false);
     };
 
     const handleRemoveImage = (index) => {
@@ -58,6 +62,8 @@ function UploadImageField({ name, images }) {
             updatedPreviewUrls.splice(index, 1);
             return updatedPreviewUrls;
         });
+
+        setIsUpdateImg(false);
     };
 
     useEffect(() => {
