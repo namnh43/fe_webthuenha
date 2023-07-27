@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './searchBar.css';
 import axios from "axios";
 import {Link} from "react-router-dom";
+import DateRangePickerComponent from "../datetime/DateRangePickerComponent";
 
 function SearchBar() {
     const [address, setAddress] = useState('');
@@ -10,6 +11,19 @@ function SearchBar() {
     const [bedrooms, setBedrooms] = useState(0);
     const [bathrooms, setBathrooms] = useState(0);
     const [listSearch, setListSearch] = useState([]);
+    const [selectedRange, setSelectedRange] = useState(['2023-01-01','2023-01-01']);
+
+    const handleDateRangeChange = (ranges) => {
+        if (ranges && ranges.length === 2)
+            setSelectedRange([ranges[0].toLocaleDateString('en-CA'),ranges[1].toLocaleDateString('en-CA')]);
+        else
+            setSelectedRange(['2023-01-01','2023-01-01'])
+    };
+    useEffect(() => {
+        selectedRange.map((item) => {
+            console.log(item) //for testting
+        })
+    },[selectedRange])
 
     let config = {
         headers: {
@@ -17,8 +31,8 @@ function SearchBar() {
         }
     }
     const handleSearch = () => {
-        console.log(bathrooms, bedrooms, address, minPrice, maxPrice);
-        axios.get(`http://localhost:8080/house/search?address=${address}&minPrice=${minPrice}&maxPrice=${maxPrice}&totalBedrooms=${bedrooms}&totalBathrooms=${bathrooms}`, config)
+        console.log(bathrooms, bedrooms, address, minPrice, maxPrice,selectedRange);
+        axios.get(`http://localhost:8080/house/search?address=${address}&minPrice=${minPrice}&maxPrice=${maxPrice}&totalBedrooms=${bedrooms}&totalBathrooms=${bathrooms}&startDate=${selectedRange[0]}&endDate=${selectedRange[1]}`, config)
             .then((res) => {
                 if (res.data.length == 0) alert("Not Found Any House")
                 setListSearch(res.data)
@@ -40,11 +54,15 @@ function SearchBar() {
                             <label htmlFor="maxPrice">Max Price</label>
                         </th>
                         <th>
+                            <label htmlFor="bathrooms">Pick time</label>
+                        </th>
+                        <th>
                             <label htmlFor="bedrooms">Bedrooms</label>
                         </th>
                         <th>
                             <label htmlFor="bathrooms">Bathrooms</label>
                         </th>
+
                     </tr>
                     <tr>
                         <td>
@@ -78,6 +96,10 @@ function SearchBar() {
                             />
                         </td>
                         <td>
+                            <DateRangePickerComponent
+                                onChange={handleDateRangeChange} />
+                        </td>
+                        <td>
                             <select
                                 className="form-control search-slt"
                                 id="bedrooms"
@@ -107,11 +129,12 @@ function SearchBar() {
                                 <option value={5}>5</option>
                             </select>
                         </td>
+
                     </tr>
                     <tr>
-                        <td colSpan={5}>
+                        <td colSpan='5'>
                             <div style={{width: 'fit-content', margin: 'auto'}}>
-                                <button style={{width: '400px'}} type="button" className="btn btn-danger wrn-btn"
+                                <button style={{width: '400px'}} type="button" className="btn btn-primary wrn-btn"
                                         onClick={handleSearch}>
                                     Search
                                 </button>
