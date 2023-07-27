@@ -131,19 +131,24 @@ export function HouseDetail() {
                                                 <div className="col-sm-12 col-md-12 col-lg-12">
                                                     <a target="_blank" href={item.fileUrl}
                                                        className="image-popup gal-item"><img
-                                                        src={item.fileUrl} alt="Image" className="img-fluid"/></a>
+                                                        src={item.fileUrl} style={{maxHeight:'500px'}} alt="Image" className="img-fluid"/></a>
                                                 </div>
                                             )
                                         })}
                                     </OwlCarousel>}
-                                {list.map((item) => {
-                                    return (
-                                        <div className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-2">
-                                            <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
-                                                src={item.fileUrl} alt="Image" className="img-fluid"/></a>
-                                        </div>
-                                    )
-                                })}
+                                <div className="container">
+                                    <div className="row">
+                                        {list.map((item) => {
+                                            return (
+                                                <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
+                                                    <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
+                                                        src={item.fileUrl} alt="Image" className="img-thumbnail h-100"/></a>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div className="col">
