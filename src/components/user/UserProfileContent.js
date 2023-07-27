@@ -77,12 +77,8 @@ export function UserProfile() {
                                 </Formik>
                             </div>
                         </div>
-                        <div className="col-md-4">
-                            <div className="profile-head">
-                                <p className="proile-rating">
-                                    RANKINGS : <span>{user.role}</span>
-                                </p>
-                            </div>
+                        <div className="col-md-3">
+
                         </div>
                         <div className="col-md-2">
                             <div>
@@ -91,15 +87,31 @@ export function UserProfile() {
                                         lastName:currentUser.lastName,
                                         email:currentUser.email,
                                         phoneNumber:currentUser.phoneNumber,
-                                        password:currentUser.password
                                     }
                                 }
                                         onSubmit={(values) => {
-                                            console.log(123)
+                                           if (values.firstName === "" || values.lastName === ""){
+                                               alert("name cannot empty")
+                                               return
+                                           }
+                                            if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(values.email)) {
+                                                alert('Please enter a valid Gmail address');
+                                                return;
+                                            }
+                                            if (!/^\d{10}$/.test(values.phoneNumber)) {
+                                                alert('Please enter a valid 10-digit phone number');
+                                            }
                                             axios.put(`http://localhost:8080/user/current`,values,config).then((res) => {
                                                 localStorage.setItem("currentUser", JSON.stringify(res.data))
                                                 alert("update success")
-                                            })
+                                            }).catch((error) => {
+                                                if (error.response && error.response.status === 401) {
+                                                    alert('email or phoneNumber already exist');
+                                                } else {
+                                                    console.error('Error occurred while posting result:', error);
+                                                    alert('An error occurred. Please try again later.');
+                                                }
+                                            });
                                         }
                                         }
                                         enableReinitialize={true}>
