@@ -21,8 +21,15 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import Grid from "@mui/material/Grid";
 import {Link} from "react-router-dom";
+import './Menubar.css'
+
 
 export default function Menubar() {
+    const menuBarStyle = {
+        fontFamily: 'Roboto, sans-serif',
+        color:'blue',
+        fontWeight: 'bold'
+    };
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();

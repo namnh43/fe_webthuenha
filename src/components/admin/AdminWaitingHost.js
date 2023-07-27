@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {fetchData,postData} from "../utils/api";
+import {fetchData,postData} from "../../utils/api";
 import Swal from "sweetalert2";
 import ReactPaginate from "react-paginate";
 

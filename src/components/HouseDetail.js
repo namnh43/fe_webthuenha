@@ -135,20 +135,25 @@ export function HouseDetail() {
                                             )
                                         })}
                                     </OwlCarousel>}
-                                {list.map((item) => {
-                                    return (
-                                        <div className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-2">
-                                            <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
-                                                src={item.fileUrl} alt="Image" className="img-fluid"/></a>
-                                        </div>
-                                    )
-                                })}
+                                <div className="container">
+                                    <div className="row">
+                                        {list.map((item) => {
+                                            return (
+                                                <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
+                                                    <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
+                                                        src={item.fileUrl} alt="Image" className="img-thumbnail h-100"/></a>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div className="col">
-                            <div className="bg-white widget border rounded">
-                                <h3 className="h4 text-black widget-title mb-3">${house.price}/Day</h3>
-                                <form action="#" className="form-contact-agent">
+                            <div className="bg-white p-3 border rounded">
+                                <h3 className=" text-black  mb-3 ">Price ${house.price}/Night</h3>
+                                <form action="#" className="">
                                     <div>
                                         <div className="form-group">
                                             <label htmlFor="Booking">Booking Date</label>

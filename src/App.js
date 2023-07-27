@@ -5,14 +5,11 @@ import {HomePage} from "./pages/HomePage";
 import {HouseList} from "./components/HouseList";
 import {RegisterPage} from "./pages/RegisterPage";
 import {LoginPage} from "./pages/LoginPage";
-import {AdminPage} from "./pages/AdminPage";
 import OwnerPage from "./pages/OwnerPage";
 import OwnerHouseList from "./components/OwnerHouseList";
-import {AdminUserList} from "./components/AdminUserList";
-import {AdminHostList} from "./components/AdminHostList";
-import {AdminWaitingHost} from "./components/AdminWaitingHost";
-import {HouseDetail} from "./components/HouseDetail";
-import TestJS from "./components/test";
+import {AdminUserList} from "./components/admin/AdminUserList";
+import {AdminHostList} from "./components/admin/AdminHostList";
+import {AdminWaitingHost} from "./components/admin/AdminWaitingHost";
 import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 import {AdminPage2} from "./pages/AdminPage2";
 import {UserPage} from "./pages/UserPage";
@@ -21,6 +18,9 @@ import BookingHistory from "./components/user/BookingHistory";
 import FormWithImageUpload from "./components/demoFormUploadImg";
 import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
 import {HouseDetailPage} from "./pages/HouseDetailPage";
+import OwnerBookingList from "./components/OwnerBookingList";
+import {SearchHouseResult} from "./components/search/SearchHouseResult";
+import {SearchResultPage} from "./pages/SearchResultPage";
 function App() {
   return (
     <div className="App">
@@ -28,6 +28,7 @@ function App() {
           <Route path='/' element={<HomePage/>}>
               <Route path='' element={<HouseList/>}/>
           </Route>
+          <Route path='/houses/search' element={<SearchResultPage/>}/>
           <Route path='/houses/:id/detail' element={<HouseDetailPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
@@ -40,6 +41,7 @@ function App() {
               <Route path='' element={<OwnerHouseList/>}/>
               <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
               <Route path='edit-house-form/:houseId' element={<OwnerEditHouseForm/>}/>
+              <Route path='booking' element={<OwnerBookingList/>}/>
           </Route>
           <Route path='/user' element={<UserPage/>}>
               <Route path='' element={<UserProfile/>}/>
