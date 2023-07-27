@@ -64,10 +64,22 @@ export function HouseDetail() {
     }, [result])
 
     function postResult() {
-        console.log('post_result', result)
-        axios.post(`http://localhost:8080/booking/create`, result, config).then((res) => {
-            alert("succssess")
-        })
+        try {
+            console.log('post_result', result);
+            axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
+                alert('success');
+            }).catch((error) => {
+                if (error.response && error.response.status === 400) {
+                    alert('This day has been placed');
+                } else {
+                    console.error('Error occurred while posting result:', error);
+                    alert('An error occurred. Please try again later.');
+                }
+            });
+        } catch (error) {
+            console.error('Error occurred while posting result:', error);
+            alert('An error occurred. Please try again later.');
+        }
     }
 
     useEffect(() => {
@@ -81,16 +93,14 @@ export function HouseDetail() {
 
     function calculateDiff(startDate, endDate) {
         if (startDate !== "" && endDate !== "") {
-            if (new Date(startDate) > new Date(endDate)) {
+            if (new Date(startDate) >= new Date(endDate)) {
                 alert("Date invalid")
-                setStartDate("")
                 setEndDate("")
-
             } else {
                 const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
                 const firstDate = new Date(startDate);
                 const secondDate = new Date(endDate);
-                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay))+1);
+                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay)));
             }
         }
     }
