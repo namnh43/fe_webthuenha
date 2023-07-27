@@ -7,7 +7,10 @@ import {useNavigate} from "react-router";
 import {LoginPage} from "./LoginPage";
 
 const SignupSchema = Yup.object().shape({
-    username: Yup.string().required('* Required'),
+    username: Yup.string()
+        .min(6, '* Username must be longer than 6 characters')
+        .max(32, '* Username must not be longer than 32 characters')
+        .required('* Required'),
     phone: Yup.string()
         .matches('^\\+?[0-9]{3}-?[0-9]{6,12}$', '* Invalid phone number')
         .required('* Required'),
@@ -15,13 +18,12 @@ const SignupSchema = Yup.object().shape({
         .matches('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$', '* Invalid email')
         .required('* Required'),
     password: Yup.string()
-        .min(6, '* Password must be longer than 5 characters')
+        .min(6, '* Password must be longer than 6 characters')
         .max(32, '* Password must not be longer than 32 characters')
         .required('* Required'),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], '* Password must match')
 });
-
 
 export function RegisterPage() {
     const navigate = useNavigate()

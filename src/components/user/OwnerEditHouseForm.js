@@ -63,11 +63,12 @@ function OwnerEditHouseForm() {
                 console.log("House updated successfully:", response.data);
 
                 setEditedHouse({ ...editedHouse, ...values });
-
             })
             .catch((error) => {
                 console.error("Error updating house:", error);
 
+            })
+            .finally(() => {
             });
     };
 

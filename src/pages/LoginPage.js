@@ -33,7 +33,7 @@ export function LoginPage() {
                     })
                     .catch(() => {
                         navigate('/login')
-                        alert('Login failed')
+                        alert('Wrong username or password')
                     })
             }}
         >

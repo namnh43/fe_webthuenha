@@ -2,8 +2,11 @@ import React, {useEffect, useState} from "react";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import UploadImageField from "./upload";
+import {useNavigate} from "react-router";
 
 function OwnerAddHouseForm() {
+
+    const navigation = useNavigate();
 
     const [bedrooms, setBedrooms] = useState(2);
     const [bathrooms, setBathrooms] = useState(1);
@@ -31,7 +34,7 @@ function OwnerAddHouseForm() {
             )
             .then((res) => {
                 alert("Added House");
-                console.log(res.data);
+                navigation("/owner");
             })
             .finally(() => {
             });
