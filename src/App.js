@@ -7,9 +7,6 @@ import {RegisterPage} from "./pages/RegisterPage";
 import {LoginPage} from "./pages/LoginPage";
 import OwnerPage from "./pages/OwnerPage";
 import OwnerHouseList from "./components/OwnerHouseList";
-import {AdminUserList} from "./components/AdminUserList";
-import {AdminHostList} from "./components/AdminHostList";
-import {AdminWaitingHost} from "./components/AdminWaitingHost";
 import {HouseDetail} from "./components/HouseDetail";
 import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 import {AdminPage2} from "./pages/AdminPage2";
@@ -20,6 +17,9 @@ import FormWithImageUpload from "./components/demoFormUploadImg";
 import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
 import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/OwnerBookingList";
+import {AdminUserList} from "./components/admin/AdminUserList";
+import {AdminHostList} from "./components/admin/AdminHostList";
+import {AdminWaitingHost} from "./components/admin/AdminWaitingHost";
 function App() {
   return (
     <div className="App">

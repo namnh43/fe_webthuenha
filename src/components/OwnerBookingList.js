@@ -27,6 +27,14 @@ function OwnerBookingList() {
             .then((res) => setBookingList(res.data))
     }, []);
 
+    let cancelMaintenance = (bookingId) => {
+        axios.delete(`http://localhost:8080/booking/maintenance-to-empty/${bookingId}`, config)
+            .then(() => {
+                axios.get('http://localhost:8080/booking/owner', config)
+                    .then((res) => setBookingList(res.data))
+            })
+    }
+
     return (<>
         <h1>Booking List</h1>
         <section className="main">
@@ -53,7 +61,8 @@ function OwnerBookingList() {
                             <td>{item.price}/{item.total}</td>
                             <td>{item.bookingStatus}</td>
                             {item.bookingStatus === "MAINTENANCE" && (
-                                <td><button className="btn btn-danger">Cancel</button></td>
+                                <td><button className="btn btn-danger"
+                                            onClick={() => cancelMaintenance(item.id)}>Cancel</button></td>
                             )}
                             {item.bookingStatus === "BOOKING" && (
                                     <td><button className="btn btn-primary">Check in</button></td>
