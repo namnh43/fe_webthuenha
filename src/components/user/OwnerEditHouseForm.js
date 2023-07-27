@@ -10,7 +10,7 @@ function OwnerEditHouseForm() {
     const [editedHouse, setEditedHouse] = useState(null);
     const [bedrooms, setBedrooms] = useState(0);
     const [bathrooms, setBathrooms] = useState(0);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isUpdateImg, setIsUpdateImg] = useState(false);
 
     useEffect(() => {
         const config = {
@@ -37,7 +37,11 @@ function OwnerEditHouseForm() {
     }
 
     const handleSubmit = (values, { setSubmitting }) => {
-        setIsSubmitting(true);
+
+        if (!isUpdateImg) {
+            setSubmitting(false);
+            return alert("Please confirm first!")
+        }
 
         const config = {
             headers: {
@@ -65,13 +69,11 @@ function OwnerEditHouseForm() {
 
                 setEditedHouse({ ...editedHouse, ...values });
 
-                setIsSubmitting(false);
                 setSubmitting(false);
             })
             .catch((error) => {
                 console.error("Error updating house:", error);
 
-                setIsSubmitting(false);
                 setSubmitting(false);
             });
     };
@@ -173,6 +175,7 @@ function OwnerEditHouseForm() {
                                     name="images"
                                     as={UploadImageField}
                                     images={editedHouse.images || []}
+                                    setIsUpdateImg={setIsUpdateImg}
                                 />
                             </div>
                             <button
