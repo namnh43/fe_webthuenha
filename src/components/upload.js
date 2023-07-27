@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {initializeApp} from "firebase/app";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import './uploadCss.css';
 
 function UploadImageField({images, values, handleFormSubmit}) {
 
@@ -48,7 +49,6 @@ function UploadImageField({images, values, handleFormSubmit}) {
 
         setSelectedFiles([...selectedFiles, ...files]);
         setPreviewUrls([...previewUrls, ...fileUrls]);
-
     };
 
     const handleRemoveImage = (index) => {
@@ -130,11 +130,9 @@ function UploadImageField({images, values, handleFormSubmit}) {
                 <span>
                     Drag and drop images here or click to select files &nbsp;
                 </span>
-                <input type="file" name="file" onChange={changeHandler} multiple
-                       style={{
-                           color: "transparent"
-                       }}/>
-                <br/>
+                <input type="file" name="file" onChange={changeHandler} multiple style={{color: "transparent"}}
+                       id="fileInput"/>
+                <label htmlFor="fileInput" className="custom-file-button">Choose File</label>
             </div>
             <br/>
 
