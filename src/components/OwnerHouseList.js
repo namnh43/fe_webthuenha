@@ -132,6 +132,7 @@ function OwnerHouseList() {
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th></th>
                     <th>Name</th>
                     <th>Price</th>
                     <th>Address</th>
@@ -146,6 +147,7 @@ function OwnerHouseList() {
                     .map((item, key) => {
                         return (<tr>
                             <td>{item.id}</td>
+                            <td><img src={item.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td>
                             <td>{item.name}</td>
                             <td>{item.price}</td>
                             <td>{item.address}</td>
