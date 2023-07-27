@@ -144,10 +144,11 @@ function OwnerHouseList() {
                 <tbody>
                 {houseList
                     .slice(pagesVisited, pagesVisited + housesPerPage)
-                    .map((item, key) => {
-                        return (<tr>
-                            <td>{item.id}</td>
-                            <td><img src={item.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td>
+                    .map((item, index) => {
+                        return (<tr key={item.id}>
+                            <td>{index + 1 + pagesVisited}</td>
+                            {item.images.length > 0 ?
+                                <td><img src={item.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td> : <td></td>}
                             <td>{item.name}</td>
                             <td>{item.price}</td>
                             <td>{item.address}</td>
