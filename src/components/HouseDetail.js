@@ -199,26 +199,6 @@ export function HouseDetail() {
                         </div>
                         <div className="bg-white property-body border-bottom border-left border-right">
                             <div className="row mb-5">
-                                <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
-                                <div className="col-md-6">
-                                    <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
-                                        <li>
-                                            <span className="property-specs">Bed room</span>
-                                            <span className="property-specs-number">{house.totalBedrooms}
-                                                <sup>+</sup></span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Bath room</span>
-                                            <span className="property-specs-number">{house.totalBathrooms}</span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Area</span>
-                                            <span className="property-specs-number">7,000</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="row mb-5">
                                 <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
                                     <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
                                     <strong className="d-block">Condo</strong>
