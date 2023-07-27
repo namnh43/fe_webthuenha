@@ -7,6 +7,7 @@ function OwnerAddHouseForm() {
 
     const [bedrooms, setBedrooms] = useState(2);
     const [bathrooms, setBathrooms] = useState(1);
+    const [submittedValues, setSubmittedValues] = useState(null);
 
     function handleBedroomsRangeChange(event) {
         setBedrooms(event.target.value);
@@ -15,6 +16,26 @@ function OwnerAddHouseForm() {
     function handleBathroomsRangeChange(event) {
         setBathrooms(event.target.value);
     }
+
+    const handleFormSubmit = (values) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        };
+        axios
+            .post(
+                `http://localhost:8080/house/create/${JSON.parse(localStorage.getItem("currentUser")).id}`,
+                values,
+                config
+            )
+            .then((res) => {
+                alert("Added House");
+                console.log(res.data);
+            })
+            .finally(() => {
+            });
+    };
 
     return (
         <>
@@ -29,20 +50,9 @@ function OwnerAddHouseForm() {
                     images: [],
                 }}
                 enableReinitialize={true}
-                onSubmit={values => {
-                    const config = {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
-                    console.log(values);
-                    axios.post(`http://localhost:8080/house/create/${JSON.parse(localStorage.getItem('currentUser')).id}`,
-                        values,
-                        config).then(res => {
-                            alert('Added House')
-                        })
-                }}
+                onSubmit={(values)=> setSubmittedValues(values)}
             >
+                {({ isSubmitting, values }) => (
                 <Form>
                     <h1>Add a new house</h1>
                     <div className="form-group">
@@ -87,10 +97,23 @@ function OwnerAddHouseForm() {
                     </div>
                     <div>
                         <label className="form-label">Upload your photos</label>
-                        <Field name="images" as={UploadImageField} />
+                        <Field
+                            name="images"
+                            as={UploadImageField}
+                            values={submittedValues}
+                            images={values.images}
+                            handleFormSubmit={handleFormSubmit}
+                        />
                     </div>
-                    <button type="submit" className="btn btn-primary mt-3">Submit</button>
+                    <button
+                        type="submit"
+                        className="btn btn-primary mt-3"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
                 </Form>
+                )}
             </Formik>
         </>
     );

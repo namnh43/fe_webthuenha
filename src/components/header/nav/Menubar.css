@@ -1,0 +1,9 @@
+.MuiListItemText-primary {
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+}
+/* Override styles for Typography component */
+/*.MuiTypography-root {*/
+
+/*}*/

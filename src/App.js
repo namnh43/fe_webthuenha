@@ -1,10 +1,10 @@
+import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router";
 import {HomePage} from "./pages/HomePage";
 import {HouseList} from "./components/HouseList";
 import {RegisterPage} from "./pages/RegisterPage";
 import {LoginPage} from "./pages/LoginPage";
-import {AdminPage} from "./pages/AdminPage";
 import OwnerPage from "./pages/OwnerPage";
 import OwnerHouseList from "./components/OwnerHouseList";
 import {AdminUserList} from "./components/AdminUserList";

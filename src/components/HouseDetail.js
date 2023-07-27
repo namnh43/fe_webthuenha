@@ -66,10 +66,22 @@ export function HouseDetail() {
     }, [result])
 
     function postResult() {
-        console.log('post_result', result)
-        axios.post(`http://localhost:8080/booking/create`, result, config).then((res) => {
-            alert("succssess")
-        })
+        try {
+            console.log('post_result', result);
+            axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
+                alert('success');
+            }).catch((error) => {
+                if (error.response && error.response.status === 400) {
+                    alert('This day has been placed');
+                } else {
+                    console.error('Error occurred while posting result:', error);
+                    alert('An error occurred. Please try again later.');
+                }
+            });
+        } catch (error) {
+            console.error('Error occurred while posting result:', error);
+            alert('An error occurred. Please try again later.');
+        }
     }
 
     useEffect(() => {
@@ -83,16 +95,14 @@ export function HouseDetail() {
 
     function calculateDiff(startDate, endDate) {
         if (startDate !== "" && endDate !== "") {
-            if (new Date(startDate) > new Date(endDate)) {
+            if (new Date(startDate) >= new Date(endDate)) {
                 alert("Date invalid")
-                setStartDate("")
                 setEndDate("")
-
             } else {
                 const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
                 const firstDate = new Date(startDate);
                 const secondDate = new Date(endDate);
-                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay))+1);
+                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay)));
             }
         }
     }
@@ -121,25 +131,30 @@ export function HouseDetail() {
                                                 <div className="col-sm-12 col-md-12 col-lg-12">
                                                     <a target="_blank" href={item.fileUrl}
                                                        className="image-popup gal-item"><img
-                                                        src={item.fileUrl} alt="Image" className="img-fluid"/></a>
+                                                        src={item.fileUrl} style={{maxHeight:'500px'}} alt="Image" className="img-fluid"/></a>
                                                 </div>
                                             )
                                         })}
                                     </OwlCarousel>}
-                                {list.map((item) => {
-                                    return (
-                                        <div className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-2">
-                                            <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
-                                                src={item.fileUrl} alt="Image" className="img-fluid"/></a>
-                                        </div>
-                                    )
-                                })}
+                                <div className="container">
+                                    <div className="row">
+                                        {list.map((item) => {
+                                            return (
+                                                <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
+                                                    <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
+                                                        src={item.fileUrl} alt="Image" className="img-thumbnail h-100"/></a>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div className="col">
-                            <div className="bg-white widget border rounded">
-                                <h3 className=" text-black widget-title mb-3 pt-2 ps-2">${house.price}/Day</h3>
-                                <form action="#" className="form-contact-agent">
+                            <div className="bg-white p-3 border rounded">
+                                <h3 className=" text-black  mb-3 ">Price ${house.price}/Night</h3>
+                                <form action="#" className="">
                                     <div>
                                         <div className="form-group">
                                             <label htmlFor="Booking">Booking Date</label>
