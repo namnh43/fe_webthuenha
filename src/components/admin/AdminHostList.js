@@ -134,7 +134,7 @@ export function AdminHostList() {
                             <th>Date Created</th>
                             <th>Phone number</th>
                             <th>Number home</th>
-                            <th>Earn money(VND)</th>
+                            <th>Earn money($)</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
