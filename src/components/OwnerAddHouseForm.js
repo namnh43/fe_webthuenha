@@ -58,59 +58,71 @@ function OwnerAddHouseForm() {
                 {({ isSubmitting, values }) => (
                 <Form>
                     <h1>Add a new house</h1>
-                    <div className="form-group">
-                        <label>House Name</label>
-                        <Field type="text" className="form-control" name="name"
-                               placeholder="Enter house name..."/>
-                        <small className="form-text text-muted">We'll never share your email with anyone
-                            else.</small>
+                    <div className="d-flex">
+                        <div className="col-6 p-0">
+                            <div className="form-group" style={{height: 72}}>
+                                <label>House Name</label>
+                                <Field type="text" className="form-control" name="name"
+                                       placeholder="Enter house name..."/>
+                                {/*<small className="form-text text-muted">We'll never share your email with anyone*/}
+                                {/*    else.</small>*/}
+                            </div>
+                            <div className="form-group h-8"  style={{height: 72}}>
+                                <label>Address</label>
+                                <Field type="text" className="form-control" name="address"
+                                       placeholder="Address..."/>
+                                {/*<small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone*/}
+                                {/*    else.</small>*/}
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="formControlRange">Descriptions</label>
+                                <Field component="textarea" className="form-control"
+                                       placeholder="Leave descriptions here..." name="description"
+                                       style={{height: '120px'}}/>
+                            </div>
+                        </div>
+
+                        <div className="col-5 pl-5">
+                            <div className="form-group">
+                                <label htmlFor="formControlRange">Number of bedrooms</label>
+                                <Field type="range" name="totalBedrooms" min="1" max="10"
+                                       value={bedrooms} className="form-control-range p-0"
+                                       onChange={handleBedroomsRangeChange}/>
+                                <output>{bedrooms}</output>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="formControlRange">Number of bathrooms</label>
+                                <Field type="range" name="totalBathrooms" min="1" max="10"
+                                       value={bathrooms} className="form-control-range p-0"
+                                       onChange={handleBathroomsRangeChange}/>
+                                <output>{bathrooms}</output>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Price (Dollars/night)</label>
+                                <Field type="text" className="form-control" name="price" placeholder="Price..."/>
+                                {/*<small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone*/}
+                                {/*    else.</small>*/}
+                            </div>
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label>Address</label>
-                        <Field type="text" className="form-control" name="address"
-                               placeholder="Address..."/>
-                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone
-                            else.</small>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="formControlRange">Number of bedrooms</label>
-                        <Field type="range" name="totalBedrooms" min="1" max="10"
-                               value={bedrooms} className="form-control-range col-6 p-0"
-                               onChange={handleBedroomsRangeChange}/>
-                        <output>{bedrooms}</output>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="formControlRange">Number of bathrooms</label>
-                        <Field type="range" name="totalBathrooms" min="1" max="10"
-                               value={bathrooms} className="form-control-range col-6 p-0"
-                               onChange={handleBathroomsRangeChange}/>
-                        <output>{bathrooms}</output>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="formControlRange">Descriptions</label>
-                        <Field component="textarea" className="form-control"
-                               placeholder="Leave descriptions here..." name="description"
-                               style={{height: '100px'}}/>
-                    </div>
-                    <div className="form-group">
-                        <label>Price (Dollars/night)</label>
-                        <Field type="text" className="form-control" name="price" placeholder="Price..."/>
-                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone
-                            else.</small>
-                    </div>
+
                     <div>
-                        <label className="form-label">Upload your photos</label>
-                        <Field
-                            name="images"
-                            as={UploadImageField}
-                            values={submittedValues}
-                            images={values.images}
-                            handleFormSubmit={handleFormSubmit}
-                        />
+                        <div className="form-group mr-3">
+                            <label className="form-label">Upload your photos</label>
+                            <Field
+                                name="images"
+                                as={UploadImageField}
+                                values={submittedValues}
+                                images={values.images}
+                                handleFormSubmit={handleFormSubmit}
+                            />
+                        </div>
                     </div>
                     <button
                         type="submit"
-                        className="btn btn-primary mt-3"
+                        className="btn btn-primary"
+                        style={{alignSelf: 'right'}}
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? "Submitting..." : "Submit"}

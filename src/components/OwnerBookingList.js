@@ -50,7 +50,8 @@ function OwnerBookingList() {
                         return (<tr>
                             <td>{key + 1 + pagesVisited}</td>
                             {item.house.images.length === 0 ? <td></td> :
-                                <td><img src={item.house.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td>
+                                <td><img src={item.house.images[0].fileUrl} style={{height: '4rem', width: '7rem'}}
+                                         alt=""/></td>
                             }
 
                             <td>{item.house.name}</td>
