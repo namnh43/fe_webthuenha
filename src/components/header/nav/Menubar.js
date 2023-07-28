@@ -70,6 +70,7 @@ export default function Menubar() {
         axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
             .then(() => localStorage.clear())
             .then(() => setLogin(false))
+            .then(()=> navigate('/login'))
     }
 
     const handleLoginClick = () => {
