@@ -111,8 +111,8 @@ export function HouseDetail() {
             <div className="container">
                     <div className="row">
                         <div className="col-12">
-                            <h1 className="text-capitalize mb-0">{house.name}</h1>
-                            <p className="text-decoration-underline">{house.address}</p>
+                            <h3 className="text-capitalize mb-0 mt-3"> <HomeIcon color="secondary" /> {house.name}</h3>
+                            <p className="text-decoration-underline"><LocationOnIcon color="primary" /> {house.address}</p>
                         </div>
                     </div>
                     <div className="row">
@@ -152,7 +152,7 @@ export function HouseDetail() {
                         </div>
                         <div className="col">
                             <div className="bg-white p-3 border rounded">
-                                <h3 className=" text-black  mb-3 ">Price ${house.price}/Night</h3>
+                                <h3 className="h4 text-black  mb-3 ">Price ${house.price}/Night</h3>
                                 <form action="#" className="">
                                     <div>
                                         <div className="form-group">
@@ -204,42 +204,11 @@ export function HouseDetail() {
                                 </ul>
                             </div>
                         </div>
+
                         <div className="bg-white property-body border-bottom border-left border-right">
                             <div className="row mb-5">
-                                <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
-                                <div className="col-md-6">
-                                    <ul className="property-specs-wrap mb-3 mb-lg-0 float-lg-right">
-                                        <li>
-                                            <span className="property-specs">Bed room</span>
-                                            <span className="property-specs-number">{house.totalBedrooms}
-                                                <sup>+</sup></span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Bath room</span>
-                                            <span className="property-specs-number">{house.totalBathrooms}</span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Area</span>
-                                            <span className="property-specs-number">7,000</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="row mb-5">
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Home Type</span>
-                                    <strong className="d-block">Condo</strong>
-                                </div>
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Year Built</span>
-                                    <strong className="d-block">2018</strong>
-                                </div>
-                                <div className="col-md-6 col-lg-4 text-center border-bottom border-top py-3">
-                                    <span className="d-inline-block text-black mb-0 caption-text">Price</span>
-                                    <strong className="d-block">${house.price}</strong>
-                                </div>
                                 <h2>Host  {house && house.user ? house.user.firstName: ''} {house && house.user ? house.user.lastName : ''}</h2>
-                                <p>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</p>
+                                <h5>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</h5>
                             </div>
                             <h2 className="h4 text-black">More Info</h2>
                             <p>{house.description}</p>
