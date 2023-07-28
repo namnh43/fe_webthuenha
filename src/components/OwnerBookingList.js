@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ReactPaginate from "react-paginate";
 import axios from "axios";
+import "./OwnerHouseList.css"
 
 function OwnerBookingList() {
 
@@ -47,8 +48,11 @@ function OwnerBookingList() {
                     .slice(pagesVisited, pagesVisited + housesPerPage)
                     .map((item, key) => {
                         return (<tr>
-                            <td>{item.id}</td>
-                            <td><img src={item.house.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td>
+                            <td>{key + 1 + pagesVisited}</td>
+                            {item.house.images.length === 0 ? <td></td> :
+                                <td><img src={item.house.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td>
+                            }
+
                             <td>{item.house.name}</td>
                             <td>{item.createAt}</td>
                             <td>{item.startDate}/{item.endDate}</td>

@@ -146,7 +146,7 @@ function OwnerHouseList() {
                     .slice(pagesVisited, pagesVisited + housesPerPage)
                     .map((item, key) => {
                         return (<tr>
-                            <td>{item.id}</td>
+                            <td>{key + 1 + pagesVisited}</td>
                             <td><img src={item.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td>
                             <td>{item.name}</td>
                             <td>{item.price}</td>
@@ -154,15 +154,16 @@ function OwnerHouseList() {
                             <td>add later</td>
                             <td>{item.houseStatus}</td>
                             <td className="col-2">
-                                <i className="material-icons">&#xe88e;</i>
-                                <i className="material-icons"
-                                   onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>&#xe3c9;</i>
-                                <i className="material-icons" onClick={() => {
+                                <button><i className="material-icons">&#xe88e;</i></button>
+                                <button onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>
+                                    <i className="material-icons">&#xe3c9;</i></button>
+                                <button onClick={() => {
                                     setMaintainedHouseId(item.id)
                                     setOpenDialog(true)
                                 }
-                                }>&#xea3c;</i>
-                                <i className="material-icons" onClick={() => deleteHouse(item.id)}>&#xe872;</i>
+                                }><i className="material-icons">&#xea3c;</i></button>
+                                <button onClick={() => deleteHouse(item.id)}>
+                                    <i className="material-icons">&#xe872;</i></button>
                             </td>
                         </tr>)
                     })}
