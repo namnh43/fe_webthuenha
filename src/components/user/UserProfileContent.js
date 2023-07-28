@@ -1,31 +1,79 @@
 import React, {useEffect, useState} from "react";
-import "./Profile.css";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
+import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import {initializeApp} from "firebase/app";
 
 export function UserProfile() {
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const [showForm, setShowForm] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBoTj1_SNijRYo4DGugLqnCKWOy2pF7hWk",
+        authDomain: "casemd4-3a742.firebaseapp.com",
+        projectId: "casemd4-3a742",
+        storageBucket: "casemd4-3a742.appspot.com",
+        messagingSenderId: "149528641745",
+        appId: "1:149528641745:web:852427a18e21880305c5f0",
+        measurementId: "G-HKY5QFR16C"
+    };
+
+    const storage = getStorage(initializeApp(firebaseConfig));
+
     let config = {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        }
-    }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    };
     const [user, setUser] = useState({});
     useEffect(() => {
-            setUser({
-                firstName:currentUser.firstName,
-                lastName:currentUser.lastName,
-                email:currentUser.email,
-                phoneNumber:currentUser.phoneNumber,
-                role:currentUser.role,
-                password:currentUser.password,
-                profileImage:currentUser.profileImage
-            });
-    }, [])
+        setUser({
+            firstName: currentUser.firstName,
+            lastName: currentUser.lastName,
+            email: currentUser.email,
+            phoneNumber: currentUser.phoneNumber,
+            role: currentUser.role,
+            password: currentUser.password,
+            profileImage: currentUser.profileImage,
+        });
+    }, []);
+
     function changePassword(){
         setShowForm(!showForm);
     }
+
+    function handleImageChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedFile(file);
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    async function uploadFileToFirebase() {
+        if (selectedFile) {
+            try {
+                const storageRef = ref(storage, "md6/" + selectedFile.name);
+                const snapshot = await uploadBytes(storageRef, selectedFile);
+                const downloadURL = await getDownloadURL(snapshot.ref);
+                console.log("File uploaded successfully. Download URL:", downloadURL);
+                setSelectedImage(downloadURL);
+                alert("Saved new avatar.")
+            } catch (error) {
+                throw error;
+            }
+        } else {
+            throw new Error("No file selected.");
+        }
+    }
+
     return (
         <div>
             <h1>User Profile</h1>
@@ -33,16 +81,16 @@ export function UserProfile() {
                     <div className="row">
                         <div className="col-md-4">
                             <div className="profile-img">
-                                <img
-                                    src={user.profileImage}
-                                    alt=""
+                                <img style={{width: "400px"}}
+                                    src={selectedImage || user.profileImage}
                                 />
-                                <div className="file btn btn-lg btn-primary">
-                                    Change Photo
-                                    <input type="file" name="file" />
+                                <div>
+                                    <label htmlFor="fileInput" className="btn btn-success">Change</label>
+                                    <label className="btn btn-primary" onClick={uploadFileToFirebase}>Save</label>
+                                    <input type="file" id="fileInput" onChange={handleImageChange}/>
                                 </div>
-                                <button onClick={changePassword} >Change password</button>
-
+                                <button className="btn btn-warning" onClick={changePassword} >
+                                    Change password</button><br/><br/>
                                 <Formik initialValues={
                                     {
                                         currentPassword:"",
@@ -68,19 +116,19 @@ export function UserProfile() {
                                         }
                                         enableReinitialize={true}>
                                     {showForm && <Form >
-                                        Current password<br/>
-                                        <Field name={"currentPassword"}></Field><br/><br/>
-                                        New Password<br/>
-                                        <Field name={"newPassword"}></Field><br/><br/>
-                                        <button >Change Password</button>
+                                        Current password
+                                        <Field className="form-control" name={"currentPassword"}></Field><br/>
+                                        New Password
+                                        <Field className="form-control" name={"newPassword"}></Field><br/>
+                                        <button className="btn btn-outline-primary">Submit</button>
                                     </Form>}
                                 </Formik>
                             </div>
                         </div>
-                        <div className="col-md-3">
+                        <div className="col-md-2">
 
                         </div>
-                        <div className="col-md-2">
+                        <div className="col-md-4">
                             <div>
                                 <Formik initialValues={
                                     { firstName:currentUser.firstName,
@@ -101,7 +149,7 @@ export function UserProfile() {
                                             if (!/^\d{10}$/.test(values.phoneNumber)) {
                                                 alert('Please enter a valid 10-digit phone number');
                                             }
-                                            axios.put(`http://localhost:8080/user/current`,values,config).then((res) => {
+                                            axios.put(`http://localhost:8080/user/current`,{...values, profileImage: selectedImage},config).then((res) => {
                                                 localStorage.setItem("currentUser", JSON.stringify(res.data))
                                                 alert("update success")
                                             }).catch((error) => {
@@ -116,15 +164,17 @@ export function UserProfile() {
                                         }
                                         enableReinitialize={true}>
                                     <Form>
-                                        firstName<br/>
-                                        <Field name={"firstName"}></Field><br/><br/>
-                                        lastName<br/>
-                                        <Field name={"lastName"}></Field><br/><br/>
-                                        email<br/>
-                                        <Field  name={"email"}></Field><br/><br/>
-                                        phoneNumber<br/>
-                                        <Field  name={"phoneNumber"}></Field><br/><br/>
-                                        <button >Edit</button>
+                                        UserName<br/>
+                                        <input className="form-control" readOnly={true} value={currentUser.username}/><br/>
+                                        FirstName<br/>
+                                        <Field className="form-control" name={"firstName"}></Field><br/>
+                                        LastName<br/>
+                                        <Field className="form-control" name={"lastName"}></Field><br/>
+                                        Email<br/>
+                                        <Field className="form-control"  name={"email"}></Field><br/>
+                                        PhoneNumber<br/>
+                                        <Field className="form-control" name={"phoneNumber"}></Field><br/>
+                                        <button className="btn btn-primary">Update</button>
                                     </Form>
                                 </Formik>
                             </div>

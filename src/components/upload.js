@@ -147,6 +147,7 @@ function UploadImageField({images, values, handleFormSubmit}) {
                         <div
                             key={url}
                             style={{
+                                border: "2px dashed #ccc",
                                 maxWidth: "450px",
                                 position: "relative",
                                 flex: "0 0 30%",
