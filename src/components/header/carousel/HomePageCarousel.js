@@ -1,10 +1,10 @@
 export function HomePageCarousel() {
     return (
         <>
-            <div id="carouselExampleFade" className="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div id="carouselExampleFade" className="carousel slide carousel-fade" style={{position: 'relative', top: '-65px', zIndex: '-1'}} data-bs-ride="carousel">
                 <div className="carousel-inner text-center">
                     <div className="carousel-item active " data-bs-interval="3000">
-                        <img src="/images/hero_bg_1.jpg" style={{height:'700px'}} className="d-block w-100" alt="img1"/>
+                        <img src="/images/hero_bg_1.jpg" className="d-block w-100 vh-100" alt="img1"/>
                         <div className="carousel-caption d-flex h-100 align-items-center justify-content-center flex-column">
                             <div className="col-md-10">
                                 <h1 className="mb-2 mt-3">625 S. Berendo St</h1>
@@ -16,7 +16,7 @@ export function HomePageCarousel() {
                         </div>
                     </div>
                     <div className="carousel-item" data-bs-interval="3000">
-                        <img src="/images/hero_bg_2.jpg" style={{height:'700px'}} className="d-block w-100" alt="img2"/>
+                        <img src="/images/hero_bg_2.jpg" className="d-block w-100 vh-100" alt="img2"/>
                         <div className="carousel-caption d-flex h-100 align-items-center justify-content-center flex-column">
                             <div className="col-md-10">
                                 <h1 className="mb-2 mt-3">871 Crenshaw Blvd</h1>
@@ -28,7 +28,7 @@ export function HomePageCarousel() {
                         </div>
                     </div>
                     <div className="carousel-item" data-bs-interval="3000">
-                        <img src="/images/hero_bg_3.jpg" style={{height:'700px'}} className="d-block w-100" alt="img3"/>
+                        <img src="/images/hero_bg_3.jpg" className="d-block w-100 vh-100" alt="img3"/>
                         <div className="carousel-caption d-flex h-100 align-items-center justify-content-center flex-column">
                             <div className="col-md-10">
                                 <h1 className="mb-2 mt-3">625 S. Berendo St</h1>
