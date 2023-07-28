@@ -16,7 +16,7 @@ import {UserPage} from "./pages/UserPage";
 import {UserProfile} from "./components/user/UserProfileContent";
 import BookingHistory from "./components/user/BookingHistory";
 import FormWithImageUpload from "./components/demoFormUploadImg";
-import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
+import OwnerEditHouseForm from "./components/OwnerEditHouseForm";
 import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/OwnerBookingList";
 import {SearchHouseResult} from "./components/search/SearchHouseResult";
