@@ -3,7 +3,14 @@ import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import UploadImageField from "./upload";
 import {useNavigate} from "react-router";
+import * as Yup from "yup";
 
+const HouseSchema = Yup.object().shape({
+    price: Yup.number()
+        .min(0, '* Price must be greater than 0')
+        .max(1000000000, '* Too high price')
+        .required('* Required')
+});
 function OwnerAddHouseForm() {
 
     const navigation = useNavigate();
@@ -28,7 +35,7 @@ function OwnerAddHouseForm() {
         };
         axios
             .post(
-                `http://localhost:8080/house/create/${JSON.parse(localStorage.getItem("currentUser")).id}`,
+                `http://localhost:8080/house`,
                 values,
                 config
             )
@@ -52,10 +59,11 @@ function OwnerAddHouseForm() {
                     price: '',
                     images: [],
                 }}
+                validationSchema={HouseSchema}
                 enableReinitialize={true}
                 onSubmit={(values)=> setSubmittedValues(values)}
             >
-                {({ isSubmitting, values }) => (
+                {({ isSubmitting, values, errors, touched }) => (
                 <Form>
                     <h1>Add a new house</h1>
                     <div className="d-flex">
@@ -103,6 +111,9 @@ function OwnerAddHouseForm() {
                                 <Field type="text" className="form-control" name="price" placeholder="Price..."/>
                                 {/*<small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone*/}
                                 {/*    else.</small>*/}
+                                {errors.price && touched.price ? (
+                                    <div style={{color: "red", fontSize: 'small'}}>{errors.price}</div>
+                                ) : null}
                             </div>
                         </div>
                     </div>
@@ -125,7 +136,7 @@ function OwnerAddHouseForm() {
                         style={{alignSelf: 'right'}}
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? "Submitting..." : "Submit"}
+                        {isSubmitting ? "Submitting..." : "Add New House"}
                     </button>
                 </Form>
                 )}

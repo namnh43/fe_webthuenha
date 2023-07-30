@@ -54,7 +54,7 @@ function OwnerEditHouseForm() {
 
         axios
             .put(
-                `http://localhost:8080/house/${houseId}/update`,
+                `http://localhost:8080/house/${houseId}`,
                 { ...editedHouse, ...values },
                 config
             )
@@ -178,7 +178,7 @@ function OwnerEditHouseForm() {
                                 className="btn btn-primary mt-3"
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? "Submitting..." : "Submit"}
+                                {isSubmitting ? "Submitting..." : "Save"}
                             </button>
                         </Form>
                     )}

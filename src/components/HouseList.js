@@ -3,7 +3,7 @@ import axios from "axios";
 import {Link} from "react-router-dom";
 import {Card, CardActionArea, CardContent, CardMedia, Typography} from "@mui/material";
 import {useNavigate} from "react-router";
-
+import StarIcon from '@mui/icons-material/Star';
 export function HouseList() {
     const [list, setList] = useState([]);
     const navigate = useNavigate();
@@ -21,12 +21,12 @@ export function HouseList() {
                         {list.map((item) => {
                             return (
                                 <>
-                                    <div className="col-md-6 col-lg-4 mb-4">
+                                    <div className="col-md-6 col-lg-4 mb-4"
+                                         onClick={() => {
+                                             const url = 'houses/' + item.id + '/detail';
+                                             navigate(url)
+                                         }}>
                                         <Card
-                                            onClick={() => {
-                                                const url = 'houses/' + item.id + '/detail';
-                                                navigate(url)
-                                            }}
                                         >
                                             <CardActionArea>
                                                 <CardMedia
@@ -38,7 +38,10 @@ export function HouseList() {
                                                 />
                                                 <CardContent>
                                                     <Typography gutterBottom variant="h5" component="div">
-                                                        <div className="text-capitalize">{item.name}</div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                            <div className="text-capitalize">{item.name}</div>
+                                                            <div><span style={{ fontSize: 'medium' }}><StarIcon fontSize="inherit" />{item.ratingScore}</span></div>
+                                                        </div>
                                                     </Typography>
                                                     <Typography variant="body2" color="text.secondary">
                                                         Lizards are a widespread group of squamate reptiles, with over 6,000
