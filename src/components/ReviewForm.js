@@ -12,6 +12,7 @@ const ReviewForm = ({ bookingId, onClose }) => {
     const handleSubmit = () => {
         console.log(`Booking ID: ${bookingId}`);
         console.log(`Rating: ${rating}\nReview: ${review}`);
+        onClose();
     };
 
     return (

@@ -4,6 +4,7 @@ import ReactPaginate from "react-paginate";
 import "./BookingList.css";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
+import ReviewForm from "../../ReviewForm";
 
 function BookingHistory() {
     const [bookingList, setBookingList] = useState([]);
@@ -13,6 +14,12 @@ function BookingHistory() {
     const pageCount = Math.ceil(bookingList.length / housesPerPage);
     const [selectedRange, setSelectedRange] = useState(['','']);
     const [searchBooking, setSearchBooking] = useState([]);
+    const [reviewBookingId, setReviewBookingId] = useState(null);
+
+
+    const handleCloseReviewForm = () => {
+        setReviewBookingId(null);
+    };
 
     const handleDateRangeChange = (ranges) => {
         if (ranges && ranges.length === 2)
@@ -22,7 +29,7 @@ function BookingHistory() {
     };
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const bookingPerpage = 2;
+    const bookingPerpage = 5;
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -105,68 +112,85 @@ function BookingHistory() {
 
     return (
         <>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <label htmlFor="house-name-input"></label>
-                <input id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required />
+            {reviewBookingId !== null ? (
+                <ReviewForm
+                    bookingId={reviewBookingId}
+                    onClose={handleCloseReviewForm}
+                />
+            ) : (
+                <>
+                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <label htmlFor="house-name-input"></label>
+                        <input id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required />
 
-                <label htmlFor="address-input"></label>
-                <input id="address-input" name="address" type="text" placeholder="Enter address" required />
+                        <label htmlFor="address-input"></label>
+                        <input id="address-input" name="address" type="text" placeholder="Enter address" required />
 
-                <label htmlFor="date-range-picker"></label>
-                <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange} />
+                        <label htmlFor="date-range-picker"></label>
+                        <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange} />
 
-                <label htmlFor="status-select"></label>
-                <select id="status-select" name="status">
-                    <option value="">-- Select status --</option>
-                    <option value="CANCELLED">CANCELLED</option>
-                    <option value="BOOKING">BOOKING</option>
-                    <option value="CHECKED_IN">CHECKED_IN</option>
-                    <option value="CHECKED_OUT">CHECKED_OUT</option>
-                </select>
-                <button onClick={search}>Search</button>
-            </div>
-            <h2>Booking List</h2>
-            <section className="main">
-                <table className="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>House Name</th>
-                        <th>Total</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {bookingList
-                        .slice(pagesVisited, pagesVisited + bookingPerpage)
-                        .map((item, key) => {
-                            return (
-                                <tr key={key}>
-                                    <td>{key + 1}</td>
-                                    <td>{formatDate(item.startDate)}</td>
-                                    <td>{formatDate(item.endDate)}</td>
-                                    <td>{item.house.name}</td>
-                                    <td>{item.total}</td>
-                                    <td>{item.house.address}</td>
-                                    <td>{item.bookingStatus}</td>
-                                    {isCancellable(item.startDate) && item.bookingStatus === "BOOKING" ? (
-                                        <td>
-                                            <button type="button" className="btn btn-danger" onClick={() => handleCancel(item.id)}>Cancel</button>
-                                        </td>
-                                    ) : (
-                                        <td><button type="button" className="btn btn-primary">Detail</button></td>
-                                    )}
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
-                <PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>
-            </section>
+                        <label htmlFor="status-select"></label>
+                        <select id="status-select" name="status">
+                            <option value="">-- Select status --</option>
+                            <option value="CANCELLED">CANCELLED</option>
+                            <option value="BOOKING">BOOKING</option>
+                            <option value="CHECKED_IN">CHECKED_IN</option>
+                            <option value="CHECKED_OUT">CHECKED_OUT</option>
+                        </select>
+                        <button onClick={search}>Search</button>
+                    </div>
+                    <h2>Booking List</h2>
+                    <section className="main">
+                        <table className="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>House Name</th>
+                                <th>Total</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {bookingList
+                                .slice(pagesVisited, pagesVisited + bookingPerpage)
+                                .map((item, key) => {
+                                    return (
+                                        <tr key={key}>
+                                            <td>{key + 1+ pagesVisited}</td>
+                                            <td>{formatDate(item.startDate)}</td>
+                                            <td>{formatDate(item.endDate)}</td>
+                                            <td>{item.house.name}</td>
+                                            <td>{item.total}</td>
+                                            <td>{item.house.address}</td>
+                                            <td>{item.bookingStatus}</td>
+                                            {(item.bookingStatus === "CHECKED_OUT" && item.review === null) ? (
+                                                <td>
+                                                    <button className="btn btn-success" onClick={() => setReviewBookingId(item.id)}>
+                                                        Review
+                                                    </button>
+                                                </td>
+                                            ) : isCancellable(item.startDate) && item.bookingStatus === "BOOKING" ? (
+                                                <td>
+                                                    <button type="button" className="btn btn-danger" onClick={() => handleCancel(item.id)}>Cancel</button>
+                                                </td>
+                                            ) : (
+                                                <td>
+                                                    <button type="button" className="btn btn-primary">Detail</button>
+                                                </td>
+                                            )}
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                        <PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>
+                    </section>
+                </>
+            )}
         </>
     );
 }
