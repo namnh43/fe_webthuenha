@@ -7,19 +7,19 @@ import {RegisterPage} from "./pages/RegisterPage";
 import {LoginPage} from "./pages/LoginPage";
 import OwnerPage from "./pages/OwnerPage";
 import OwnerHouseList from "./components/OwnerHouseList";
-import {HouseDetail} from "./components/HouseDetail";
 import OwnerAddHouseForm from "./components/OwnerAddHouseForm";
 import {AdminPage2} from "./pages/AdminPage2";
 import {UserPage} from "./pages/UserPage";
 import {UserProfile} from "./components/user/UserProfileContent";
 import BookingHistory from "./components/user/BookingHistory";
 import FormWithImageUpload from "./components/demoFormUploadImg";
-import OwnerEditHouseForm from "./components/user/OwnerEditHouseForm";
+import OwnerEditHouseForm from "./components/OwnerEditHouseForm";
 import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/OwnerBookingList";
 import {AdminUserList} from "./components/admin/AdminUserList";
 import {AdminHostList} from "./components/admin/AdminHostList";
 import {AdminWaitingHost} from "./components/admin/AdminWaitingHost";
+import {SearchResultPage} from "./pages/SearchResultPage";
 function App() {
   return (
     <div className="App">
@@ -27,6 +27,7 @@ function App() {
           <Route path='/' element={<HomePage/>}>
               <Route path='' element={<HouseList/>}/>
           </Route>
+          <Route path='/houses/search' element={<SearchResultPage/>}/>
           <Route path='/houses/:id/detail' element={<HouseDetailPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>

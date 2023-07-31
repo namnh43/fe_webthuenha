@@ -2,6 +2,11 @@ import React, {useEffect, useState} from "react";
 import {fetchData,postData} from "../../utils/api";
 import Swal from "sweetalert2";
 import ReactPaginate from "react-paginate";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
+import UserProfileDialog from "../dialog/UserProfileDialog";
+import RuleIcon from '@mui/icons-material/Rule';
+import IconButton from '@mui/material/IconButton';
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
@@ -11,10 +16,20 @@ export function AdminWaitingHost() {
     const pagesVisited = pageNumber * housesPerPage;
     const pageCount = Math.ceil(hosts.length / housesPerPage);
     let [currentDisplayNumber,setCurrentDisplayNumber] = useState(0);
+    const [openProfileDialog, setOpenProfileDialog] = useState(false);
+    const [currentUserId,setCurrentUserId] = useState(null);
+
     const changePage = ({ selected }) => {
         setPageNumber(selected);
         setCurrentDisplayNumber(hosts.slice(selected*housesPerPage, selected*housesPerPage + housesPerPage).length);
     };
+    const handleProfileEdit = (id) => {
+        setCurrentUserId(id);
+        setOpenProfileDialog(true);
+    }
+    const handleCloseProfileDialog = (event,reason) => {
+        setOpenProfileDialog(false);
+    }
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
@@ -87,6 +102,7 @@ export function AdminWaitingHost() {
                     </thead>
                     <tbody>
                     {hosts.slice(pagesVisited, pagesVisited + housesPerPage).map((item,key) => {
+                        console.log(item)
                         return (
                             <tr>
                                 <td>{key}</td>
@@ -95,27 +111,8 @@ export function AdminWaitingHost() {
                                 <td>04/10/2013</td>
                                 <td>{item.phoneNumber}</td>
                                 <td>
-                                    <a href="#" className="settings" title="Settings" id="drop2"
-                                       data-bs-toggle="dropdown" data-toggle="tooltip"><i
-                                        className="material-icons text-dark-light">&#xE8B8;</i></a>
-                                    <div
-                                        className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
-                                        aria-labelledby="drop2">
-                                        <div className="message-body">
-                                            <a
-                                               className="d-flex align-items-center gap-2 dropdown-item">
-                                                <i className="ti ti-user fs-6"></i>
-                                                <p className="mb-0 ">View
-                                                    Profile</p>
-                                            </a>
-                                            <a  onClick={() => handleAction(item.id)}
-                                               className="d-flex align-items-center gap-2 dropdown-item">
-                                                <i className="ti ti-analyze fs-6"></i>
-                                                <p className="mb-0 ">Duyệt yêu
-                                                    cầu</p>
-                                            </a>
-                                        </div>
-                                    </div>
+                                    <Tooltip title="info"><InfoIcon onClick={() => handleProfileEdit(item.id)}/></Tooltip>
+                                    <IconButton title='confirm' color='inherit'><RuleIcon onClick={() => handleAction(item.id)}/></IconButton>
                                 </td>
                             </tr>
                         )
@@ -140,6 +137,7 @@ export function AdminWaitingHost() {
                 </div>
             </section>)
         }
+            <UserProfileDialog open={openProfileDialog} onClose={handleCloseProfileDialog} id={currentUserId}/>
         </>
     )
 }

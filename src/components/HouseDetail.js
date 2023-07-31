@@ -5,6 +5,7 @@ import MapWithSearch from "./Map";
 import OwlCarousel from "react-owl-carousel";
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Reviews from "./Reviews";
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -15,6 +16,7 @@ export function HouseDetail() {
     const [day, setDay] = useState(0);
     const [result, setResult] = useState(null);
     const navigate = useNavigate();
+
     function handleStartDateChange(event) {
         if (new Date(event.target.value) < Date.now()) {
             alert("startDate invalid")
@@ -106,121 +108,129 @@ export function HouseDetail() {
             }
         }
     }
+
     return (
         <>
             <div className="container">
-                    <div className="row">
-                        <div className="col-12">
-                            <h3 className="text-capitalize mb-0 mt-3"> <HomeIcon color="secondary" /> {house.name}</h3>
-                            <p className="text-decoration-underline"><LocationOnIcon color="primary" /> {house.address}</p>
-
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-8">
-                            <div className="row">
-                                {list.length > 0 &&
-                                    <OwlCarousel items={1}
-                                                 className="owl-theme"
-                                                 loop
-                                                 dots={true}
-                                                 autoplay
-                                                 margin={8}>
-                                        {list.map((item) => {
-                                            return (
-                                                <div className="col-sm-12 col-md-12 col-lg-12">
-                                                    <a target="_blank" href={item.fileUrl}
-                                                       className="image-popup gal-item"><img
-                                                        src={item.fileUrl} style={{maxHeight:'500px'}} alt="Image" className="img-fluid"/></a>
-                                                </div>
-                                            )
-                                        })}
-                                    </OwlCarousel>}
-                                <div className="container">
-                                    <div className="row">
-                                        {list.map((item) => {
-                                            return (
-                                                <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
-                                                    <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
-                                                        src={item.fileUrl} alt="Image" className="img-thumbnail h-100"/></a>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="col">
-                            <div className="bg-white p-3 border rounded">
-                                <h3 className=" text-black  mb-3 ">Price ${house.price}/Night</h3>
-                                <form action="#" className="">
-                                    <div>
-                                        <div className="form-group">
-                                            <label htmlFor="Booking">Booking Date</label>
-                                            <input type="Date" id="Booking" className="form-control" value={startDate}
-                                                   onChange={handleStartDateChange}/>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="EndDate">End Date</label>
-                                            <input type="Date" id="EndDate" className="form-control" value={endDate}
-                                                   onChange={handleEndDateChange}/>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {startDate !== "" && endDate !== "" && <div>
-                                            <tr>
-                                                <td>
-                                                    ${house.price} X {day} Day :
-                                                </td>
-                                                <td>${house.price * day}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Service charge :
-                                                </td>
-                                                <td>${house.price * day * 5 / 100}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total money :</th>
-                                                <th>${house.price * day + house.price * day * 5 / 100}</th>
-                                            </tr>
-                                        </div>}
-                                    </div>
-                                    <br/>
-                                    <div className="form-group">
-                                        <input type="button" value="Booking" className="btn btn-primary"
-                                               onClick={booking}/>
-                                    </div>
-                                </form>
-                            </div>
-                            <div className="bg-white widget border rounded mt-5">
-                                <h3 className="h4 text-black widget-title mb-3">Featured Properties</h3>
-                                <p>Address detail</p>
-                                <ul className="list-unstyled">
-                                    <li className="mb-2"><a href="#">1 Madison Street</a></li>
-                                    <li className="mb-2"><a href="#">42 Barington Drive</a></li>
-                                    <li className="mb-2"><a href="#">87 Alton Road</a></li>
-                                    <li className="mb-2"><a href="#">14 Brooketon Drive</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="bg-white property-body border-bottom border-left border-right">
-                            <div className="row mb-5">
-                                <h2>Host  {house && house.user ? house.user.firstName: ''} {house && house.user ? house.user.lastName : ''}</h2>
-                                <p>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</p>
-                            </div>
-                            <h2 className="h4 text-black">More Info</h2>
-                            <p>{house.description}</p>
-                            <br/>
-                            {house.address
-                                && <div >
-                                    <MapWithSearch initialAddress={house.address}/>
-                                </div>}
-                        </div>
-
+                <div className="row">
+                    <div className="col-12">
+                        <h3 className="text-capitalize mb-0 mt-3"><HomeIcon color="secondary"/> {house.name}</h3>
+                        <p className="text-decoration-underline"><LocationOnIcon color="primary"/> {house.address}</p>
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col-8">
+                        <div className="row">
+                            {list.length > 0 &&
+                                <OwlCarousel items={1}
+                                             className="owl-theme"
+                                             loop
+                                             dots={true}
+                                             autoplay
+                                             margin={8}>
+                                    {list.map((item) => {
+                                        return (
+                                            <div className="col-sm-12 col-md-12 col-lg-12">
+                                                <a target="_blank" href={item.fileUrl}
+                                                   className="image-popup gal-item"><img
+                                                    src={item.fileUrl} alt="Image" className="img-fluid"/></a>
+                                            </div>
+                                        )
+                                    })}
+                                </OwlCarousel>}
+                            <div className="container">
+                                <div className="row">
+                                    {list.map((item) => {
+                                        return (
+                                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
+                                                <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
+                                                    src={item.fileUrl} alt="Image" className="img-thumbnail h-100"/></a>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="bg-white p-3 border rounded">
+                            <h3 className="h4 text-black  mb-3 ">Price ${house.price}/Night</h3>
+                            <form action="#" className="">
+                                <div>
+                                    <div className="form-group">
+                                        <label htmlFor="Booking">Booking Date</label>
+                                        <input type="Date" id="Booking" className="form-control" value={startDate}
+                                               onChange={handleStartDateChange}/>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="EndDate">End Date</label>
+                                        <input type="Date" id="EndDate" className="form-control" value={endDate}
+                                               onChange={handleEndDateChange}/>
+                                    </div>
+                                </div>
+                                <div>
+                                    {startDate !== "" && endDate !== "" && <div>
+                                        <tr>
+                                            <td>
+                                                ${house.price} X {day} Day :
+                                            </td>
+                                            <td>${house.price * day}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Service charge :
+                                            </td>
+                                            <td>${house.price * day * 5 / 100}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total money :</th>
+                                            <th>${house.price * day + house.price * day * 5 / 100}</th>
+                                        </tr>
+                                    </div>}
+                                </div>
+                                <br/>
+                                <div className="form-group">
+                                    <input type="button" value="Booking" className="btn btn-primary"
+                                           onClick={booking}/>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="bg-white widget border rounded mt-5">
+                            <h3 className="h4 text-black widget-title mb-3">Featured Properties</h3>
+                            <p>Address detail</p>
+                            <ul className="list-unstyled">
+                                <li className="mb-2"><a href="#">1 Madison Street</a></li>
+                                <li className="mb-2"><a href="#">42 Barington Drive</a></li>
+                                <li className="mb-2"><a href="#">87 Alton Road</a></li>
+                                <li className="mb-2"><a href="#">14 Brooketon Drive</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="bg-white property-body border-bottom border-left border-right">
+                        <div className="row mb-5">
+                            <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
+                            <h5>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</h5>
+                        </div>
+                        <h2 className="h4 text-black">More Info</h2>
+                        <p>{house.description}</p>
+                        <br/>
+                        {house.address
+                            && <div>
+                                <MapWithSearch initialAddress={house.address}/>
+                            </div>}
+                    </div>
+                </div>
+
+                <br/><br/>
+
+                <Reviews house={house}/>
+
+                <br/><br/>
+
+            </div>
+
             <div className="site-section site-section-sm bg-light">
                 <div className="container">
 

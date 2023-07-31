@@ -6,7 +6,7 @@ export function ParentUsingDatePicker() {
 
     const handleDateRangeChange = (ranges) => {
         if (ranges && ranges.length == 2)
-            setSelectedRange([ranges[0].getTime(),ranges[1].getTime()]);
+            setSelectedRange([ranges[0].toLocaleDateString('en-CA'),ranges[1].toLocaleDateString('en-CA')]);
     };
     useEffect(() => {
         selectedRange.map((item) => {

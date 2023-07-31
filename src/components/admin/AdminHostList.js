@@ -1,6 +1,10 @@
 import './AdminHostList.css'
 import {fetchData, postData} from "../../utils/api";
 import React, {useEffect, useState} from "react";
+import InfoIcon from '@mui/icons-material/Info';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import LockIcon from '@mui/icons-material/Lock';
+import Tooltip from '@mui/material/Tooltip';
 // @mui
 import {
     Grid,
@@ -130,7 +134,7 @@ export function AdminHostList() {
                             <th>Date Created</th>
                             <th>Phone number</th>
                             <th>Number home</th>
-                            <th>Earn money(VND)</th>
+                            <th>Earn money($)</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -152,19 +156,11 @@ export function AdminHostList() {
                                     {!item.user.blocked ?
                                         <td><span className="status text-success">&bull;</span> Active</td> :
                                         <td><span className="status text-danger">&bull;</span> Suspended</td>}
-                                    {/*{item.enable ? <td><button type="button" className="btn btn-danger">Block</button></td> :*/}
-                                    {/*    <td><button type="button" className="btn btn-primary">Allow</button></td>}*/}
                                     <td>
-                                        <a href="#" onClick={() => handleProfileEdit(item.user.id)} className="settings text-dark-light" title="Edit"
-                                           data-toggle="tooltip"><i
-                                            className="material-icons material-symbols-outlined">&#xe88e;</i></a>
+                                        <Tooltip title="info"><InfoIcon onClick={() => handleProfileEdit(item.user.id)}/></Tooltip>
                                         {item.user.blocked ?
-                                            <a href="#" onClick={() => unlockHost(item.user.id)} className="settings"
-                                               title="unlock" data-toggle="tooltip"><i
-                                                className="material-icons text-dark-light">&#xe897;</i></a> :
-                                            <a href="#" onClick={() => lockHost(item.user.id)}
-                                               className="settings text-dark-light" title="block"
-                                               data-toggle="tooltip"><i className="material-icons">&#xe898;</i></a>}
+                                            <IconButton title='deactive' color='inherit'><LockIcon onClick={() => unlockHost(item.user.id)}/></IconButton> :
+                                            <IconButton title='active' color='primary'><LockOpenIcon onClick={() => lockHost(item.user.id)}/></IconButton>}
                                     </td>
                                 </tr>
                             )
