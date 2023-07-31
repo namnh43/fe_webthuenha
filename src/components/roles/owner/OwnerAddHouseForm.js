@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
-import UploadImageField from "./upload";
+import UploadImageField from "../../upload";
 import {useNavigate} from "react-router";
 import * as Yup from "yup";
 

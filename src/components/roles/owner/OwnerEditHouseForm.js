@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Field, Form, Formik } from "formik";
 import { useParams } from "react-router";
-import UploadImageField from "./upload";
+import UploadImageField from "../../upload";
 
 function OwnerEditHouseForm() {
     const houseId = useParams().houseId;
@@ -90,7 +90,7 @@ function OwnerEditHouseForm() {
                 >
                     {({ isSubmitting }) => (
                         <Form>
-                            <h1>Edit house</h1>
+                            <h2>Edit house</h2>
                             <div className="form-group">
                                 <label>House Name</label>
                                 <Field

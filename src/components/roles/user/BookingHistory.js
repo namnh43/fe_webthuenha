@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "./BookingList.css";
+import DateRangePickerComponent from "../datetime/DateRangePickerComponent";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 import ReviewForm from "../ReviewForm";
 
 function BookingHistory() {
@@ -25,33 +27,8 @@ function BookingHistory() {
 
     const handleCloseReviewForm = () => {
         setReviewBookingId(null);
-    };
-
-    function formatDate(dateString) {
-        const dateObject = new Date(dateString);
-        const day = dateObject.getDate().toString().padStart(2, '0');
-        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-        const year = dateObject.getFullYear();
-        return `${day}-${month}-${year}`;
-    }
-
-    useEffect(() => {
-        axios.get(`http://localhost:8080/user/list-booking`, config)
-            .then((res) => {
-                console.log(res.data);
-                setBookingList(res.data);
-            });
-    }, []);
-
-    const isCancellable = (startDate) => {
-        const startDateObj = new Date(startDate);
-        const today = new Date();
-        const timeDifference = startDateObj.getTime() - today.getTime();
-        return timeDifference > 86400000;
-    };
-
     const handleCancel = (bookingId) => {
-        const confirmCancel = window.confirm('Are you sure you want to cancel your reservation??');
+        const confirmCancel = window.confirm('Bạn có chắc chắn muốn hủy đặt phòng?');
         let url = `http://localhost:8080/booking/cancel/${bookingId}`;
         console.log(url);
         if (confirmCancel) {
@@ -71,6 +48,56 @@ function BookingHistory() {
         }
     };
 
+    function formatDate(dateString) {
+        const dateObject = new Date(dateString);
+        const day = dateObject.getDate().toString().padStart(2, '0');
+        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+        const year = dateObject.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
+    useEffect(() => {
+        axios.get(`http://localhost:8080/user/list-booking`, config)
+            .then((res) => {
+                console.log(res.data)
+                setSearchBooking(res.data);
+                setBookingList(res.data);
+            });
+    }, []);
+
+    const isCancellable = (startDate) => {
+        const startDateObj = new Date(startDate);
+        const today = new Date();
+        const timeDifference = startDateObj.getTime() - today.getTime();
+        return timeDifference > 86400000;
+    };
+
+
+
+    function search() {
+        const houseName = document.getElementById('house-name-input').value.trim().toLowerCase();
+        const address = document.getElementById('address-input').value.trim().toLowerCase();
+        const status = document.getElementById('status-select').value;
+
+        const searchFilter = searchBooking.filter((booking) => {
+            if (
+                (!houseName || booking.house?.name?.toLowerCase().includes(houseName)) &&
+                (!address || booking.house?.address?.toLowerCase().includes(address)) &&
+                (!status || booking.bookingStatus === status) &&
+                (selectedRange[0]==="" ||
+                    ((selectedRange[1]>=booking.startDate && booking.startDate >= selectedRange[0] ) ||
+                        (selectedRange[0]<=booking.endDate&& booking.endDate <=selectedRange[1])) || (selectedRange[0]>booking.startDate && selectedRange[1]<booking.endDate)
+                )
+            ) {
+                return true;
+            }
+            return false;
+        });
+
+        setBookingList(searchFilter);
+    }
+
+
     return (
         <>
             {reviewBookingId !== null ? (
@@ -80,6 +107,26 @@ function BookingHistory() {
                 />
             ) : (
                 <>
+                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <label htmlFor="house-name-input"></label>
+                        <input id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required />
+
+                        <label htmlFor="address-input"></label>
+                        <input id="address-input" name="address" type="text" placeholder="Enter address" required />
+
+                        <label htmlFor="date-range-picker"></label>
+                        <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange} />
+
+                        <label htmlFor="status-select"></label>
+                        <select id="status-select" name="status">
+                            <option value="">-- Select status --</option>
+                            <option value="CANCELLED">CANCELLED</option>
+                            <option value="BOOKING">BOOKING</option>
+                            <option value="CHECKED_IN">CHECKED_IN</option>
+                            <option value="CHECKED_OUT">CHECKED_OUT</option>
+                        </select>
+                        <button onClick={search}>Search</button>
+                    </div>
                     <h1>Booking List</h1>
                     <section className="main">
                         <table className="table table-striped table-hover">

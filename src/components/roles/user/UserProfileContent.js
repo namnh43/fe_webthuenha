@@ -76,7 +76,7 @@ export function UserProfile() {
 
     return (
         <div>
-            <h1>User Profile</h1>
+            <h2>User Profile</h2>
             <div className="container emp-profile" style={{height: '700px'}}>
                 <div className="row">
                     <div className="col-md-4">
@@ -121,7 +121,7 @@ export function UserProfile() {
                                     <Field className="form-control" name={"currentPassword"}></Field><br/>
                                     New Password
                                     <Field className="form-control" name={"newPassword"}></Field><br/>
-                                    <button className="btn btn-outline-primary">Submit</button>
+                                    <button className="btn btn-outline-primary">Update</button>
                                 </Form>}
                             </Formik>
                         </div>
