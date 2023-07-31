@@ -10,6 +10,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
+import {PaginationComponent} from "./pagination/PaginationComponent";
 
 function MaintenanceDialog(props) {
 
@@ -87,16 +88,12 @@ function OwnerHouseList() {
 
     const [houseList, setHouseList] = useState([])
 
-    const [pageNumber, setPageNumber] = useState(0);
-
-    const housesPerPage = 5;
-    const pagesVisited = pageNumber * housesPerPage;
-
-    const pageCount = Math.ceil(houseList.length / housesPerPage);
-
-    const changePage = ({selected}) => {
-        setPageNumber(selected);
-    };
+    //pagination
+    const [pagesVisited,setPagesVisited] = useState(0);
+    const housesPerPage = 2;
+    const handlePageChange = (value) => {
+        setPagesVisited(value)
+    }
 
     let config = {
         headers: {
@@ -153,7 +150,7 @@ function OwnerHouseList() {
     return (<>
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
                            maintainedHouseId={maintainedHouseId}/>
-        <h1>House List</h1>
+        <h2>House List</h2>
         <section className="main">
             <table className="table table-striped table-hover">
                 <thead>
@@ -197,17 +194,7 @@ function OwnerHouseList() {
 
                 </tbody>
             </table>
-            <ReactPaginate
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                pageCount={pageCount}
-                onPageChange={changePage}
-                containerClassName={"paginationBttns"}
-                previousLinkClassName={"previousBttn"}
-                nextLinkClassName={"nextBttn"}
-                disabledClassName={"paginationDisabled"}
-                activeClassName={"paginationActive"}
-            />
+            <PaginationComponent data={houseList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
 
         </section>
     </>);

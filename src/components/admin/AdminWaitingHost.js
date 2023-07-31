@@ -7,22 +7,20 @@ import Tooltip from "@mui/material/Tooltip";
 import UserProfileDialog from "../dialog/UserProfileDialog";
 import RuleIcon from '@mui/icons-material/Rule';
 import IconButton from '@mui/material/IconButton';
+import {PaginationComponent} from "../pagination/PaginationComponent";
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
     //pagination
-    const [pageNumber, setPageNumber] = useState(0);
-    const housesPerPage = 5;
-    const pagesVisited = pageNumber * housesPerPage;
-    const pageCount = Math.ceil(hosts.length / housesPerPage);
-    let [currentDisplayNumber,setCurrentDisplayNumber] = useState(0);
+    const [pagesVisited,setPagesVisited] = useState(0);
+    const hostsPerPage = 2;
+    const handlePageChange = (value) => {
+        setPagesVisited(value)
+    }
+
+
     const [openProfileDialog, setOpenProfileDialog] = useState(false);
     const [currentUserId,setCurrentUserId] = useState(null);
-
-    const changePage = ({ selected }) => {
-        setPageNumber(selected);
-        setCurrentDisplayNumber(hosts.slice(selected*housesPerPage, selected*housesPerPage + housesPerPage).length);
-    };
     const handleProfileEdit = (id) => {
         setCurrentUserId(id);
         setOpenProfileDialog(true);
@@ -41,8 +39,6 @@ export function AdminWaitingHost() {
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
-                //set current pagination
-                setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
             } catch (error) {
                 console.log(error)
             }
@@ -87,7 +83,7 @@ export function AdminWaitingHost() {
         })
     }
     return (
-        <>{hosts.length <= 0 ? <h1>There no data</h1> : (
+        <>{hosts.length <= 0 ? <h2>There no data</h2> : (
             <section className="main">
                 <h2 className="mb-3">Waiting confirmation hosts</h2>
                 <table className="table table-striped table-hover">
@@ -101,11 +97,11 @@ export function AdminWaitingHost() {
                     </tr>
                     </thead>
                     <tbody>
-                    {hosts.slice(pagesVisited, pagesVisited + housesPerPage).map((item,key) => {
+                    {hosts.slice(pagesVisited, pagesVisited + hostsPerPage).map((item,key) => {
                         console.log(item)
                         return (
                             <tr>
-                                <td>{key}</td>
+                                <td>{key + 1 + pagesVisited}</td>
                                 <td><img src="./images/profile/user-1.jpg" alt=""
                                          className="avatar"/>{item.username}</td>
                                 <td>04/10/2013</td>
@@ -119,22 +115,7 @@ export function AdminWaitingHost() {
                     })}
                     </tbody>
                 </table>
-                <div className="clearfix">
-                    <div className="hint-text">Showing <b>{currentDisplayNumber}</b> out of <b>{hosts.length}</b> entries</div>
-                    <ul className="pagination">
-                        <ReactPaginate
-                            previousLabel={"Previous"}
-                            nextLabel={"Next"}
-                            pageCount={pageCount}
-                            onPageChange={changePage}
-                            containerClassName={"paginationBttns"}
-                            previousLinkClassName={"previousBttn"}
-                            nextLinkClassName={"nextBttn"}
-                            disabledClassName={"paginationDisabled"}
-                            activeClassName={"paginationActive"}
-                        />
-                    </ul>
-                </div>
+                <PaginationComponent data={hosts} numberPerpage={hostsPerPage} changeCurentPage={handlePageChange}/>
             </section>)
         }
             <UserProfileDialog open={openProfileDialog} onClose={handleCloseProfileDialog} id={currentUserId}/>

@@ -116,7 +116,7 @@ export function AdminHostList() {
 
     return (
         <>
-            {hosts.length <= 0 ? <h1>There no data</h1> : (
+            {hosts.length <= 0 ? <h2>There no data</h2> : (
                 <section className="main">
                     <h2 className="mb-3">List hosts</h2>
                     <table className="table table-striped table-hover">
@@ -160,9 +160,7 @@ export function AdminHostList() {
                         })}
                         </tbody>
                     </table>
-
                     <PaginationComponent data={hosts} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
-
                 </section>)
 
             }
