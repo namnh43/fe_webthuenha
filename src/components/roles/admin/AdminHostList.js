@@ -119,14 +119,17 @@ export function AdminHostList() {
     }
     function search() {
         const userName = document.getElementById('name-input').value.trim().toLowerCase();
+        console.log(userName)
         const home = document.getElementById('home-input').value;
+        console.log(home)
         const numberPhone = document.getElementById('numberPhone-input').value;
+        console.log(numberPhone)
 
         const searchFilter = searchHost.filter((host) => {
             if (
-                (!userName || host.house?.name?.toLowerCase().includes(userName)) &&
-                (!home || host.houseCount === home ) &&
-                (!numberPhone || host.phoneNumber ===numberPhone )
+                (!userName || host.user?.username?.toLowerCase().includes(userName)) &&
+                (!home || host.houseCount == home ) &&
+                (!numberPhone || host.user.phoneNumber === numberPhone )
             ) {
                 return true;
             }
@@ -137,20 +140,20 @@ export function AdminHostList() {
 
     return (
         <>
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                <label htmlFor="name-input"></label>
+                <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />
+                <label htmlFor="home-input"></label>
+                <input id="home-input" name="name" type="number" placeholder="Enter total home" required />
+
+                <label htmlFor="numberPhone-input"></label>
+                <input id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter numberPhone" required />
+
+
+                <button onClick={search}>Search</button>
+            </div>
             {hosts.length <= 0 ? <h2>There no data</h2> : (
                 <section className="main">
-                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <label htmlFor="name-input"></label>
-                        <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />
-                        <label htmlFor="home-input"></label>
-                        <input id="home-input" name="name" type="text" placeholder="Enter total home" required />
-
-                        <label htmlFor="numberPhone-input"></label>
-                        <input id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter numberPhone" required />
-
-
-                        <button onClick={search}>Search</button>
-                    </div>
                     <h2 className="mb-3">List hosts</h2>
                     <table className="table table-striped table-hover">
                         <thead>
