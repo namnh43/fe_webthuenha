@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "./BookingList.css";
-import DateRangePickerComponent from "../datetime/DateRangePickerComponent";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
+import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
 
 function BookingHistory() {
     const [bookingList, setBookingList] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const housesPerPage = 5;
-    const pagesVisited = pageNumber * housesPerPage;
+    // const pagesVisited = pageNumber * housesPerPage;
     const pageCount = Math.ceil(bookingList.length / housesPerPage);
     const [selectedRange, setSelectedRange] = useState(['','']);
     const [searchBooking, setSearchBooking] = useState([]);
