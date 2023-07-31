@@ -29,6 +29,7 @@ import {PaginationComponent} from "../../pagination/PaginationComponent";
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
+    const [searchHost, setSearchHost] = useState([]);
     const [message, setMessage] = useState({
         id: '',
         msg: '',
@@ -56,6 +57,9 @@ export function AdminHostList() {
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
+                console.log(fetchedData)
+                setSearchHost(fetchedData);
+
                 //set current pagination
                 // setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
             } catch (error) {
@@ -113,9 +117,41 @@ export function AdminHostList() {
         setCurrentUserId(id);
         setOpenProfileDialog(true);
     }
+    function search() {
+        const userName = document.getElementById('name-input').value.trim().toLowerCase();
+        console.log(userName)
+        const home = document.getElementById('home-input').value;
+        console.log(home)
+        const numberPhone = document.getElementById('numberPhone-input').value;
+        console.log(numberPhone)
+
+        const searchFilter = searchHost.filter((host) => {
+            if (
+                (!userName || host.user?.username?.toLowerCase().includes(userName)) &&
+                (!home || host.houseCount == home ) &&
+                (!numberPhone || host.user.phoneNumber === numberPhone )
+            ) {
+                return true;
+            }
+            return false;
+        });
+        setHosts(searchFilter);
+    }
 
     return (
         <>
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                <label htmlFor="name-input"></label>
+                <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />
+                <label htmlFor="home-input"></label>
+                <input id="home-input" name="name" type="number" placeholder="Enter total home" required />
+
+                <label htmlFor="numberPhone-input"></label>
+                <input id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter numberPhone" required />
+
+
+                <button onClick={search}>Search</button>
+            </div>
             {hosts.length <= 0 ? <h2>There no data</h2> : (
                 <section className="main">
                     <h2 className="mb-3">List hosts</h2>
@@ -123,7 +159,7 @@ export function AdminHostList() {
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
+                            <th>UserName</th>
                             <th>Date Created</th>
                             <th>Phone number</th>
                             <th>Number home</th>

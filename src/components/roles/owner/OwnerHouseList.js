@@ -11,6 +11,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
+import {Link} from "react-router-dom";
 
 function MaintenanceDialog(props) {
 
@@ -150,7 +151,7 @@ function OwnerHouseList() {
     return (<>
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
                            maintainedHouseId={maintainedHouseId}/>
-        <h2>House List</h2>
+        <h1>House List</h1>
         <section className="main">
             <table className="table table-striped table-hover">
                 <thead>
