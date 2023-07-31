@@ -123,7 +123,7 @@ function OwnerHouseList() {
                 axios.delete(`http://localhost:8080/house/${itemId}`, config)
                     .then(() => axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
                         .then(res => {
-                            setHouseList(res.data);
+                            setHouseList(res.data.reverse());
                             Swal.fire(
                                 'Deleted!',
                                 'Your house has been deleted.',
@@ -182,15 +182,16 @@ function OwnerHouseList() {
                             <td>add later</td>
                             <td>{item.houseStatus}</td>
                             <td className="col-2">
-                                <i className="material-icons">&#xe88e;</i>
-                                <i className="material-icons"
-                                   onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>&#xe3c9;</i>
-                                <i className="material-icons" onClick={() => {
+                                <button style={{backgroundColor: 'transparent'}}><i className="material-icons">&#xe88e;</i></button>
+                                <button style={{backgroundColor: 'transparent'}}
+                                         onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>
+                                    <i className="material-icons">&#xe3c9;</i></button>
+                                <button  style={{backgroundColor: 'transparent'}} onClick={() => {
                                     setMaintainedHouseId(item.id)
                                     setOpenDialog(true)
-                                }
-                                }>&#xea3c;</i>
-                                <i className="material-icons" onClick={() => deleteHouse(item.id)}>&#xe872;</i>
+                                }}><i className="material-icons" >&#xea3c;</i></button>
+                                <button style={{backgroundColor: 'transparent'}} onClick={() => deleteHouse(item.id)}>
+                                    <i className="material-icons">&#xe14b;</i></button>
                             </td>
                         </tr>)
                     })}

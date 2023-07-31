@@ -20,6 +20,7 @@ import {AdminUserList} from "./components/admin/AdminUserList";
 import {AdminHostList} from "./components/admin/AdminHostList";
 import {AdminWaitingHost} from "./components/admin/AdminWaitingHost";
 import {SearchResultPage} from "./pages/SearchResultPage";
+import OwnerMaintenanceList from "./components/OwnerMaintenanceList";
 function App() {
   return (
     <div className="App">
@@ -41,6 +42,7 @@ function App() {
               <Route path='add-house-form' element={<OwnerAddHouseForm/>}/>
               <Route path='edit-house-form/:houseId' element={<OwnerEditHouseForm/>}/>
               <Route path='booking' element={<OwnerBookingList/>}/>
+              <Route path='maintenance' element={<OwnerMaintenanceList/>}/>
           </Route>
           <Route path='/user' element={<UserPage/>}>
               <Route path='' element={<UserProfile/>}/>

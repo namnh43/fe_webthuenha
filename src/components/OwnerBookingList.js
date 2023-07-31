@@ -25,16 +25,8 @@ function OwnerBookingList() {
 
     useEffect(() => {
         axios.get('http://localhost:8080/booking/owner', config)
-            .then((res) => setBookingList(res.data))
+            .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE")))
     }, []);
-
-    let cancelMaintenance = (bookingId) => {
-        axios.delete(`http://localhost:8080/booking/maintenance-to-empty/${bookingId}`, config)
-            .then(() => {
-                axios.get('http://localhost:8080/booking/owner', config)
-                    .then((res) => setBookingList(res.data))
-            })
-    }
 
     return (<>
         <h1>Booking List</h1>
@@ -48,6 +40,7 @@ function OwnerBookingList() {
                     <th>Duration</th>
                     <th>Unit/Total Price</th>
                     <th>Status</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,16 +48,12 @@ function OwnerBookingList() {
                     .slice(pagesVisited, pagesVisited + housesPerPage)
                     .map((item, key) => {
                         return (<tr>
-                            <td>{item.id}</td>
+                            <td>{key + 1 + pagesVisited}</td>
                             <td>{item.house.name}</td>
                             <td>{item.createAt}</td>
                             <td>{item.startDate}/{item.endDate}</td>
                             <td>{item.price}/{item.total}</td>
                             <td>{item.bookingStatus}</td>
-                            {item.bookingStatus === "MAINTENANCE" && (
-                                <td><button className="btn btn-danger"
-                                            onClick={() => cancelMaintenance(item.id)}>Cancel</button></td>
-                            )}
                             {item.bookingStatus === "BOOKING" && (
                                     <td><button className="btn btn-primary">Check in</button></td>
 
