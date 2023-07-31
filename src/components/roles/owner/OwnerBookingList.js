@@ -2,20 +2,18 @@ import React, {useEffect, useState} from 'react';
 import ReactPaginate from "react-paginate";
 import axios from "axios";
 import "./OwnerHouseList.css"
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 function OwnerBookingList() {
 
     const [bookingList, setBookingList] = useState([])
-    const [pageNumber, setPageNumber] = useState(0);
 
-    const housesPerPage = 5;
-    const pagesVisited = pageNumber * housesPerPage;
-
-    const pageCount = Math.ceil(bookingList.length / housesPerPage);
-
-    const changePage = ({selected}) => {
-        setPageNumber(selected);
-    };
+    //pagination
+    const [pagesVisited,setPagesVisited] = useState(0);
+    const bookingPerpage = 2;
+    const handlePageChange = (value) => {
+        setPagesVisited(value)
+    }
 
     let config = {
         headers: {
@@ -29,7 +27,7 @@ function OwnerBookingList() {
     }, []);
 
     return (<>
-        <h1>Booking List</h1>
+        <h2>Booking List</h2>
         <section className="main">
             <table className="table table-striped table-hover">
                 <thead>
@@ -45,7 +43,7 @@ function OwnerBookingList() {
                 </thead>
                 <tbody>
                 {bookingList
-                    .slice(pagesVisited, pagesVisited + housesPerPage)
+                    .slice(pagesVisited, pagesVisited + bookingPerpage)
                     .map((item, key) => {
                         return (<tr>
                             <td>{key + 1 + pagesVisited}</td>
@@ -64,17 +62,7 @@ function OwnerBookingList() {
 
                 </tbody>
             </table>
-            <ReactPaginate
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                pageCount={pageCount}
-                onPageChange={changePage}
-                containerClassName={"paginationBttns"}
-                previousLinkClassName={"previousBttn"}
-                nextLinkClassName={"nextBttn"}
-                disabledClassName={"paginationDisabled"}
-                activeClassName={"paginationActive"}
-            />
+            <PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>
 
         </section>
     </>);

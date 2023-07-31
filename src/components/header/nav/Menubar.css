@@ -3,7 +3,11 @@
     font-weight: bold !important;
     font-size: 18px !important;
 }
-/* Override styles for Typography component */
-/*.MuiTypography-root {*/
-
-/*}*/
+.logo {
+    color: white;
+}
+.logo:hover {
+    background-color: transparent;
+    color: #007bff;
+    cursor: pointer;
+}

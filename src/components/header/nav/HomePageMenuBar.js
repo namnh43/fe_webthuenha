@@ -20,12 +20,19 @@ import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
-
+import './Menubar.css'
 function HomePageMenuBar() {
     const menuBarStyle = {
         fontFamily: 'Roboto, sans-serif',
         color:'blue',
         fontWeight: 'bold'
+    };
+    const logoStyle = {
+        color:'blue',
+        '&:hover': {
+            backgroundColor: 'transparent',
+            color: '#007bff'
+        }
     };
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -91,8 +98,8 @@ function HomePageMenuBar() {
                     <Box
                         sx={{display:"flex", justifyContent:"flex-end",  alignItems: 'center'}}
                     >
-                        <h1 className="mb-0"><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
-                            className="text-danger">.</span></strong></Link></h1>
+                        <h2 className="mb-0 logo text-decoration-underline pe-auto" onClick={()=> navigate('/')}><strong>Homeland<span
+                            className="text-danger">.</span></strong></h2>
                     </Box>
                 </Grid>
                 <Grid item xs={9}>

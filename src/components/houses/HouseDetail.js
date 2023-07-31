@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router";
-import MapWithSearch from "./Map";
+import MapWithSearch from "../Map";
 import OwlCarousel from "react-owl-carousel";
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import Reviews from "./Reviews";
+import Reviews from "../Reviews";
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -133,7 +133,7 @@ export function HouseDetail() {
                                             <div className="col-sm-12 col-md-12 col-lg-12">
                                                 <a target="_blank" href={item.fileUrl}
                                                    className="image-popup gal-item"><img
-                                                    src={item.fileUrl} alt="Image" className="img-fluid"/></a>
+                                                    src={item.fileUrl} alt="Image" className="img-fluid vh-100" style={{maxHeight:'460px'}}/></a>
                                             </div>
                                         )
                                     })}
@@ -156,7 +156,7 @@ export function HouseDetail() {
                     <div className="col">
                         <div className="bg-white p-3 border rounded">
                             <h3 className="h4 text-black  mb-3 ">Price ${house.price}/Night</h3>
-                            <form action="#" className="">
+                            <form action="src/components#" className="">
                                 <div>
                                     <div className="form-group">
                                         <label htmlFor="Booking">Booking Date</label>
@@ -197,14 +197,10 @@ export function HouseDetail() {
                             </form>
                         </div>
                         <div className="bg-white widget border rounded mt-5">
-                            <h3 className="h4 text-black widget-title mb-3">Featured Properties</h3>
-                            <p>Address detail</p>
-                            <ul className="list-unstyled">
-                                <li className="mb-2"><a href="#">1 Madison Street</a></li>
-                                <li className="mb-2"><a href="#">42 Barington Drive</a></li>
-                                <li className="mb-2"><a href="#">87 Alton Road</a></li>
-                                <li className="mb-2"><a href="#">14 Brooketon Drive</a></li>
-                            </ul>
+                            {house.address
+                                && <div>
+                                    <MapWithSearch initialAddress={house.address}/>
+                                </div>}
                         </div>
                     </div>
 
@@ -216,10 +212,7 @@ export function HouseDetail() {
                         <h2 className="h4 text-black">More Info</h2>
                         <p>{house.description}</p>
                         <br/>
-                        {house.address
-                            && <div>
-                                <MapWithSearch initialAddress={house.address}/>
-                            </div>}
+
                     </div>
                 </div>
 
@@ -253,7 +246,7 @@ export function HouseDetail() {
                                     <img src="images/img_1.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="#" className="property-favorite"><span className="icon-heart-o"></span></a>
+                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
                                     <h2 className="property-title"><a href="property-details.html">625 S. Berendo St</a>
                                     </h2>
                                     <span className="property-location d-block mb-3"><span
@@ -288,7 +281,7 @@ export function HouseDetail() {
                                     <img src="images/img_2.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="#" className="property-favorite active"><span
+                                    <a href="src/components#" className="property-favorite active"><span
                                         className="icon-heart-o"></span></a>
                                     <h2 className="property-title"><a href="property-details.html">871 Crenshaw Blvd</a>
                                     </h2>
@@ -323,7 +316,7 @@ export function HouseDetail() {
                                     <img src="images/img_3.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="#" className="property-favorite"><span className="icon-heart-o"></span></a>
+                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
                                     <h2 className="property-title"><a href="property-details.html">853 S Lucerne
                                         Blvd</a></h2>
                                     <span className="property-location d-block mb-3"><span

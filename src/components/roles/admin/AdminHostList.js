@@ -1,5 +1,5 @@
-import './AdminHostList.css'
-import {fetchData, postData} from "../../utils/api";
+// import './AdminHostList.css'
+import {fetchData, postData} from "../../../utils/api";
 import React, {useEffect, useState} from "react";
 import InfoIcon from '@mui/icons-material/Info';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -23,31 +23,28 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
-import HostProfileDialog from "../dialog/HostProfileDialog";
-import ReactPaginate from "react-paginate";
+import HostProfileDialog from "../../dialog/HostProfileDialog";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
+    const [searchHost, setSearchHost] = useState([]);
     const [message, setMessage] = useState({
         id: '',
         msg: '',
         blocked:false
     });
+
     const [openProfileDialog, setOpenProfileDialog] = useState(false);
     const [currentUserId,setCurrentUserId] = useState(null);
 
     //pagination
-    const [pageNumber, setPageNumber] = useState(0);
-    const housesPerPage = 5;
-    const pagesVisited = pageNumber * housesPerPage;
-    const pageCount = Math.ceil(hosts.length / housesPerPage);
-    let [currentDisplayNumber,setCurrentDisplayNumber] = useState(0);
-    const changePage = ({ selected }) => {
-        setPageNumber(selected);
-        setCurrentDisplayNumber(hosts.slice(selected*housesPerPage, selected*housesPerPage + housesPerPage).length);
-    };
-
+    const [pagesVisited,setPagesVisited] = useState(0);
+    const housesPerPage = 2;
+    const handlePageChange = (value) => {
+        setPagesVisited(value)
+    }
 
     useEffect(() => {
         const fetchDataAsync = async () => {
@@ -60,8 +57,11 @@ export function AdminHostList() {
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
+                console.log(fetchedData)
+                setSearchHost(fetchedData);
+
                 //set current pagination
-                setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
+                // setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
             } catch (error) {
                 console.log(error)
             }
@@ -69,12 +69,10 @@ export function AdminHostList() {
         fetchDataAsync();
     }, [])
     const lockHost = (id) => {
-        console.log('lock_id', id)
         setMessage({id: id, msg: "This account is gonna be blocked. Are you sure?",blocked:false})
         setOpenDialog(true)
     }
     const unlockHost = (id) => {
-        console.log('unlock_id', id)
         setMessage({id: id, msg: "This account is gonna be re-activated. Are you sure?",blocked: true})
         setOpenDialog(true)
     }
@@ -93,7 +91,6 @@ export function AdminHostList() {
         } else {
             url = 'http://localhost:8080/admin/block-user/'+ id;
         }
-        console.log('url',url)
         const params = {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -120,17 +117,46 @@ export function AdminHostList() {
         setCurrentUserId(id);
         setOpenProfileDialog(true);
     }
+    function search() {
+        const userName = document.getElementById('name-input').value.trim().toLowerCase();
+        const home = document.getElementById('home-input').value;
+        const numberPhone = document.getElementById('numberPhone-input').value;
+
+        const searchFilter = searchHost.filter((host) => {
+            if (
+                (!userName || host.house?.name?.toLowerCase().includes(userName)) &&
+                (!home || host.houseCount === home ) &&
+                (!numberPhone || host.phoneNumber ===numberPhone )
+            ) {
+                return true;
+            }
+            return false;
+        });
+        setHosts(searchFilter);
+    }
 
     return (
         <>
-            {hosts.length <= 0 ? <h1>There no data</h1> : (
+            {hosts.length <= 0 ? <h2>There no data</h2> : (
                 <section className="main">
+                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <label htmlFor="name-input"></label>
+                        <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />
+                        <label htmlFor="home-input"></label>
+                        <input id="home-input" name="name" type="text" placeholder="Enter total home" required />
+
+                        <label htmlFor="numberPhone-input"></label>
+                        <input id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter numberPhone" required />
+
+
+                        <button onClick={search}>Search</button>
+                    </div>
                     <h2 className="mb-3">List hosts</h2>
                     <table className="table table-striped table-hover">
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
+                            <th>UserName</th>
                             <th>Date Created</th>
                             <th>Phone number</th>
                             <th>Number home</th>
@@ -145,7 +171,7 @@ export function AdminHostList() {
                             return (
 
                                 <tr>
-                                    <td>{key}</td>
+                                    <td>{key + 1 + pagesVisited}</td>
                                     <td><img src="./images/profile/user-1.jpg" alt=""
                                              className="avatar"/>{item.user.username}
                                     </td>
@@ -167,23 +193,7 @@ export function AdminHostList() {
                         })}
                         </tbody>
                     </table>
-                    <div className="clearfix">
-                        <div className="hint-text">Showing <b>{currentDisplayNumber}</b> out of <b>{hosts.length}</b> entries</div>
-                        <ul className="pagination">
-                            <ReactPaginate
-                                previousLabel={"Previous"}
-                                nextLabel={"Next"}
-                                pageCount={pageCount}
-                                onPageChange={changePage}
-                                containerClassName={"paginationBttns"}
-                                previousLinkClassName={"previousBttn"}
-                                nextLinkClassName={"nextBttn"}
-                                disabledClassName={"paginationDisabled"}
-                                activeClassName={"paginationActive"}
-                            />
-                        </ul>
-                    </div>
-
+                    <PaginationComponent data={hosts} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
                 </section>)
 
             }
