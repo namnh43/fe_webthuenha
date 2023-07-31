@@ -1,6 +1,10 @@
 import './AdminHostList.css'
 import {fetchData, postData} from "../../utils/api";
 import React, {useEffect, useState} from "react";
+import InfoIcon from '@mui/icons-material/Info';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import LockIcon from '@mui/icons-material/Lock';
+import Tooltip from '@mui/material/Tooltip';
 // @mui
 import {
     Grid,
@@ -25,6 +29,7 @@ import ReactPaginate from "react-paginate";
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
+    const [searchHost, setSearchHost] = useState([]);
     const [message, setMessage] = useState({
         id: '',
         msg: '',
@@ -56,6 +61,9 @@ export function AdminHostList() {
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
+                console.log(fetchedData)
+                setSearchHost(fetchedData);
+
                 //set current pagination
                 setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
             } catch (error) {
@@ -116,21 +124,50 @@ export function AdminHostList() {
         setCurrentUserId(id);
         setOpenProfileDialog(true);
     }
+    function search() {
+        const userName = document.getElementById('name-input').value.trim().toLowerCase();
+        const home = document.getElementById('home-input').value;
+        const numberPhone = document.getElementById('numberPhone-input').value;
+
+        const searchFilter = searchHost.filter((host) => {
+            if (
+                (!userName || host.house?.name?.toLowerCase().includes(userName)) &&
+                (!home || host.houseCount === home ) &&
+                (!numberPhone || host.phoneNumber ===numberPhone )
+            ) {
+                return true;
+            }
+            return false;
+        });
+        setHosts(searchFilter);
+    }
 
     return (
         <>
             {hosts.length <= 0 ? <h1>There no data</h1> : (
                 <section className="main">
+                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <label htmlFor="name-input"></label>
+                        <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />
+                        <label htmlFor="home-input"></label>
+                        <input id="home-input" name="name" type="text" placeholder="Enter total home" required />
+
+                        <label htmlFor="numberPhone-input"></label>
+                        <input id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter numberPhone" required />
+
+
+                        <button onClick={search}>Search</button>
+                    </div>
                     <h2 className="mb-3">List hosts</h2>
                     <table className="table table-striped table-hover">
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
+                            <th>UserName</th>
                             <th>Date Created</th>
                             <th>Phone number</th>
                             <th>Number home</th>
-                            <th>Earn money(VND)</th>
+                            <th>Earn money($)</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -152,19 +189,11 @@ export function AdminHostList() {
                                     {!item.user.blocked ?
                                         <td><span className="status text-success">&bull;</span> Active</td> :
                                         <td><span className="status text-danger">&bull;</span> Suspended</td>}
-                                    {/*{item.enable ? <td><button type="button" className="btn btn-danger">Block</button></td> :*/}
-                                    {/*    <td><button type="button" className="btn btn-primary">Allow</button></td>}*/}
                                     <td>
-                                        <a href="#" onClick={() => handleProfileEdit(item.user.id)} className="settings text-dark-light" title="Edit"
-                                           data-toggle="tooltip"><i
-                                            className="material-icons material-symbols-outlined">&#xe88e;</i></a>
+                                        <Tooltip title="info"><InfoIcon onClick={() => handleProfileEdit(item.user.id)}/></Tooltip>
                                         {item.user.blocked ?
-                                            <a href="#" onClick={() => unlockHost(item.user.id)} className="settings"
-                                               title="unlock" data-toggle="tooltip"><i
-                                                className="material-icons text-dark-light">&#xe897;</i></a> :
-                                            <a href="#" onClick={() => lockHost(item.user.id)}
-                                               className="settings text-dark-light" title="block"
-                                               data-toggle="tooltip"><i className="material-icons">&#xe898;</i></a>}
+                                            <IconButton title='deactive' color='inherit'><LockIcon onClick={() => unlockHost(item.user.id)}/></IconButton> :
+                                            <IconButton title='active' color='primary'><LockOpenIcon onClick={() => lockHost(item.user.id)}/></IconButton>}
                                     </td>
                                 </tr>
                             )

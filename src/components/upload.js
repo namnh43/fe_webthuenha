@@ -147,6 +147,7 @@ function UploadImageField({images, values, handleFormSubmit}) {
                         <div
                             key={url}
                             style={{
+                                border: "2px dashed #ccc",
                                 maxWidth: "450px",
                                 position: "relative",
                                 flex: "0 0 30%",
@@ -173,7 +174,7 @@ function UploadImageField({images, values, handleFormSubmit}) {
                                 onClick={() => handleRemoveImage(index)}
                             >
                                 <span style={{
-                                    fontSize: "30px",
+                                    fontSize: "30px", color: "white"
                                 }}>&times;</span>
                             </button>
 
