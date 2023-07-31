@@ -21,6 +21,7 @@ import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/OwnerBookingList";
 import {SearchHouseResult} from "./components/search/SearchHouseResult";
 import {SearchResultPage} from "./pages/SearchResultPage";
+import BasicRating from "./components/ReviewForm";
 function App() {
   return (
     <div className="App">
@@ -47,7 +48,7 @@ function App() {
               <Route path='' element={<UserProfile/>}/>
               <Route path='booking-history' element={<BookingHistory/>}/>
           </Route>
-          <Route path='/test' element={<FormWithImageUpload/>}/>
+          <Route path='/test' element={<BasicRating/>}/>
       </Routes>
     </div>
   );

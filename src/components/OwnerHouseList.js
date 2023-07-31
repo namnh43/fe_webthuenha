@@ -56,7 +56,7 @@ function MaintenanceDialog(props) {
                         <label className="col-4">End date</label>
                         <input type="date" value={endDate} required
                                onChange={e => setEndDate(e.target.value)}/>
-                    </div>
+                    </div>boo
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
