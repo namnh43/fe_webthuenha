@@ -9,6 +9,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import Swal from "sweetalert2";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 function MaintenanceDialog(props) {
 
@@ -32,7 +34,6 @@ function MaintenanceDialog(props) {
             setErrorMessage('')
         }
     }, [startDate, endDate]);
-
 
     return (
         <Dialog
@@ -81,23 +82,18 @@ function MaintenanceDialog(props) {
     )
 }
 
-
 function OwnerHouseList() {
 
     const navigate = useNavigate()
 
     const [houseList, setHouseList] = useState([])
 
-    const [pageNumber, setPageNumber] = useState(0);
-
-    const housesPerPage = 5;
-    const pagesVisited = pageNumber * housesPerPage;
-
-    const pageCount = Math.ceil(houseList.length / housesPerPage);
-
-    const changePage = ({selected}) => {
-        setPageNumber(selected);
-    };
+    //pagination
+    const [pagesVisited,setPagesVisited] = useState(0);
+    const housesPerPage = 2;
+    const handlePageChange = (value) => {
+        setPagesVisited(value)
+    }
 
     let config = {
         headers: {
@@ -107,13 +103,41 @@ function OwnerHouseList() {
 
     useEffect(() => {
         axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
-            .then((res) => setHouseList(res.data))
+            .then((res) => setHouseList(res.data.reverse()));
     }, []);
 
     const deleteHouse = (itemId) => {
-        axios.delete(`http://localhost:8080/house/delete/${itemId}`, config)
-            .then(() => axios.get('http://localhost:8080/house', config)
-                .then(res => setHouseList(res.data)))
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:8080/house/${itemId}`, config)
+                    .then(() => axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
+                        .then(res => {
+                            setHouseList(res.data);
+                            Swal.fire(
+                                'Deleted!',
+                                'Your house has been deleted.',
+                                'success'
+                            );
+                        })
+                    )
+                    .catch(error => {
+                        Swal.fire(
+                            'Somthing went wrong!',
+                            'You cannot delete this house.',
+                            'error'
+                        );
+                        console.error("Lỗi khi xóa dữ liệu:", error);
+                    });
+            }
+        });
     }
 
     const [openDialog, setOpenDialog] = useState(false);
@@ -126,7 +150,7 @@ function OwnerHouseList() {
     return (<>
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
                            maintainedHouseId={maintainedHouseId}/>
-        <h1>House List</h1>
+        <h2>House List</h2>
         <section className="main">
             <table className="table table-striped table-hover">
                 <thead>
@@ -138,7 +162,7 @@ function OwnerHouseList() {
                     <th>Address</th>
                     <th>Sale</th>
                     <th>Status</th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -170,17 +194,7 @@ function OwnerHouseList() {
 
                 </tbody>
             </table>
-            <ReactPaginate
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                pageCount={pageCount}
-                onPageChange={changePage}
-                containerClassName={"paginationBttns"}
-                previousLinkClassName={"previousBttn"}
-                nextLinkClassName={"nextBttn"}
-                disabledClassName={"paginationDisabled"}
-                activeClassName={"paginationActive"}
-            />
+            <PaginationComponent data={houseList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
 
         </section>
     </>);

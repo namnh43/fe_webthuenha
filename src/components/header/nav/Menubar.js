@@ -70,6 +70,7 @@ export default function Menubar() {
         axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
             .then(() => localStorage.clear())
             .then(() => setLogin(false))
+            .then(()=> navigate('/login'))
     }
 
     const handleLoginClick = () => {
@@ -83,7 +84,7 @@ export default function Menubar() {
                 container
                 spacing={2}
                   sx={{
-                      backgroundColor: "white",
+                      color: "black",
                       height: '80px',
                   }}
                 alignItems="center"
@@ -161,7 +162,11 @@ export default function Menubar() {
                     </Dialog>
                     <React.Fragment>
                         <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                            <ListItemButton sx={{minWidth: '100px', maxWidth: '100px',fontFamily:'Raleway'}}
+                            <ListItemButton sx={{minWidth: '100px', maxWidth: '100px',fontFamily:'Raleway', textAlign: 'center',
+                                '&:hover': {
+                                    backgroundColor: 'transparent',
+                                    color: '#007bff'
+                                }}}
                                             onClick={() => {
                                                 navigate("/")
                                             }}><ListItemText >Home</ListItemText></ListItemButton>

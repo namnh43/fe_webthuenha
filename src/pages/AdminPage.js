@@ -1,6 +1,6 @@
-import {AdminNavbar} from "../components/admin/AdminNavbar";
-import {AdminSidebar} from "../components/admin/AdminSidebar";
-import {AdminFooter} from "../components/admin/AdminFooter";
+import {AdminNavbar} from "../components/roles/admin/AdminNavbar";
+import {AdminSidebar} from "../components/roles/admin/AdminSidebar";
+import {AdminFooter} from "../components/roles/admin/AdminFooter";
 import {Outlet} from "react-router";
 
 export function AdminPage() {

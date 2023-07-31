@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {useEffect, useState} from "react";
 import {fetchData} from "../../utils/api";
-import {HostProfileContent} from "../user/HostProfileContent";
+import {HostProfileContent} from "../roles/user/HostProfileContent";
 
 export default function HostProfileDialog({open, onClose, id}) {
     const [host, setHost] = useState(null);

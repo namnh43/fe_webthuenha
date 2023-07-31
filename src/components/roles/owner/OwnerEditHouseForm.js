@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Field, Form, Formik } from "formik";
 import { useParams } from "react-router";
-import UploadImageField from "./upload";
+import UploadImageField from "../../upload";
 
 function OwnerEditHouseForm() {
     const houseId = useParams().houseId;
@@ -54,7 +54,7 @@ function OwnerEditHouseForm() {
 
         axios
             .put(
-                `http://localhost:8080/house/${houseId}/update`,
+                `http://localhost:8080/house/${houseId}`,
                 { ...editedHouse, ...values },
                 config
             )
@@ -90,7 +90,7 @@ function OwnerEditHouseForm() {
                 >
                     {({ isSubmitting }) => (
                         <Form>
-                            <h1>Edit house</h1>
+                            <h2>Edit house</h2>
                             <div className="form-group">
                                 <label>House Name</label>
                                 <Field
@@ -178,7 +178,7 @@ function OwnerEditHouseForm() {
                                 className="btn btn-primary mt-3"
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? "Submitting..." : "Submit"}
+                                {isSubmitting ? "Submitting..." : "Save"}
                             </button>
                         </Form>
                     )}
