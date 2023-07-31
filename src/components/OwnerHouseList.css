@@ -14,15 +14,15 @@
     transition: all 0.3s ease;
 }
 
-.paginationBttns a:hover {
+.paginationBttns li:hover {
     color: white;
-    background-color: #2b2eff;
+    text-decoration: none;
 }
 
 .paginationDisabled a {
     display: none;
 }
 
-.paginationActive {
+.paginationActive  {
     color: white;
 }
