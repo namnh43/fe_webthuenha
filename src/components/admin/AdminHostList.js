@@ -1,4 +1,4 @@
-import './AdminHostList.css'
+// import './AdminHostList.css'
 import {fetchData, postData} from "../../utils/api";
 import React, {useEffect, useState} from "react";
 import InfoIcon from '@mui/icons-material/Info';
@@ -24,7 +24,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
 import HostProfileDialog from "../dialog/HostProfileDialog";
-import ReactPaginate from "react-paginate";
+import {PaginationComponent} from "../pagination/PaginationComponent";
 
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
@@ -34,20 +34,16 @@ export function AdminHostList() {
         msg: '',
         blocked:false
     });
+
     const [openProfileDialog, setOpenProfileDialog] = useState(false);
     const [currentUserId,setCurrentUserId] = useState(null);
 
     //pagination
-    const [pageNumber, setPageNumber] = useState(0);
-    const housesPerPage = 5;
-    const pagesVisited = pageNumber * housesPerPage;
-    const pageCount = Math.ceil(hosts.length / housesPerPage);
-    let [currentDisplayNumber,setCurrentDisplayNumber] = useState(0);
-    const changePage = ({ selected }) => {
-        setPageNumber(selected);
-        setCurrentDisplayNumber(hosts.slice(selected*housesPerPage, selected*housesPerPage + housesPerPage).length);
-    };
-
+    const [pagesVisited,setPagesVisited] = useState(0);
+    const housesPerPage = 2;
+    const handlePageChange = (value) => {
+        setPagesVisited(value)
+    }
 
     useEffect(() => {
         const fetchDataAsync = async () => {
@@ -61,7 +57,7 @@ export function AdminHostList() {
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
                 //set current pagination
-                setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
+                // setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
             } catch (error) {
                 console.log(error)
             }
@@ -69,12 +65,10 @@ export function AdminHostList() {
         fetchDataAsync();
     }, [])
     const lockHost = (id) => {
-        console.log('lock_id', id)
         setMessage({id: id, msg: "This account is gonna be blocked. Are you sure?",blocked:false})
         setOpenDialog(true)
     }
     const unlockHost = (id) => {
-        console.log('unlock_id', id)
         setMessage({id: id, msg: "This account is gonna be re-activated. Are you sure?",blocked: true})
         setOpenDialog(true)
     }
@@ -93,7 +87,6 @@ export function AdminHostList() {
         } else {
             url = 'http://localhost:8080/admin/block-user/'+ id;
         }
-        console.log('url',url)
         const params = {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -145,7 +138,7 @@ export function AdminHostList() {
                             return (
 
                                 <tr>
-                                    <td>{key}</td>
+                                    <td>{key + 1 + pagesVisited}</td>
                                     <td><img src="./images/profile/user-1.jpg" alt=""
                                              className="avatar"/>{item.user.username}
                                     </td>
@@ -167,22 +160,8 @@ export function AdminHostList() {
                         })}
                         </tbody>
                     </table>
-                    <div className="clearfix">
-                        <div className="hint-text">Showing <b>{currentDisplayNumber}</b> out of <b>{hosts.length}</b> entries</div>
-                        <ul className="pagination">
-                            <ReactPaginate
-                                previousLabel={"Previous"}
-                                nextLabel={"Next"}
-                                pageCount={pageCount}
-                                onPageChange={changePage}
-                                containerClassName={"paginationBttns"}
-                                previousLinkClassName={"previousBttn"}
-                                nextLinkClassName={"nextBttn"}
-                                disabledClassName={"paginationDisabled"}
-                                activeClassName={"paginationActive"}
-                            />
-                        </ul>
-                    </div>
+
+                    <PaginationComponent data={hosts} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
 
                 </section>)
 
