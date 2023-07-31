@@ -10,7 +10,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
-import {PaginationComponent} from "./pagination/PaginationComponent";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 function MaintenanceDialog(props) {
 

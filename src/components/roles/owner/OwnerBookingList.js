@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import ReactPaginate from "react-paginate";
 import axios from "axios";
 import "./OwnerHouseList.css"
-import {PaginationComponent} from "./pagination/PaginationComponent";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 function OwnerBookingList() {
 
@@ -27,7 +27,7 @@ function OwnerBookingList() {
     }, []);
 
     return (<>
-        <h1>Booking List</h1>
+        <h2>Booking List</h2>
         <section className="main">
             <table className="table table-striped table-hover">
                 <thead>

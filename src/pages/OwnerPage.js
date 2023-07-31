@@ -1,7 +1,7 @@
 import React from 'react';
-import OwnerNavbar from "../components/OwnerNavbar";
+import OwnerNavbar from "../components/roles/owner/OwnerNavbar";
 import {Outlet} from "react-router";
-import OwnerSideBar2 from "../components/OwnerSideBar2";
+import OwnerSideBar2 from "../components/roles/owner/OwnerSideBar2";
 import Menubar from "../components/header/nav/Menubar";
 import {Divider, Grid} from "@mui/material";
 import {AdminSidebar} from "../components/sidebar/AdminSidebar";

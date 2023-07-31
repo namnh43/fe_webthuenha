@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "./BookingList.css";
-import {PaginationComponent} from "../pagination/PaginationComponent";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 function BookingHistory() {
     const [bookingList, setBookingList] = useState([]);
@@ -64,7 +64,7 @@ function BookingHistory() {
 
     return (
         <>
-            <h1>Booking List</h1>
+            <h2>Booking List</h2>
             <section className="main">
                 <table className="table table-striped table-hover">
                     <thead>

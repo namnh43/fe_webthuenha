@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {fetchData,postData} from "../../utils/api";
+import {fetchData,postData} from "../../../utils/api";
 import Swal from "sweetalert2";
 import ReactPaginate from "react-paginate";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
-import UserProfileDialog from "../dialog/UserProfileDialog";
+import UserProfileDialog from "../../dialog/UserProfileDialog";
 import RuleIcon from '@mui/icons-material/Rule';
 import IconButton from '@mui/material/IconButton';
-import {PaginationComponent} from "../pagination/PaginationComponent";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
