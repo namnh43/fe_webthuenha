@@ -1,0 +1,25 @@
+.pagination li a {
+    border: none;
+    font-size: 20px;
+    min-width: 30px;
+    min-height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 2px !important;
+    text-align: center;
+    padding: 0 6px;
+}
+.pagination ul {
+    justify-content: flex-end;
+    margin-right: 0px;
+}
+.pagination li i {
+    font-size: 20px;
+    padding-top: 6px;
+}
+.hint-text {
+    float: left;
+    /*margin-top: 10px;*/
+    font-size: 15px;
+}

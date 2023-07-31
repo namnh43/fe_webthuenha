@@ -1,7 +1,7 @@
 export function AdminUserList() {
     return (
         <>
-            <h1>userList</h1>
+            <h2>userList</h2>
         </>
     )
 }

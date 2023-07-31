@@ -10,6 +10,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {Link} from "react-router-dom";
 
 function MaintenanceDialog(props) {
@@ -88,16 +89,12 @@ function OwnerHouseList() {
 
     const [houseList, setHouseList] = useState([])
 
-    const [pageNumber, setPageNumber] = useState(0);
-
-    const housesPerPage = 5;
-    const pagesVisited = pageNumber * housesPerPage;
-
-    const pageCount = Math.ceil(houseList.length / housesPerPage);
-
-    const changePage = ({selected}) => {
-        setPageNumber(selected);
-    };
+    //pagination
+    const [pagesVisited,setPagesVisited] = useState(0);
+    const housesPerPage = 2;
+    const handlePageChange = (value) => {
+        setPagesVisited(value)
+    }
 
     let config = {
         headers: {
@@ -154,17 +151,7 @@ function OwnerHouseList() {
     return (<>
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
                            maintainedHouseId={maintainedHouseId}/>
-        <table>
-            <tr>
-                <td style={{ width: '700px', textAlign: 'left' }}>
-                    <h1 className="title">House List</h1>
-                </td>
-                <td style={{ width: '50%', textAlign: 'right' }}>
-                    <h2 className="link">
-                        <Link to="/owner/add-house-form">Add a new house</Link>
-                    </h2>
-                </td>
-            </tr></table>
+        <h1>House List</h1>
         <section className="main">
             <table className="table table-striped table-hover">
                 <thead>
@@ -208,17 +195,7 @@ function OwnerHouseList() {
 
                 </tbody>
             </table>
-            <ReactPaginate
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                pageCount={pageCount}
-                onPageChange={changePage}
-                containerClassName={"paginationBttns"}
-                previousLinkClassName={"previousBttn"}
-                nextLinkClassName={"nextBttn"}
-                disabledClassName={"paginationDisabled"}
-                activeClassName={"paginationActive"}
-            />
+            <PaginationComponent data={houseList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
 
         </section>
     </>);
