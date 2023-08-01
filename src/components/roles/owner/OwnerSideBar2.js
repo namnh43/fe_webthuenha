@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {Link} from "react-router-dom";
 import {useNavigate} from "react-router";
 import {List, ListItem, ListItemButton} from "@mui/material";
-import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
-import GiteOutlinedIcon from "@mui/icons-material/GiteOutlined";
-import HearingOutlinedIcon from "@mui/icons-material/HearingOutlined";
+import ConstructionIcon from '@mui/icons-material/Construction';
+import HouseIcon from '@mui/icons-material/House';
+import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 function OwnerSideBar2() {
     const [selectedItem, setSelectedItem] = useState('user-list');
@@ -15,43 +15,56 @@ function OwnerSideBar2() {
                 <span><p className="h4">Houses</p></span>
             </ListItem>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem == 'user-list'}
+                key='owner-list'
+                selected={selectedItem == 'house-list'}
                 onClick={() => {
-                    setSelectedItem('user-list');
+                    setSelectedItem('house-list');
                     navigate('')
                 }}
             >
                     <span className="me-3">
-                      <GroupOutlinedIcon/>
+                      <HolidayVillageIcon/>
                     </span>
                 <span className="hide-menu">House List</span>
             </ListItemButton>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem == 'host-list'}
+                key='owner-list'
+                selected={selectedItem == 'add-house-form'}
                 onClick={() => {
-                    setSelectedItem('host-list');
+                    setSelectedItem('add-house-form');
                     navigate('add-house-form')
                 }}
             >
                 <span className="me-3">
-                  <GiteOutlinedIcon/>
+                  <HouseIcon/>
                 </span>
                 <span className="hide-menu">Add a new house</span>
             </ListItemButton>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem == 'waiting-list'}
+                key='owner-list'
+                selected={selectedItem == 'booking-list'}
                 onClick={() => {
-                    setSelectedItem('waiting-list');
+                    setSelectedItem('booking-list');
                     navigate('booking');
                 }}
             >
                     <span className="me-3">
-                      <HearingOutlinedIcon/>
+                      <ReceiptLongIcon/>
                     </span>
                 <span className="hide-menu">Booking List</span>
+            </ListItemButton>
+            <ListItemButton
+                key='owner-list'
+                selected={selectedItem == 'maintenance-list'}
+                onClick={() => {
+                    setSelectedItem('maintenance-list');
+                    navigate('maintenance');
+                }}
+            >
+                    <span className="me-3">
+                      <ConstructionIcon/>
+                    </span>
+                <span className="hide-menu">Maintenance management</span>
             </ListItemButton>
         </List>
     </div>);
