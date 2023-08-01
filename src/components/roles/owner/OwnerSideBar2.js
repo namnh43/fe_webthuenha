@@ -27,19 +27,19 @@ function OwnerSideBar2() {
                     </span>
                 <span className="hide-menu">House List</span>
             </ListItemButton>
-            <ListItemButton
-                key='owner-list'
-                selected={selectedItem == 'add-house-form'}
-                onClick={() => {
-                    setSelectedItem('add-house-form');
-                    navigate('add-house-form')
-                }}
-            >
-                <span className="me-3">
-                  <HouseIcon/>
-                </span>
-                <span className="hide-menu">Add a new house</span>
-            </ListItemButton>
+            {/*<ListItemButton*/}
+            {/*    key='owner-list'*/}
+            {/*    selected={selectedItem == 'add-house-form'}*/}
+            {/*    onClick={() => {*/}
+            {/*        setSelectedItem('add-house-form');*/}
+            {/*        navigate('add-house-form')*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    <span className="me-3">*/}
+            {/*      <HouseIcon/>*/}
+            {/*    </span>*/}
+            {/*    <span className="hide-menu">Add a new house</span>*/}
+            {/*</ListItemButton>*/}
             <ListItemButton
                 key='owner-list'
                 selected={selectedItem == 'booking-list'}
