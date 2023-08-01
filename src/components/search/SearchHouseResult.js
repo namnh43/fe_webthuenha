@@ -13,6 +13,8 @@ export function SearchHouseResult() {
         return state.search.searchQuery;
     });
     useEffect(() => {
+        const searchUrl = `http://localhost:8080/house/search?address=${searchQuery.address}&minPrice=${searchQuery.minPrice}&maxPrice=${searchQuery.maxPrice}&totalBedrooms=${searchQuery.bedrooms}&totalBathrooms=${searchQuery.bathrooms}&startDate=${searchQuery.startDate}&endDate=${searchQuery.endDate}`
+        console.log(searchUrl);
         axios.get(`http://localhost:8080/house/search?address=${searchQuery.address}&minPrice=${searchQuery.minPrice}&maxPrice=${searchQuery.maxPrice}&totalBedrooms=${searchQuery.bedrooms}&totalBathrooms=${searchQuery.bathrooms}&startDate=${searchQuery.startDate}&endDate=${searchQuery.endDate}`)
             .then((res) => {
                 if (res.data.length == 0) alert("Not Found Any House")
