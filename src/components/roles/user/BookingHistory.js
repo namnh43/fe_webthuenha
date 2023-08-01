@@ -69,13 +69,17 @@ function BookingHistory() {
     }
 
     useEffect(() => {
+        refreshBookingList();
+    }, []);
+
+    const refreshBookingList = () => {
         axios.get(`http://localhost:8080/user/list-booking`, config)
             .then((res) => {
                 console.log(res.data)
                 setSearchBooking(res.data);
                 setBookingList(res.data);
             });
-    }, []);
+    }
 
     const isCancellable = (startDate) => {
         const startDateObj = new Date(startDate);
@@ -116,6 +120,7 @@ function BookingHistory() {
                 <ReviewForm
                     bookingId={reviewBookingId}
                     onClose={handleCloseReviewForm}
+                    refreshBookingList={refreshBookingList}
                 />
             ) : (
                 <>

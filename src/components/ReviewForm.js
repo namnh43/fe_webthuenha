@@ -4,7 +4,7 @@ import axios from "axios";
 import {useNavigate} from "react-router";
 import Swal from "sweetalert2";
 
-const ReviewForm = ({ bookingId, onClose }) => {
+const ReviewForm = ({ bookingId, onClose, refreshBookingList }) => {
     const [content, setContent] = useState('');
     const [rating, setRating] = useState(5);
 
@@ -43,7 +43,7 @@ const ReviewForm = ({ bookingId, onClose }) => {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                navigator("/user/booking-history");
+                refreshBookingList();
                 onClose();
             })
             .catch((error) => {
