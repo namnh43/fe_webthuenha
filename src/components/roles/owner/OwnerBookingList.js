@@ -3,13 +3,14 @@ import ReactPaginate from "react-paginate";
 import axios from "axios";
 import "./OwnerHouseList.css"
 import {PaginationComponent} from "../../pagination/PaginationComponent";
+import Swal from "sweetalert2";
 
 function OwnerBookingList() {
 
     const [bookingList, setBookingList] = useState([])
 
     //pagination
-    const [pagesVisited,setPagesVisited] = useState(0);
+    const [pagesVisited, setPagesVisited] = useState(0);
     const bookingPerpage = 5;
     const handlePageChange = (value) => {
         setPagesVisited(value)
@@ -25,6 +26,81 @@ function OwnerBookingList() {
         axios.get('http://localhost:8080/booking/owner', config)
             .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE")))
     }, []);
+
+    const checkIn = (item) =>
+        Swal.fire({
+            title: 'Check in this booking!',
+            text: "You won't be able to revert this!",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const formattedDate = () => {
+
+                    let TODAY = new Date()
+                    let cd = num => num.toString().padStart(2, 0)
+                    return TODAY.getFullYear() + "-" + cd(TODAY.getMonth() + 1) + "-" + cd(TODAY.getDate())
+                }
+                if (formattedDate() >= item.startDate) {
+                    axios.put(`http://localhost:8080/booking/check-in/${item.id}`, null, config)
+                        .then(() => axios.get('http://localhost:8080/booking/owner', config)
+                            .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))))
+                        .then(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Checked in!',
+                            });
+                        })
+                        .catch(() => {
+                            Swal.fire(
+                                'Something went wrong!',
+                                'You cannot check in this booking.',
+                                'warning'
+                            );
+                        })
+                }else {
+                    Swal.fire(
+                        'Forbidden!',
+                        'You must wait until start date on the booking to check in.',
+                        'error'
+                    );
+                }
+            }
+        })
+
+    const checkOut = (item) => Swal.fire({
+        title: 'Check out this booking!',
+        text: "You won't be able to revert this!",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+                axios.put(`http://localhost:8080/booking/check-out/${item.id}`, null, config)
+                    .then(() => axios.get('http://localhost:8080/booking/owner', config)
+                        .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))))
+                    .then(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Checked out!',
+                        });
+                    })
+                    .catch(() => {
+                        Swal.fire(
+                            'Something went wrong!',
+                            'You cannot check out this booking.',
+                            'warning'
+                        );
+                    })
+
+        }
+    })
 
     return (<>
         <h2>Booking List</h2>
@@ -53,11 +129,14 @@ function OwnerBookingList() {
                             <td>{item.price}/{item.total}</td>
                             <td>{item.bookingStatus}</td>
                             {item.bookingStatus === "BOOKING" && (
-                                    <td><button className="btn btn-primary">Check in</button></td>
-
+                                <td>
+                                    <button className="btn btn-primary" onClick={() => checkIn(item)}>Check in</button>
+                                </td>
                             )}
                             {item.bookingStatus === "CHECKED_IN" && (
-                                <td><button>Check out</button></td>
+                                <td>
+                                    <button className="btn btn-secondary" onClick={() => checkOut(item)}>Check out</button>
+                                </td>
                             )}
                             {item.bookingStatus === "CANCELLED" && (
                                 <td></td>

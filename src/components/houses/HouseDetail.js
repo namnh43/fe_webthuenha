@@ -9,6 +9,8 @@ import Reviews from "../Reviews";
 import TestDatePicker from "../datetime/test";
 import Swal from "sweetalert2";
 import StarIcon from "@mui/icons-material/Star";
+import BedIcon from '@mui/icons-material/Bed';
+import BathtubIcon from '@mui/icons-material/Bathtub';
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -218,7 +220,7 @@ export function HouseDetail() {
                                 </button>
                             </form>
                         </div>
-                        <div className="bg-white widget border rounded mt-5">
+                        <div className="bg-white border rounded mt-5">
                             {house.address
                                 && <div>
                                     <MapWithSearch initialAddress={house.address}/>
@@ -229,7 +231,7 @@ export function HouseDetail() {
                     <div className="bg-white property-body border-bottom border-left border-right">
                         <div className="row mb-5">
                             <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
-                            <h5>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</h5>
+                            <h5><BedIcon/>{house.totalBedrooms} Bed room . <BathtubIcon/>{house.totalBathrooms} Bath room</h5>
                         </div>
                         <h2 className="h4 text-black">More Info</h2>
                         <p>{house.description}</p>
@@ -268,8 +270,7 @@ export function HouseDetail() {
                                     <img src="images/img_1.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite"><span
-                                        className="icon-heart-o"></span></a>
+                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
                                     <h2 className="property-title"><a href="property-details.html">625 S. Berendo St</a>
                                     </h2>
                                     <span className="property-location d-block mb-3"><span
@@ -339,8 +340,7 @@ export function HouseDetail() {
                                     <img src="images/img_3.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite"><span
-                                        className="icon-heart-o"></span></a>
+                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
                                     <h2 className="property-title"><a href="property-details.html">853 S Lucerne
                                         Blvd</a></h2>
                                     <span className="property-location d-block mb-3"><span
