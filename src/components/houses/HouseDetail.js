@@ -8,6 +8,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Reviews from "../Reviews";
 import TestDatePicker from "../datetime/test";
 import Swal from "sweetalert2";
+import StarIcon from "@mui/icons-material/Star";
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -16,9 +17,19 @@ export function HouseDetail() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [day, setDay] = useState(0);
-    const [result, setResult] = useState(null);
+
     const navigate = useNavigate();
     const [listBooking, setListBooking] = useState([]);
+
+    let result = {
+        startDate: "",
+        endDate: "",
+        price: house.price,
+        total: house.price * day + house.price * day * 5 / 100,
+        house: {
+            id: id
+        }
+    }
 
     let config = {
         headers: {
@@ -32,10 +43,14 @@ export function HouseDetail() {
             return;
         }
         if (startDate === "" || endDate === "") {
-            alert("invite you enter Date")
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Please select booking date',
+            })
             return;
         }
-        setResult({
+        result = {
             startDate: startDate,
             endDate: endDate,
             price: house.price,
@@ -43,32 +58,42 @@ export function HouseDetail() {
             house: {
                 id: house.id
             }
-        });
+        };
+        postResult();
     }
-
-    useEffect(() => {
-        console.log('result', result)
-        if (result === null) return
-        postResult()
-    }, [result])
 
     function postResult() {
         try {
             console.log('post_result', result);
             axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
+                handleFetchBookingList();
                 Swal.fire({
                     icon: 'success',
                     title: 'Booking successful!',
-                    showConfirmButton: false,
-                    timer: 1500
+                    html: `
+                    <div>House: ${result.house.name}</div>
+                    <div>Address: ${result.house.address}</div>
+                    <div>Start Date: ${result.startDate}</div>
+                    <div>End Date: ${result.endDate}</div>
+                    <div>Price: ${result.price}</div>
+                    <div>Total: ${result.total}</div>
+                    `,
+                    footer: '<a href="/user/booking-history">Click here to see booking list</a>'
                 });
             }).catch((error) => {
                 if (error.response && error.response.status === 400) {
-                    alert('This day has been placed');
-                    handleFetchBookingList();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error...',
+                        text: 'This house is already booked!',
+                    })
                 } else {
                     console.error('Error occurred while posting result:', error);
-                    alert('An error occurred. Please try again later.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error...',
+                        text: 'An error occurred. Please try again later.',
+                    })
                 }
             });
         } catch (error) {
@@ -92,8 +117,6 @@ export function HouseDetail() {
         })
         handleFetchBookingList();
     }, [])
-
-
 
     function calculateDiff(startDate, endDate) {
         if (startDate !== "" && endDate !== "") {
@@ -150,38 +173,49 @@ export function HouseDetail() {
                         </div>
                     </div>
                     <div className="col">
-                        <div className="bg-white p-3 border rounded">
-                            <h5 className="h5 text-black  mb-3 ">Price ${house.price}/Night</h5>
+                        <div className="bg-white p-4 border rounded">
+                            <h5 className="text-black mb-3" style={{ display: 'flex', alignItems: 'center'}}>
+                                <b><span style={{fontSize: '24px'}}>${house.price} /</span> night</b>
+                                <span style={{ marginLeft: 'auto', fontSize: '15px', paddingTop: '9px'}}>
+                <StarIcon style={{ marginBottom: '4px', fontSize: '16px'}}/>
+                                    {house.ratingScore} {" - " + house.numberOfReviews + " reviews"}
+            </span>
+                            </h5>
                             <form action="src/components#" className="">
-                                <div>
+                                <div style={{width: 'fit-content', margin: 'auto'}}>
                                     <TestDatePicker setStartDate={setStartDate} setEndDate={setEndDate}
                                                     calculateDiff={calculateDiff} listBooking={listBooking}/>
                                 </div>
+                                <hr/>
                                 <div>
                                     {startDate !== "" && endDate !== "" && <div>
-                                        <tr>
-                                            <td>
-                                                ${house.price} x {day} Night :
-                                            </td>
-                                            <td>${house.price * day}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Service charge :
-                                            </td>
-                                            <td>${house.price * day * 5 / 100}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Total money :</th>
-                                            <th>${house.price * day + house.price * day * 5 / 100}</th>
-                                        </tr>
+                                        <table style={{width: '100%'}}>
+                                            <tr>
+                                                <td style={{textAlign: 'left'}}>
+                                                    ${house.price} x {day} night
+                                                </td>
+                                                <td style={{textAlign: 'right'}}>${house.price * day}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{textAlign: 'left'}}>
+                                                    Service charge
+                                                </td>
+                                                <td style={{textAlign: 'right'}}>${house.price * day * 5 / 100}</td>
+                                            </tr>
+                                        </table>
+                                        <hr/>
+                                        <table style={{width: '100%'}}>
+                                            <tr>
+                                                <td style={{textAlign: 'left'}}><b>Total</b></td>
+                                                <td style={{textAlign: 'right'}}><b>${house.price * day + house.price * day * 5 / 100}</b></td>
+                                            </tr>
+                                        </table>
                                     </div>}
                                 </div>
-                                <br/>
-                                <div className="form-group">
-                                    <input type="button" value="Booking" className="btn btn-primary"
-                                           onClick={booking}/>
-                                </div>
+                                <button style={{width: '100%', margin: 'auto', fontSize: '18px', height: '50px'}} type="button" className="btn btn-primary mt-2"
+                                        onClick={booking}>
+                                    {startDate !== "" && endDate !== "" ? "Booking Now" : "Choose date to check home status"}
+                                </button>
                             </form>
                         </div>
                         <div className="bg-white widget border rounded mt-5">

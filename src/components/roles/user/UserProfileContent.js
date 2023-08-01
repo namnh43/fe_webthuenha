@@ -229,7 +229,7 @@ export function UserProfile() {
                                 <Form>
                                     <div className="form-group">
                                         UserName<br/>
-                                        <input className="form-control" readOnly={true} value={currentUser.username}/><br/>
+                                        <input className="form-control" readOnly={true} value={currentUser.username}/>
                                     </div>
                                     <div className="form-group">
                                         FirstName<br/>
