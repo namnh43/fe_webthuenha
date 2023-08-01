@@ -31,17 +31,17 @@ export function HouseList() {
                         {list.map((item) => {
                             return (
                                 <>
-                                    <div className="col-md-6 col-lg-4 mb-4"
+                                    <div className="col-md-6 col-lg-3 mb-4"
                                          onClick={() => {
                                              const url = 'houses/' + item.id + '/detail';
                                              navigate(url)
                                          }}>
-                                        <Card
+                                        <Card sx={{borderRadius:'10px'}}
                                         >
                                             <CardActionArea>
                                                 <CardMedia
                                                     component="img"
-                                                    height="300"
+                                                    height="200"
                                                     image={item.images.length > 0 ? item.images[0].fileUrl
                                                         : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
                                                     alt="house image"

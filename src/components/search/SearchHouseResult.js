@@ -34,7 +34,7 @@ export function SearchHouseResult() {
         <>
             {listSearch.length <= 0 ? <h3>Not found results</h3> :
                 <div className="bg-light pt-3">
-                    <h3 className='mb-2'>Found {listSearch.length} results!</h3>
+                    <h5 className='mb-2'>Found {listSearch.length} results!</h5>
                     <div className="container">
                         <div className="row mb-5">
                             {listSearch.map((item) => {
