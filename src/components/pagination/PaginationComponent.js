@@ -10,7 +10,9 @@ export function PaginationComponent({data,numberPerpage,changeCurentPage}) {
     let [currentDisplayNumber,setCurrentDisplayNumber] = useState(0);
 
     useEffect(() => {
+        setPageNumber(0)
         setCurrentDisplayNumber(data.slice(pageNumber*numberPerpage, pageNumber*numberPerpage + numberPerpage).length);
+        changeCurentPage(0)
 
     },[data])
     const changePage = ({ selected }) => {

@@ -22,12 +22,60 @@ export function HouseList() {
         const endDate = searchParams.get('endDate');
 
     }, [])
+    const top4House = list
+        .sort((a, b) => b.numberOfRented - a.numberOfRented)
+        .slice(0, 4);
 
     return (
         <>
             <div className="site-section site-section-sm bg-light">
                 <div className="container">
                     <div className="row mb-5">
+                        <h1>Top Visited</h1>
+                        {top4House.map((item) => {
+                            return (
+                                <>
+                                    <div className="col-md-6 col-lg-3 mb-4"
+                                         onClick={() => {
+                                             const url = 'houses/' + item.id + '/detail';
+                                             navigate(url)
+                                         }}>
+                                        <Card sx={{borderRadius:'10px'}}
+                                        >
+                                            <CardActionArea>
+                                                <CardMedia
+                                                    component="img"
+                                                    height="200"
+                                                    image={item.images.length > 0 ? item.images[0].fileUrl
+                                                        : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
+                                                    alt="house image"
+                                                />
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="h5" component="div">
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                            <div className="text-capitalize">{item.name}</div>
+                                                            <div><span style={{ fontSize: 'medium' }}><StarIcon fontSize="inherit" />{item.ratingScore}</span></div>
+                                                        </div>
+                                                    </Typography>
+                                                    <div >
+                                                        <div className="row">
+                                                            <div className="col">
+                                                                <span className="property-location d-block mb-3"><LocationOnIcon color="primary"/> {item.address}</span>
+                                                            </div>
+                                                            <div className="col text-right">
+                                                                <strong
+                                                                    className="property-price text-primary mb-3 d-block text-success">${item.price}</strong>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    </div>
+                                </>
+                            );
+                        })}
+                        <h1>Popular Houses</h1>
                         {list.map((item) => {
                             return (
                                 <>
