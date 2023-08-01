@@ -20,7 +20,7 @@ import OwnerEditHouseForm from "./components/roles/owner/OwnerEditHouseForm";
 import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/roles/owner/OwnerBookingList";
 import {SearchResultPage} from "./pages/SearchResultPage";
-import OwnerMaintenanceList from "./components/OwnerMaintenanceList";
+import OwnerMaintenanceList from "./components/roles/owner/OwnerMaintenanceList";
 function App() {
   return (
     <div className="App">
