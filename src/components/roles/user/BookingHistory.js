@@ -124,7 +124,7 @@ function BookingHistory() {
                 />
             ) : (
                 <>
-                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                    <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
                         <label htmlFor="house-name-input"></label>
                         <input id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required />
 
@@ -142,7 +142,6 @@ function BookingHistory() {
                             <option value="CHECKED_IN">CHECKED_IN</option>
                             <option value="CHECKED_OUT">CHECKED_OUT</option>
                         </select>
-                        <button onClick={search}>Search</button>
                     </div>
                     <h2>Booking List</h2>
                     <section className="main">
