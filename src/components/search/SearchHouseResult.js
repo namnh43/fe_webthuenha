@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 import axios from "axios";
 import {Card, CardActionArea, CardContent, CardMedia, Typography} from "@mui/material";
@@ -8,24 +8,33 @@ import {useNavigate} from "react-router";
 export function SearchHouseResult() {
     const [listSearch, setListSearch] = useState([]);
     const navigate = useNavigate();
-    const searchQuery = useSelector((state) => {
-        console.log(state.search.searchQuery)
-        return state.search.searchQuery;
-    });
+    let [searchParams, setSearchParams] = useSearchParams();
+    let searchQuery={};
+    useEffect(()=> {
+
+    },[searchParams])
     useEffect(() => {
-        const searchUrl = `http://localhost:8080/house/search?address=${searchQuery.address}&minPrice=${searchQuery.minPrice}&maxPrice=${searchQuery.maxPrice}&totalBedrooms=${searchQuery.bedrooms}&totalBathrooms=${searchQuery.bathrooms}&startDate=${searchQuery.startDate}&endDate=${searchQuery.endDate}`
-        console.log(searchUrl);
-        axios.get(`http://localhost:8080/house/search?address=${searchQuery.address}&minPrice=${searchQuery.minPrice}&maxPrice=${searchQuery.maxPrice}&totalBedrooms=${searchQuery.bedrooms}&totalBathrooms=${searchQuery.bathrooms}&startDate=${searchQuery.startDate}&endDate=${searchQuery.endDate}`)
-            .then((res) => {
-                if (res.data.length == 0) alert("Not Found Any House")
+        if (searchParams.size > 0) {
+            const addressQuery = searchParams.get('address')?searchParams.get('address'):'';
+            const minPriceQuery = searchParams.get('minprice')?searchParams.get('minprice'):0;
+            const maxPriceQuery = searchParams.get('maxprice')?searchParams.get('maxprice'):1000000;
+            const startDate = searchParams.get('startdate')?searchParams.get('startdate'): '2023-01-01';
+            const endDate = searchParams.get('enddate')?searchParams.get('enddate'): '2023-01-01';
+            axios.get(`http://localhost:8080/house/search?address=${addressQuery}&minPrice=${minPriceQuery}&maxPrice=${maxPriceQuery}&totalBedrooms=${0}&totalBathrooms=${0}&startDate=${startDate}&endDate=${endDate}`)
+                .then((res) => {
+                    setListSearch(res.data)
+                })
+        } else {
+            axios.get(`http://localhost:8080/house`, {}).then(res => {
                 setListSearch(res.data)
             })
-    },[searchQuery])
+        }
+    },[searchParams])
     return (
         <>
             {listSearch.length <= 0 ? <h3>Not found results</h3> :
                 <div className="bg-light pt-3">
-                    {/*<h3 className='mb-2'>Search Result</h3>*/}
+                    <h3 className='mb-2'>Found {listSearch.length} results!</h3>
                     <div className="container">
                         <div className="row mb-5">
                             {listSearch.map((item) => {

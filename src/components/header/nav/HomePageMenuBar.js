@@ -21,6 +21,7 @@ import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import './Menubar.css'
+import AlertDialog from "../../dialog/AlertDialog";
 function HomePageMenuBar() {
     const menuBarStyle = {
         fontFamily: 'Roboto, sans-serif',
@@ -80,6 +81,10 @@ function HomePageMenuBar() {
     const handleLoginClick = () => {
         setLogin(true)
         console.log('login state', login)
+    }
+
+    function openSearchBox() {
+        console.log('open search dialog')
     }
 
     return (

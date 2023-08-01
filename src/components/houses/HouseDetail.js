@@ -6,6 +6,8 @@ import OwlCarousel from "react-owl-carousel";
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Reviews from "../Reviews";
+import BedIcon from '@mui/icons-material/Bed';
+import BathtubIcon from '@mui/icons-material/Bathtub';
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -196,7 +198,7 @@ export function HouseDetail() {
                                 </div>
                             </form>
                         </div>
-                        <div className="bg-white widget border rounded mt-5">
+                        <div className="bg-white border rounded mt-5">
                             {house.address
                                 && <div>
                                     <MapWithSearch initialAddress={house.address}/>
@@ -207,7 +209,7 @@ export function HouseDetail() {
                     <div className="bg-white property-body border-bottom border-left border-right">
                         <div className="row mb-5">
                             <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
-                            <h5>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</h5>
+                            <h5><BedIcon/>{house.totalBedrooms} Bed room . <BathtubIcon/>{house.totalBathrooms} Bath room</h5>
                         </div>
                         <h2 className="h4 text-black">More Info</h2>
                         <p>{house.description}</p>
