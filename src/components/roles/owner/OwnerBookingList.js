@@ -10,7 +10,7 @@ function OwnerBookingList() {
 
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const bookingPerpage = 2;
+    const bookingPerpage = 5;
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -23,7 +23,7 @@ function OwnerBookingList() {
 
     useEffect(() => {
         axios.get('http://localhost:8080/booking/owner', config)
-            .then((res) => setBookingList(res.data))
+            .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE")))
     }, []);
 
     return (<>
@@ -33,12 +33,12 @@ function OwnerBookingList() {
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th className="p-0 m-0"></th>
                     <th>House</th>
                     <th>Booking date</th>
                     <th>Duration</th>
                     <th>Unit/Total Price</th>
                     <th>Status</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -47,16 +47,24 @@ function OwnerBookingList() {
                     .map((item, key) => {
                         return (<tr>
                             <td>{key + 1 + pagesVisited}</td>
-                            {item.house.images.length === 0 ? <td></td> :
-                                <td><img src={item.house.images[0].fileUrl} style={{height: '4rem', width: '7rem'}}
-                                         alt=""/></td>
-                            }
-
                             <td>{item.house.name}</td>
                             <td>{item.createAt}</td>
                             <td>{item.startDate}/{item.endDate}</td>
                             <td>{item.price}/{item.total}</td>
                             <td>{item.bookingStatus}</td>
+                            {item.bookingStatus === "BOOKING" && (
+                                    <td><button className="btn btn-primary">Check in</button></td>
+
+                            )}
+                            {item.bookingStatus === "CHECKED_IN" && (
+                                <td><button>Check out</button></td>
+                            )}
+                            {item.bookingStatus === "CANCELLED" && (
+                                <td></td>
+                            )}
+                            {item.bookingStatus === "CHECKED_OUT" && (
+                                <td></td>
+                            )}
                         </tr>)
                     })}
 
