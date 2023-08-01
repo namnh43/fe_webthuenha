@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import ReactPaginate from "react-paginate";
+import Swal from "sweetalert2";
 
 function OwnerMaintenanceList() {
     const [bookingList, setBookingList] = useState([])
@@ -26,13 +27,37 @@ function OwnerMaintenanceList() {
             .then((res) => setBookingList(res.data.filter(item => item.bookingStatus === "MAINTENANCE")))
     }, []);
 
-    let cancelMaintenance = (bookingId) => {
-        axios.delete(`http://localhost:8080/booking/maintenance-to-empty/${bookingId}`, config)
-            .then(() => {
-                axios.get('http://localhost:8080/booking/owner', config)
-                    .then((res) => setBookingList(res.data.filter(item => item.bookingStatus === "MAINTENANCE")))
-            })
-    }
+    let cancelMaintenance = (bookingId) =>
+        Swal.fire({
+            title: 'Cancel this maintenance!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`http://localhost:8080/booking/maintenance-to-empty/${bookingId}`, config)
+                        .then(() => {
+                            axios.get('http://localhost:8080/booking/owner', config)
+                                .then((res) => setBookingList(res.data.filter(item => item.bookingStatus === "MAINTENANCE")))
+                        })
+                        .then(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success'
+                            });
+                        })
+                        .catch(() => {
+                            Swal.fire(
+                                'Something went wrong!',
+                                'You cannot check in this booking.',
+                                'info'
+                            );
+                        })
+                }
+            }
+        )
 
     return (
         <>
