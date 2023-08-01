@@ -6,6 +6,8 @@ import OwlCarousel from "react-owl-carousel";
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Reviews from "../Reviews";
+import TestDatePicker from "../datetime/test";
+import Swal from "sweetalert2";
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -16,24 +18,7 @@ export function HouseDetail() {
     const [day, setDay] = useState(0);
     const [result, setResult] = useState(null);
     const navigate = useNavigate();
-
-    function handleStartDateChange(event) {
-        if (new Date(event.target.value) < Date.now()) {
-            alert("startDate invalid")
-            return;
-        }
-        setStartDate(event.target.value);
-        calculateDiff(event.target.value, endDate)
-    }
-
-    function handleEndDateChange(event) {
-        if (new Date(event.target.value) < Date.now()) {
-            alert("endDate invalid")
-            return;
-        }
-        setEndDate(event.target.value);
-        calculateDiff(startDate, event.target.value)
-    }
+    const [listBooking, setListBooking] = useState([]);
 
     let config = {
         headers: {
@@ -48,7 +33,7 @@ export function HouseDetail() {
         }
         if (startDate === "" || endDate === "") {
             alert("invite you enter Date")
-            return
+            return;
         }
         setResult({
             startDate: startDate,
@@ -71,10 +56,16 @@ export function HouseDetail() {
         try {
             console.log('post_result', result);
             axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
-                alert('success');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Booking successful!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             }).catch((error) => {
                 if (error.response && error.response.status === 400) {
                     alert('This day has been placed');
+                    handleFetchBookingList();
                 } else {
                     console.error('Error occurred while posting result:', error);
                     alert('An error occurred. Please try again later.');
@@ -86,6 +77,12 @@ export function HouseDetail() {
         }
     }
 
+    const handleFetchBookingList = () => {
+        axios.get(`http://localhost:8080/booking/house/` + id).then(res => {
+            setListBooking(res.data)
+        })
+    }
+
     useEffect(() => {
         console.log('get_house_id', id);
         axios.get(`http://localhost:8080/house/` + id).then(res => {
@@ -93,19 +90,17 @@ export function HouseDetail() {
             setHouse(res.data)
             setList(res.data.images)
         })
+        handleFetchBookingList();
     }, [])
+
+
 
     function calculateDiff(startDate, endDate) {
         if (startDate !== "" && endDate !== "") {
-            if (new Date(startDate) >= new Date(endDate)) {
-                alert("Date invalid")
-                setEndDate("")
-            } else {
-                const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
-                const firstDate = new Date(startDate);
-                const secondDate = new Date(endDate);
-                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay)));
-            }
+            const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
+            const firstDate = new Date(startDate);
+            const secondDate = new Date(endDate);
+            setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay)));
         }
     }
 
@@ -133,7 +128,8 @@ export function HouseDetail() {
                                             <div className="col-sm-12 col-md-12 col-lg-12">
                                                 <a target="_blank" href={item.fileUrl}
                                                    className="image-popup gal-item"><img
-                                                    src={item.fileUrl} alt="Image" className="img-fluid vh-100" style={{maxHeight:'460px'}}/></a>
+                                                    src={item.fileUrl} alt="Image" className="img-fluid vh-100"
+                                                    style={{maxHeight: '460px'}}/></a>
                                             </div>
                                         )
                                     })}
@@ -155,25 +151,17 @@ export function HouseDetail() {
                     </div>
                     <div className="col">
                         <div className="bg-white p-3 border rounded">
-                            <h3 className="h4 text-black  mb-3 ">Price ${house.price}/Night</h3>
+                            <h5 className="h5 text-black  mb-3 ">Price ${house.price}/Night</h5>
                             <form action="src/components#" className="">
                                 <div>
-                                    <div className="form-group">
-                                        <label htmlFor="Booking">Booking Date</label>
-                                        <input type="Date" id="Booking" className="form-control" value={startDate}
-                                               onChange={handleStartDateChange}/>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="EndDate">End Date</label>
-                                        <input type="Date" id="EndDate" className="form-control" value={endDate}
-                                               onChange={handleEndDateChange}/>
-                                    </div>
+                                    <TestDatePicker setStartDate={setStartDate} setEndDate={setEndDate}
+                                                    calculateDiff={calculateDiff} listBooking={listBooking}/>
                                 </div>
                                 <div>
                                     {startDate !== "" && endDate !== "" && <div>
                                         <tr>
                                             <td>
-                                                ${house.price} X {day} Day :
+                                                ${house.price} x {day} Night :
                                             </td>
                                             <td>${house.price * day}</td>
                                         </tr>
@@ -246,7 +234,8 @@ export function HouseDetail() {
                                     <img src="images/img_1.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
+                                    <a href="src/components#" className="property-favorite"><span
+                                        className="icon-heart-o"></span></a>
                                     <h2 className="property-title"><a href="property-details.html">625 S. Berendo St</a>
                                     </h2>
                                     <span className="property-location d-block mb-3"><span
@@ -316,7 +305,8 @@ export function HouseDetail() {
                                     <img src="images/img_3.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
+                                    <a href="src/components#" className="property-favorite"><span
+                                        className="icon-heart-o"></span></a>
                                     <h2 className="property-title"><a href="property-details.html">853 S Lucerne
                                         Blvd</a></h2>
                                     <span className="property-location d-block mb-3"><span

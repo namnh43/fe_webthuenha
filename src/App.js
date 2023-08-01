@@ -21,6 +21,7 @@ import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/roles/owner/OwnerBookingList";
 import {SearchResultPage} from "./pages/SearchResultPage";
 import OwnerMaintenanceList from "./components/OwnerMaintenanceList";
+import TestDatePicker from "./components/datetime/test";
 function App() {
   return (
     <div className="App">
@@ -48,7 +49,7 @@ function App() {
               <Route path='' element={<UserProfile/>}/>
               <Route path='booking-history' element={<BookingHistory/>}/>
           </Route>
-          <Route path='/test' element={<FormWithImageUpload/>}/>
+          <Route path='/test' element={<TestDatePicker/>}/>
       </Routes>
     </div>
   );
