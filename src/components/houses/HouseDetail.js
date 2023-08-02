@@ -175,7 +175,7 @@ export function HouseDetail() {
                                     {startDate !== "" && endDate !== "" && <div>
                                         <tr>
                                             <td>
-                                                ${house.price} X {day} Day :
+                                                ${house.price} X {day} Night :
                                             </td>
                                             <td>${house.price * day}</td>
                                         </tr>
