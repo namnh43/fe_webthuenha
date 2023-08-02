@@ -50,12 +50,12 @@ function MaintenanceDialog(props) {
                 <DialogContentText id="alert-dialog-description">
                     <div style={{color: "red"}}>{errorMessage}</div>
                     <div>
-                        <label className="col-4">Start date</label>
+                        <label className="col-4 text-dark">Start date</label>
                         <input type="date" value={startDate} required
                                onChange={e => setStartDate(e.target.value)}/>
                     </div>
                     <div>
-                        <label className="col-4">End date</label>
+                        <label className="col-4 text-dark">End date</label>
                         <input type="date" value={endDate} required
                                onChange={e => setEndDate(e.target.value)}/>
                     </div>
@@ -188,7 +188,12 @@ function OwnerHouseList() {
     return (<>
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
                            maintainedHouseId={maintainedHouseId}/>
-        <h1>House List</h1>
+        <div className="d-flex justify-content-between">
+            <h2>House List</h2>
+            <button className="btn btn-light d-flex" style={{paddingTop: '10px'}} onClick={() => navigate('/owner/add-house-form')}>
+                <i className="material-icons">&#xf8eb;</i>
+                <span>Create new</span></button>
+        </div>
         <section className="main">
             <table className="table table-striped table-hover">
                 <thead>
@@ -216,8 +221,8 @@ function OwnerHouseList() {
                             <td>{item.address}</td>
                             <td>add later</td>
                             {item.blocked === false ?
-                                (<td><span style={{display: 'inline-block', backgroundColor: 'lightgreen', height: '6px', width: '6px', borderRadius: '50%', marginBottom: '3px', marginRight: '5px'}}></span>Active</td>)
-                                :(<td><span style={{display: 'inline-block', backgroundColor: 'red', height: '6px', width: '6px', borderRadius: '50%', marginBottom: '3px', marginRight: '5px'}}></span>Blocked</td>)}
+                                (<td><span style={{display: 'inline-block', backgroundColor: '#198754', height: '8px', width: '8px', borderRadius: '50%', marginBottom: '2px', marginRight: '5px'}}></span>Active</td>)
+                                :(<td><span style={{display: 'inline-block', backgroundColor: '#dc3545', height: '8px', width: '8px', borderRadius: '50%', marginBottom: '2px', marginRight: '5px'}}></span>Blocked</td>)}
                             <td className="col-2">
                                 {/*<button style={{backgroundColor: 'transparent'}}><i className="material-icons">&#xe88e;</i></button>*/}
                                 <button style={{backgroundColor: 'transparent'}}
