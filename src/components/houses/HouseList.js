@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Link, useSearchParams} from "react-router-dom";
 import {Card, CardActionArea, CardContent, CardMedia, Typography} from "@mui/material";
 import {useNavigate} from "react-router";
 import StarIcon from '@mui/icons-material/Star';
@@ -11,6 +10,7 @@ export function HouseList() {
     useEffect(() => {
         axios.get(`http://localhost:8080/house`, {}).then(res => {
             setList(res.data)
+            console.log(res.data)
         })
         //get search params
         const searchParams = new URLSearchParams(window.location.search);
@@ -22,7 +22,7 @@ export function HouseList() {
         const endDate = searchParams.get('endDate');
 
     }, [])
-    const top4House = list
+    const topHouse = list
         .sort((a, b) => b.numberOfRented - a.numberOfRented)
         .slice(0, 4);
 
@@ -32,7 +32,7 @@ export function HouseList() {
                 <div className="container">
                     <div className="row mb-5">
                         <h1>Top Visited</h1>
-                        {top4House.map((item) => {
+                        {topHouse.map((item) => {
                             return (
                                 <>
                                     <div className="col-md-6 col-lg-3 mb-4"
