@@ -89,12 +89,11 @@ function HomePageMenuBar() {
     }
 
     return (
-        <>
             <Grid
                 container
                 spacing={2}
                 sx={{
-                    backgroundColor: "rgb(1,1,1,.4)",
+                    backgroundColor: "rgb(1,1,1,.6)",
                     color: "white",
                     height: '80px',
                 }}
@@ -289,7 +288,6 @@ function HomePageMenuBar() {
                 </Grid>
 
             </Grid>
-        </>
 
     );
 }
