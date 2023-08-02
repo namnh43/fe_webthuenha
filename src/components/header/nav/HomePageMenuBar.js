@@ -93,7 +93,7 @@ function HomePageMenuBar() {
                 container
                 spacing={2}
                 sx={{
-                    backgroundColor: "rgb(1,1,1,.6)",
+                    backgroundColor: "rgb(1,1,1,.4)",
                     color: "white",
                     height: '80px',
                 }}

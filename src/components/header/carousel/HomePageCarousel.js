@@ -29,9 +29,9 @@ export function HomePageCarousel() {
                         (<div className="carousel-item active"  data-bs-interval="2000">
                             {house.images.length > 0 ? (<img src={house.images[0].fileUrl}  className="d-block w-100 vh-100" alt="img1"/>)
                                 :(<img src="/images/hero_bg_1.jpg"  className="d-block w-100 vh-100" alt="img1"/>)}
-                            <div className="carousel-caption d-flex col-3 align-items-center justify-content-center flex-column"
-                            style={{backgroundColor: 'rgb(1,1,1,.6)', position: 'absolute', top: '250px', left: '550px', height: '250px'}}>
-                                <div className="col-12">
+                            <div className="carousel-caption d-flex col-3 p-0 align-items-center justify-content-center flex-column"
+                            style={{backgroundColor: 'rgb(1,1,1,.5)', position: 'absolute', top: '300px', left: '560px', height: '180px', width: '3000px'}}>
+                                <div className="col-12 p-0">
                                     <p className="mt-3 h2 text-light font-weight-bold">{house.name}</p>
                                     <p className="mb-3"><strong
                                         className="h2 text-success font-weight-bold">${house.price}</strong></p>
