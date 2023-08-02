@@ -12,7 +12,7 @@ export default function UserSidebar() {
     const drawer = (<div>
         <List>
             <ListItem className="">
-                <span><p className="h4">USERS</p></span>
+                <span><p className="h4">My Accounts</p></span>
             </ListItem>
             <ListItemButton
                 key='profile'

@@ -40,7 +40,7 @@ export function HouseList() {
                                              const url = 'houses/' + item.id + '/detail';
                                              navigate(url)
                                          }}>
-                                        <Card sx={{borderRadius:'10px'}}
+                                        <Card sx={{borderRadius:'6px'}}
                                         >
                                             <CardActionArea>
                                                 <CardMedia
@@ -50,22 +50,20 @@ export function HouseList() {
                                                         : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
                                                     alt="house image"
                                                 />
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="div">
+                                                <CardContent style={{padding:'8px'}}>
+                                                    <Typography gutterBottom variant="h6" component="div" style={{ lineHeight: '1', marginBottom: '1px'}}>
                                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                             <div className="text-capitalize">{item.name}</div>
-                                                            <div><span style={{ fontSize: 'medium' }}><StarIcon fontSize="inherit" />{item.ratingScore}</span></div>
+                                                            <div><span style={{ fontSize: 'medium'}}><StarIcon style={{paddingBottom:'3px', fontSize:'19px'}} fontSize="inherit" />{item.ratingScore}</span></div>
                                                         </div>
                                                     </Typography>
-                                                    <div >
-                                                        <div className="row">
-                                                            <div className="col">
-                                                                <span className="property-location d-block mb-3"><LocationOnIcon color="primary"/> {item.address}</span>
-                                                            </div>
-                                                            <div className="col text-right">
-                                                                <strong
-                                                                    className="property-price text-primary mb-3 d-block text-success">${item.price}</strong>
-                                                            </div>
+                                                    <div>
+                                                        <div>
+                                                            <span style={{position: 'relative', right: '3px'}} className="property-location d-block"><LocationOnIcon style={{fontSize:'19px'}} color="primary"/>{item.address}</span>
+                                                        </div>
+                                                        <div>
+                                                            <strong
+                                                                className="property-price text-primary d-block text-success">${item.price}</strong>/night
                                                         </div>
                                                     </div>
                                                 </CardContent>
@@ -79,12 +77,12 @@ export function HouseList() {
                         {list.map((item) => {
                             return (
                                 <>
-                                    <div className="col-md-6 col-lg-3 mb-4"
+                                    <div className="col-md-6 col-lg-3 mb-3"
                                          onClick={() => {
                                              const url = 'houses/' + item.id + '/detail';
                                              navigate(url)
                                          }}>
-                                        <Card sx={{borderRadius:'10px'}}
+                                        <Card sx={{borderRadius:'6px'}}
                                         >
                                             <CardActionArea>
                                                 <CardMedia
@@ -98,18 +96,16 @@ export function HouseList() {
                                                     <Typography gutterBottom variant="h5" component="div">
                                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                             <div className="text-capitalize">{item.name}</div>
-                                                            <div><span style={{ fontSize: 'medium' }}><StarIcon fontSize="inherit" />{item.ratingScore}</span></div>
+                                                            <div><span style={{ fontSize: 'medium' }}><StarIcon style={{paddingBottom:'3px', fontSize:'19px'}} fontSize="inherit" />{item.ratingScore}</span></div>
                                                         </div>
                                                     </Typography>
-                                                    <div >
-                                                        <div className="row">
-                                                            <div className="col">
-                                                                <span className="property-location d-block mb-3"><LocationOnIcon color="primary"/> {item.address}</span>
-                                                            </div>
-                                                            <div className="col text-right">
-                                                                <strong
-                                                                    className="property-price text-primary mb-3 d-block text-success">${item.price}</strong>
-                                                            </div>
+                                                    <div>
+                                                        <div>
+                                                            <span style={{position: 'relative', right: '3px'}} className="property-location d-block"><LocationOnIcon style={{fontSize:'19px'}} color="primary"/>{item.address}</span>
+                                                        </div>
+                                                        <div>
+                                                            <strong
+                                                                className="property-price text-primary d-block text-success">${item.price}</strong>
                                                         </div>
                                                     </div>
                                                 </CardContent>
