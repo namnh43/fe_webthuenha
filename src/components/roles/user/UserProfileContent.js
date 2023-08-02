@@ -93,8 +93,8 @@ export function UserProfile() {
     }
 
     return (
-        <div>
-            <h2>User Profile</h2>
+        <div className="mt-3">
+            <h2 className='mb-3'>User Profile</h2>
             <div className="container emp-profile" style={{height: '700px'}}>
                 <div className="row">
                     <div className="col-md-4">
@@ -103,13 +103,12 @@ export function UserProfile() {
                                  src={selectedImage || user.profileImage}
                             />
                             <div>
-                                <label htmlFor="fileInput" className="btn btn-success">Change Avatar</label>
+                                <label htmlFor="fileInput" className="btn btn-outline-success mt-2">Change Avatar</label>
                                 <input type="file" id="fileInput" onChange={handleImageChange}/>
-                            </div>
-                            <button className="btn btn-warning" onClick={changePassword}>
+                            <button className="btn btn-outline-danger ml-2" onClick={changePassword}>
                                 Change password
                             </button>
-                            <br/><br/>
+                            </div>
                             <Formik initialValues={
                                 {
                                     currentPassword: "",
@@ -175,7 +174,7 @@ export function UserProfile() {
                                             className="text-danger"
                                         />
                                     </div>
-                                    <button className="btn btn-outline-primary">Update</button>
+                                    <button className="btn btn-primary">Update</button>
                                 </Form>}
                             </Formik>
                         </div>
@@ -227,41 +226,35 @@ export function UserProfile() {
                                     validationSchema={validationSchema}
                                     enableReinitialize={true}>
                                 <Form>
-                                    <div className="form-group">
-                                        UserName<br/>
-                                        <input className="form-control" readOnly={true} value={currentUser.username}/>
+                                    <div>
+                                        <fieldset style={{border: "1px solid #ccc", padding: "10px", borderRadius: "5px"}}>
+                                            <div className="form-group">
+                                                UserName<br/>
+                                                <input className="form-control" readOnly={true} value={currentUser.username}/>
+                                            </div>
+                                            <div className="form-group">
+                                                FirstName<br/>
+                                                <Field className="form-control" name={"firstName"}/>
+                                                <ErrorMessage name="firstName" component="div" className="text-danger"/>
+                                            </div>
+                                            <div className="form-group">
+                                                LastName<br/>
+                                                <Field className="form-control" name={"lastName"}/>
+                                                <ErrorMessage name="lastName" component="div" className="text-danger"/>
+                                            </div>
+                                            <div className="form-group">
+                                                Email<br/>
+                                                <Field className="form-control" name={"email"}/>
+                                                <ErrorMessage name="email" component="div" className="text-danger"/>
+                                            </div>
+                                            <div className="form-group">
+                                                PhoneNumber<br/>
+                                                <Field className="form-control" name={"phoneNumber"}/>
+                                                <ErrorMessage name="phoneNumber" component="div" className="text-danger"/>
+                                            </div>
+                                            <button className="btn btn-primary" type="submit">Update</button>
+                                        </fieldset>
                                     </div>
-                                    <div className="form-group">
-                                        FirstName<br/>
-                                        <Field className="form-control" name={"firstName"}/>
-                                        <ErrorMessage name="firstName" component="div" className="text-danger"/>
-                                    </div>
-                                    <div className="form-group">
-                                        LastName<br/>
-                                        <Field className="form-control" name={"lastName"}/>
-                                        <ErrorMessage name="lastName" component="div" className="text-danger"/>
-                                    </div>
-                                    <div className="form-group">
-                                        Email<br/>
-                                        <Field className="form-control" name={"email"}/>
-                                        <ErrorMessage name="email" component="div" className="text-danger"/>
-                                    </div>
-                                    <div className="form-group">
-                                        PhoneNumber<br/>
-                                        <Field className="form-control" name={"phoneNumber"}/>
-                                        <ErrorMessage name="phoneNumber" component="div" className="text-danger"/>
-                                    </div>
-                                    <div className="form-group">
-                                        New Password<br/>
-                                        <Field className="form-control" name={"newPassword"} type="password"/>
-                                        <ErrorMessage name="newPassword" component="div" className="text-danger"/>
-                                    </div>
-                                    <div className="form-group">
-                                        Confirm Password<br/>
-                                        <Field className="form-control" name={"confirmPassword"} type="password"/>
-                                        <ErrorMessage name="confirmPassword" component="div" className="text-danger"/>
-                                    </div>
-                                    <button className="btn btn-primary" type="submit">Update</button>
                                 </Form>
                             </Formik>
                         </div>

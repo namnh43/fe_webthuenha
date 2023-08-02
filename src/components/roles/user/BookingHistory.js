@@ -116,7 +116,6 @@ function BookingHistory() {
         setBookingList(searchFilter);
     }
 
-
     return (
         <>
             {reviewBookingId !== null ? (
