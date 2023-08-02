@@ -61,7 +61,7 @@ function OwnerMaintenanceList() {
 
     return (
         <>
-            <h1>Maintenance List</h1>
+            <h2>Maintenance List</h2>
             <section className="main">
                 <table className="table table-striped table-hover">
                     <thead>
@@ -70,7 +70,6 @@ function OwnerMaintenanceList() {
                         <th>House</th>
                         <th>Booking date</th>
                         <th>Duration</th>
-                        <th>Unit/Total Price</th>
                         <th>Status</th>
                     </tr>
                     </thead>
@@ -83,7 +82,6 @@ function OwnerMaintenanceList() {
                                 <td>{item.house.name}</td>
                                 <td>{item.createAt}</td>
                                 <td>{item.startDate}/{item.endDate}</td>
-                                <td>{item.price}/{item.total}</td>
                                 <td>{item.bookingStatus}</td>
                                 <td>
                                     <button className="btn btn-danger"

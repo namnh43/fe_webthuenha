@@ -4,6 +4,8 @@ import {Card, CardActionArea, CardContent, CardMedia, Typography} from "@mui/mat
 import {useNavigate} from "react-router";
 import StarIcon from '@mui/icons-material/Star';
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import LocalHotelRoundedIcon from '@mui/icons-material/LocalHotelRounded';
+import BathtubIcon from '@mui/icons-material/Bathtub';
 export function HouseList() {
     const [list, setList] = useState([]);
     const navigate = useNavigate();
@@ -28,19 +30,19 @@ export function HouseList() {
 
     return (
         <>
-            <div className="site-section site-section-sm bg-light">
+            <div className="bg-light pt-4 pb-4">
                 <div className="container">
-                    <div className="row mb-5">
+                    <div className="row">
                         <h1>Top Visited</h1>
                         {topHouse.map((item) => {
                             return (
                                 <>
-                                    <div className="col-md-6 col-lg-3 mb-4"
+                                    <div className="col-md-6 col-lg-3 mb-2 mt-2"
                                          onClick={() => {
                                              const url = 'houses/' + item.id + '/detail';
                                              navigate(url)
                                          }}>
-                                        <Card sx={{borderRadius:'10px'}}
+                                        <Card sx={{borderRadius:'6px'}}
                                         >
                                             <CardActionArea>
                                                 <CardMedia
@@ -50,22 +52,24 @@ export function HouseList() {
                                                         : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
                                                     alt="house image"
                                                 />
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="div">
+                                                <CardContent style={{padding:'8px'}}>
+                                                    <Typography gutterBottom variant="h6" component="div" style={{ lineHeight: '1', marginBottom: '1px'}}>
                                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                            <div className="text-capitalize">{item.name}</div>
-                                                            <div><span style={{ fontSize: 'medium' }}><StarIcon fontSize="inherit" />{item.ratingScore}</span></div>
+                                                            <div className="text-capitalize"><b>{item.name}</b></div>
+                                                            <div><span style={{ fontSize: 'medium'}}><StarIcon style={{paddingBottom:'3px', fontSize:'19px'}} fontSize="inherit" />{item.ratingScore}</span></div>
                                                         </div>
                                                     </Typography>
-                                                    <div >
-                                                        <div className="row">
-                                                            <div className="col">
-                                                                <span className="property-location d-block mb-3"><LocationOnIcon color="primary"/> {item.address}</span>
-                                                            </div>
-                                                            <div className="col text-right">
-                                                                <strong
-                                                                    className="property-price text-primary mb-3 d-block text-success">${item.price}</strong>
-                                                            </div>
+                                                    <div>
+                                                        <div>
+                                                            <span style={{position: 'relative', right: '3px'}} className="property-location d-block"><LocationOnIcon style={{fontSize:'19px', paddingBottom:'3px'}} color="error"/>{item.address}</span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '-5px'}}>
+                                                            <span>
+                                                                <LocalHotelRoundedIcon fontSize="small" style={{paddingBottom:'3px'}}/>{item.totalBedrooms} &nbsp;
+                                                                <BathtubIcon fontSize="small" style={{paddingBottom:'3px'}}/>{item.totalBathrooms}
+                                                            </span>
+                                                            <span
+                                                                className="property-price text-primary text-success"><b>${item.price}</b></span>
                                                         </div>
                                                     </div>
                                                 </CardContent>
@@ -75,16 +79,16 @@ export function HouseList() {
                                 </>
                             );
                         })}
-                        <h1>Popular Houses</h1>
+                        <h1 className='mt-5'>Popular Houses</h1>
                         {list.map((item) => {
                             return (
                                 <>
-                                    <div className="col-md-6 col-lg-3 mb-4"
+                                    <div className="col-md-6 col-lg-3 mb-3 mt-2"
                                          onClick={() => {
                                              const url = 'houses/' + item.id + '/detail';
                                              navigate(url)
                                          }}>
-                                        <Card sx={{borderRadius:'10px'}}
+                                        <Card sx={{borderRadius:'6px'}}
                                         >
                                             <CardActionArea>
                                                 <CardMedia
@@ -94,22 +98,24 @@ export function HouseList() {
                                                         : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
                                                     alt="house image"
                                                 />
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="div">
+                                                <CardContent style={{padding:'8px'}}>
+                                                    <Typography gutterBottom variant="h6" component="div" style={{ lineHeight: '1', marginBottom: '1px'}}>
                                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                            <div className="text-capitalize">{item.name}</div>
-                                                            <div><span style={{ fontSize: 'medium' }}><StarIcon fontSize="inherit" />{item.ratingScore}</span></div>
+                                                            <div className="text-capitalize"><b>{item.name}</b></div>
+                                                            <div><span style={{ fontSize: 'medium'}}><StarIcon style={{paddingBottom:'3px', fontSize:'19px'}} fontSize="inherit" />{item.ratingScore}</span></div>
                                                         </div>
                                                     </Typography>
-                                                    <div >
-                                                        <div className="row">
-                                                            <div className="col">
-                                                                <span className="property-location d-block mb-3"><LocationOnIcon color="primary"/> {item.address}</span>
-                                                            </div>
-                                                            <div className="col text-right">
-                                                                <strong
-                                                                    className="property-price text-primary mb-3 d-block text-success">${item.price}</strong>
-                                                            </div>
+                                                    <div>
+                                                        <div>
+                                                            <span style={{position: 'relative', right: '3px'}} className="property-location d-block"><LocationOnIcon style={{fontSize:'19px', paddingBottom:'3px'}} color="error"/>{item.address}</span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '-5px'}}>
+                                                            <span>
+                                                                <LocalHotelRoundedIcon fontSize="small" style={{paddingBottom:'3px'}}/>{item.totalBedrooms} &nbsp;
+                                                                <BathtubIcon fontSize="small" style={{paddingBottom:'3px'}}/>{item.totalBathrooms}
+                                                            </span>
+                                                            <span
+                                                                className="property-price text-primary text-success"><b>${item.price}</b></span>
                                                         </div>
                                                     </div>
                                                 </CardContent>

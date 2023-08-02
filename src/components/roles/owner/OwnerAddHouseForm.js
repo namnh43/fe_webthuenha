@@ -88,7 +88,7 @@ function OwnerAddHouseForm() {
             >
                 {({isSubmitting, values, errors, touched}) => (
                     <Form>
-                        <h1>Add a new house</h1>
+                        <h2>Add a new house</h2>
                         <div className="d-flex">
                             <div className="col-6 p-0">
                                 <div className="form-group" style={{height: 72}}>

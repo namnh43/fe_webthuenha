@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import axios from "axios";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import {initializeApp} from "firebase/app";
 import {useNavigate} from "react-router";
+import * as Yup from "yup";
 
 export function UserProfile() {
     const navigator =  useNavigate();
@@ -12,6 +13,23 @@ export function UserProfile() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
 
+    const validationSchema = Yup.object().shape({
+        firstName: Yup.string().required("First name is required"),
+        lastName: Yup.string().required("Last name is required"),
+        email: Yup.string()
+            .email("Please enter a valid email address")
+            .required("Email is required"),
+        phoneNumber: Yup.string()
+            .matches(/^\d{10}$/, "Please enter a valid 10-digit phone number")
+            .required("Phone number is required"),
+        newPassword: Yup.string()
+            .required("New password is required")
+            .min(6, "Password must be at least 6 characters")
+            .max(32, "Password must not exceed 32 characters"),
+        confirmPassword: Yup.string()
+            .required("Confirm password is required")
+            .oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
+    });
 
     const firebaseConfig = {
         apiKey: "AIzaSyBoTj1_SNijRYo4DGugLqnCKWOy2pF7hWk",
@@ -75,8 +93,8 @@ export function UserProfile() {
     }
 
     return (
-        <div>
-            <h2>User Profile</h2>
+        <div className="mt-3">
+            <h2 className='mb-3'>User Profile</h2>
             <div className="container emp-profile" style={{height: '700px'}}>
                 <div className="row">
                     <div className="col-md-4">
@@ -85,13 +103,12 @@ export function UserProfile() {
                                  src={selectedImage || user.profileImage}
                             />
                             <div>
-                                <label htmlFor="fileInput" className="btn btn-success">Change Avatar</label>
+                                <label htmlFor="fileInput" className="btn btn-outline-success mt-2">Change Avatar</label>
                                 <input type="file" id="fileInput" onChange={handleImageChange}/>
-                            </div>
-                            <button className="btn btn-warning" onClick={changePassword}>
+                            <button className="btn btn-outline-danger ml-2" onClick={changePassword}>
                                 Change password
                             </button>
-                            <br/><br/>
+                            </div>
                             <Formik initialValues={
                                 {
                                     currentPassword: "",
@@ -115,13 +132,49 @@ export function UserProfile() {
                                         });
                                     }
                                     }
+                                    validationSchema={validationSchema}
                                     enableReinitialize={true}>
                                 {showForm && <Form>
-                                    Current password
-                                    <Field className="form-control" name={"currentPassword"}></Field><br/>
-                                    New Password
-                                    <Field className="form-control" name={"newPassword"}></Field><br/>
-                                    <button className="btn btn-outline-primary">Update</button>
+                                    <div className="form-group">
+                                        Current password
+                                        <Field
+                                            className="form-control"
+                                            name="currentPassword"
+                                            type="password"
+                                        />
+                                        <ErrorMessage
+                                            name="currentPassword"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        New Password
+                                        <Field
+                                            className="form-control"
+                                            name="newPassword"
+                                            type="password"
+                                        />
+                                        <ErrorMessage
+                                            name="newPassword"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        Confirm Password
+                                        <Field
+                                            className="form-control"
+                                            name="confirmPassword"
+                                            type="password"
+                                        />
+                                        <ErrorMessage
+                                            name="confirmPassword"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </div>
+                                    <button className="btn btn-primary">Update</button>
                                 </Form>}
                             </Formik>
                         </div>
@@ -170,19 +223,38 @@ export function UserProfile() {
                                         } )
                                     }
                                     }
+                                    validationSchema={validationSchema}
                                     enableReinitialize={true}>
                                 <Form>
-                                    UserName<br/>
-                                    <input className="form-control" readOnly={true} value={currentUser.username}/><br/>
-                                    FirstName<br/>
-                                    <Field className="form-control" name={"firstName"}></Field><br/>
-                                    LastName<br/>
-                                    <Field className="form-control" name={"lastName"}></Field><br/>
-                                    Email<br/>
-                                    <Field className="form-control" name={"email"}></Field><br/>
-                                    PhoneNumber<br/>
-                                    <Field className="form-control" name={"phoneNumber"}></Field><br/>
-                                    <button className="btn btn-primary">Update</button>
+                                    <div>
+                                        <fieldset style={{border: "1px solid #ccc", padding: "10px", borderRadius: "5px"}}>
+                                            <div className="form-group">
+                                                UserName<br/>
+                                                <input className="form-control" readOnly={true} value={currentUser.username}/>
+                                            </div>
+                                            <div className="form-group">
+                                                FirstName<br/>
+                                                <Field className="form-control" name={"firstName"}/>
+                                                <ErrorMessage name="firstName" component="div" className="text-danger"/>
+                                            </div>
+                                            <div className="form-group">
+                                                LastName<br/>
+                                                <Field className="form-control" name={"lastName"}/>
+                                                <ErrorMessage name="lastName" component="div" className="text-danger"/>
+                                            </div>
+                                            <div className="form-group">
+                                                Email<br/>
+                                                <Field className="form-control" name={"email"}/>
+                                                <ErrorMessage name="email" component="div" className="text-danger"/>
+                                            </div>
+                                            <div className="form-group">
+                                                PhoneNumber<br/>
+                                                <Field className="form-control" name={"phoneNumber"}/>
+                                                <ErrorMessage name="phoneNumber" component="div" className="text-danger"/>
+                                            </div>
+                                            <button className="btn btn-primary" type="submit">Update</button>
+                                        </fieldset>
+                                    </div>
                                 </Form>
                             </Formik>
                         </div>
