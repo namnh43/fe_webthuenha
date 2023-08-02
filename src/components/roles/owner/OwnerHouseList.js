@@ -50,15 +50,15 @@ function MaintenanceDialog(props) {
                 <DialogContentText id="alert-dialog-description">
                     <div style={{color: "red"}}>{errorMessage}</div>
                     <div>
-                        <label className="col-4">Start date</label>
+                        <label className="col-4 text-dark">Start date</label>
                         <input type="date" value={startDate} required
                                onChange={e => setStartDate(e.target.value)}/>
                     </div>
                     <div>
-                        <label className="col-4">End date</label>
+                        <label className="col-4 text-dark">End date</label>
                         <input type="date" value={endDate} required
                                onChange={e => setEndDate(e.target.value)}/>
-                    </div>boo
+                    </div>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -104,35 +104,39 @@ function OwnerHouseList() {
 
     useEffect(() => {
         axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
-            .then((res) => setHouseList(res.data.reverse()));
+            .then((res) => {
+                console.log(res.data)
+                setHouseList(res.data.reverse())
+            });
     }, []);
 
-    const deleteHouse = (itemId) => {
+    const blockHouse = (itemId) => {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Block this house?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Yes, block it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`http://localhost:8080/house/${itemId}`, config)
+                axios.put(`http://localhost:8080/house/block/${itemId}`,null, config)
+                    .then(res => console.log(res))
                     .then(() => axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
                         .then(res => {
+                            console.log(res.data)
                             setHouseList(res.data.reverse());
                             Swal.fire(
-                                'Deleted!',
-                                'Your house has been deleted.',
+                                'Blocked!',
+                                'This house has been blocked.',
                                 'success'
                             );
                         })
                     )
                     .catch(error => {
                         Swal.fire(
-                            'Somthing went wrong!',
-                            'You cannot delete this house.',
+                            'Something went wrong!',
+                            'You cannot block this house.',
                             'error'
                         );
                         console.error("Lỗi khi xóa dữ liệu:", error);
@@ -140,6 +144,39 @@ function OwnerHouseList() {
             }
         });
     }
+
+    const unBlockHouse = (itemId) =>  Swal.fire({
+        title: 'Unblock this house?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, unblock it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.put(`http://localhost:8080/house/un-block/${itemId}`,null, config)
+                .then(res => console.log(res))
+                .then(() => axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
+                    .then(res => {
+                        console.log(res.data)
+                        setHouseList(res.data.reverse());
+                        Swal.fire(
+                            'Success!',
+                            'This house has been re-actived.',
+                            'success'
+                        );
+                    })
+                )
+                .catch(error => {
+                    Swal.fire(
+                        'Something went wrong!',
+                        'You cannot unblock this house.',
+                        'error'
+                    );
+                    console.error("Lỗi khi xóa dữ liệu:", error);
+                });
+        }
+    });
 
     const [openDialog, setOpenDialog] = useState(false);
     const [maintainedHouseId, setMaintainedHouseId] = useState(0);
@@ -151,7 +188,12 @@ function OwnerHouseList() {
     return (<>
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
                            maintainedHouseId={maintainedHouseId}/>
-        <h1>House List</h1>
+        <div className="d-flex justify-content-between">
+            <h2>House List</h2>
+            <button className="btn btn-light d-flex" style={{paddingTop: '10px'}} onClick={() => navigate('/owner/add-house-form')}>
+                <i className="material-icons">&#xf8eb;</i>
+                <span>Create new</span></button>
+        </div>
         <section className="main">
             <table className="table table-striped table-hover">
                 <thead>
@@ -178,18 +220,24 @@ function OwnerHouseList() {
                             <td>{item.price}</td>
                             <td>{item.address}</td>
                             <td>add later</td>
-                            <td>{item.houseStatus}</td>
+                            {item.blocked === false ?
+                                (<td><span style={{display: 'inline-block', backgroundColor: '#198754', height: '8px', width: '8px', borderRadius: '50%', marginBottom: '2px', marginRight: '5px'}}></span>Active</td>)
+                                :(<td><span style={{display: 'inline-block', backgroundColor: '#dc3545', height: '8px', width: '8px', borderRadius: '50%', marginBottom: '2px', marginRight: '5px'}}></span>Blocked</td>)}
                             <td className="col-2">
-                                <button style={{backgroundColor: 'transparent'}}><i className="material-icons">&#xe88e;</i></button>
+                                {/*<button style={{backgroundColor: 'transparent'}}><i className="material-icons">&#xe88e;</i></button>*/}
                                 <button style={{backgroundColor: 'transparent'}}
                                          onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>
                                     <i className="material-icons">&#xe3c9;</i></button>
-                                <button  style={{backgroundColor: 'transparent'}} onClick={() => {
+                                <button  style={{backgroundColor: 'transparent'}} className="ml-3 mr-3" onClick={() => {
                                     setMaintainedHouseId(item.id)
                                     setOpenDialog(true)
                                 }}><i className="material-icons" >&#xea3c;</i></button>
-                                <button style={{backgroundColor: 'transparent'}} onClick={() => deleteHouse(item.id)}>
-                                    <i className="material-icons">&#xe14b;</i></button>
+                                {item.blocked === false ?
+                                    (<button style={{backgroundColor: 'transparent'}} onClick={() => blockHouse(item.id)}>
+                                        <i className="material-icons">&#xe897;</i></button>)
+                                :(<button style={{backgroundColor: 'transparent'}} onClick={() => unBlockHouse(item.id)}>
+                                        <i className="material-icons">&#xe898;</i></button>)}
+
                             </td>
                         </tr>)
                     })}

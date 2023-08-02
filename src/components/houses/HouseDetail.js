@@ -6,6 +6,11 @@ import OwlCarousel from "react-owl-carousel";
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Reviews from "../Reviews";
+import TestDatePicker from "../datetime/test";
+import Swal from "sweetalert2";
+import StarIcon from "@mui/icons-material/Star";
+import BedIcon from '@mui/icons-material/Bed';
+import BathtubIcon from '@mui/icons-material/Bathtub';
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -14,25 +19,18 @@ export function HouseDetail() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [day, setDay] = useState(0);
-    const [result, setResult] = useState(null);
+
     const navigate = useNavigate();
+    const [listBooking, setListBooking] = useState([]);
 
-    function handleStartDateChange(event) {
-        if (new Date(event.target.value) < Date.now()) {
-            alert("startDate invalid")
-            return;
+    let result = {
+        startDate: "",
+        endDate: "",
+        price: house.price,
+        total: house.price * day + house.price * day * 5 / 100,
+        house: {
+            id: id
         }
-        setStartDate(event.target.value);
-        calculateDiff(event.target.value, endDate)
-    }
-
-    function handleEndDateChange(event) {
-        if (new Date(event.target.value) < Date.now()) {
-            alert("endDate invalid")
-            return;
-        }
-        setEndDate(event.target.value);
-        calculateDiff(startDate, event.target.value)
     }
 
     let config = {
@@ -47,10 +45,14 @@ export function HouseDetail() {
             return;
         }
         if (startDate === "" || endDate === "") {
-            alert("invite you enter Date")
-            return
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Please select booking date',
+            })
+            return;
         }
-        setResult({
+        result = {
             startDate: startDate,
             endDate: endDate,
             price: house.price,
@@ -58,32 +60,54 @@ export function HouseDetail() {
             house: {
                 id: house.id
             }
-        });
+        };
+        postResult();
     }
-
-    useEffect(() => {
-        console.log('result', result)
-        if (result === null) return
-        postResult()
-    }, [result])
 
     function postResult() {
         try {
             console.log('post_result', result);
             axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
-                alert('success');
+                handleFetchBookingList();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Booking successful!',
+                    html: `
+                    <div>House: ${result.house.name}</div>
+                    <div>Address: ${result.house.address}</div>
+                    <div>Start Date: ${result.startDate}</div>
+                    <div>End Date: ${result.endDate}</div>
+                    <div>Price: ${result.price}</div>
+                    <div>Total: ${result.total}</div>
+                    `,
+                    footer: '<a href="/user/booking-history">Click here to see booking list</a>'
+                });
             }).catch((error) => {
                 if (error.response && error.response.status === 400) {
-                    alert('This day has been placed');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error...',
+                        text: 'This house is already booked!',
+                    })
                 } else {
                     console.error('Error occurred while posting result:', error);
-                    alert('An error occurred. Please try again later.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error...',
+                        text: 'An error occurred. Please try again later.',
+                    })
                 }
             });
         } catch (error) {
             console.error('Error occurred while posting result:', error);
             alert('An error occurred. Please try again later.');
         }
+    }
+
+    const handleFetchBookingList = () => {
+        axios.get(`http://localhost:8080/booking/house/` + id).then(res => {
+            setListBooking(res.data)
+        })
     }
 
     useEffect(() => {
@@ -93,19 +117,15 @@ export function HouseDetail() {
             setHouse(res.data)
             setList(res.data.images)
         })
+        handleFetchBookingList();
     }, [])
 
     function calculateDiff(startDate, endDate) {
         if (startDate !== "" && endDate !== "") {
-            if (new Date(startDate) >= new Date(endDate)) {
-                alert("Date invalid")
-                setEndDate("")
-            } else {
-                const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
-                const firstDate = new Date(startDate);
-                const secondDate = new Date(endDate);
-                setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay)));
-            }
+            const oneDay = 24 * 60 * 60 * 1000; // số mili giây trong 1 ngày
+            const firstDate = new Date(startDate);
+            const secondDate = new Date(endDate);
+            setDay(Math.round(Math.abs((firstDate - secondDate) / oneDay)));
         }
     }
 
@@ -133,7 +153,8 @@ export function HouseDetail() {
                                             <div className="col-sm-12 col-md-12 col-lg-12">
                                                 <a target="_blank" href={item.fileUrl}
                                                    className="image-popup gal-item"><img
-                                                    src={item.fileUrl} alt="Image" className="img-fluid vh-100" style={{maxHeight:'460px'}}/></a>
+                                                    src={item.fileUrl} alt="Image" className="img-fluid vh-100"
+                                                    style={{maxHeight: '460px'}}/></a>
                                             </div>
                                         )
                                     })}
@@ -154,49 +175,52 @@ export function HouseDetail() {
                         </div>
                     </div>
                     <div className="col">
-                        <div className="bg-white p-3 border rounded">
-                            <h3 className="h4 text-black  mb-3 ">Price ${house.price}/Night</h3>
+                        <div className="bg-white p-4 border rounded">
+                            <h5 className="text-black mb-3" style={{ display: 'flex', alignItems: 'center'}}>
+                                <b><span style={{fontSize: '24px'}}>${house.price} /</span> night</b>
+                                <span style={{ marginLeft: 'auto', fontSize: '15px', paddingTop: '9px'}}>
+                <StarIcon style={{ marginBottom: '4px', fontSize: '16px'}}/>
+                                    {house.ratingScore} {" - " + house.numberOfReviews + " reviews"}
+            </span>
+                            </h5>
                             <form action="src/components#" className="">
-                                <div>
-                                    <div className="form-group">
-                                        <label htmlFor="Booking">Booking Date</label>
-                                        <input type="Date" id="Booking" className="form-control" value={startDate}
-                                               onChange={handleStartDateChange}/>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="EndDate">End Date</label>
-                                        <input type="Date" id="EndDate" className="form-control" value={endDate}
-                                               onChange={handleEndDateChange}/>
-                                    </div>
+                                <div style={{width: 'fit-content', margin: 'auto'}}>
+                                    <TestDatePicker setStartDate={setStartDate} setEndDate={setEndDate}
+                                                    calculateDiff={calculateDiff} listBooking={listBooking}/>
                                 </div>
+                                <hr/>
                                 <div>
                                     {startDate !== "" && endDate !== "" && <div>
-                                        <tr>
-                                            <td>
-                                                ${house.price} X {day} Day :
-                                            </td>
-                                            <td>${house.price * day}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Service charge :
-                                            </td>
-                                            <td>${house.price * day * 5 / 100}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Total money :</th>
-                                            <th>${house.price * day + house.price * day * 5 / 100}</th>
-                                        </tr>
+                                        <table style={{width: '100%'}}>
+                                            <tr>
+                                                <td style={{textAlign: 'left'}}>
+                                                    ${house.price} x {day} night
+                                                </td>
+                                                <td style={{textAlign: 'right'}}>${house.price * day}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{textAlign: 'left'}}>
+                                                    Service charge
+                                                </td>
+                                                <td style={{textAlign: 'right'}}>${house.price * day * 5 / 100}</td>
+                                            </tr>
+                                        </table>
+                                        <hr/>
+                                        <table style={{width: '100%'}}>
+                                            <tr>
+                                                <td style={{textAlign: 'left'}}><b>Total</b></td>
+                                                <td style={{textAlign: 'right'}}><b>${house.price * day + house.price * day * 5 / 100}</b></td>
+                                            </tr>
+                                        </table>
                                     </div>}
                                 </div>
-                                <br/>
-                                <div className="form-group">
-                                    <input type="button" value="Booking" className="btn btn-primary"
-                                           onClick={booking}/>
-                                </div>
+                                <button style={{width: '100%', margin: 'auto', fontSize: '18px', height: '50px'}} type="button" className="btn btn-primary mt-2"
+                                        onClick={booking}>
+                                    {startDate !== "" && endDate !== "" ? "Booking Now" : "Choose date to check home status"}
+                                </button>
                             </form>
                         </div>
-                        <div className="bg-white widget border rounded mt-5">
+                        <div className="bg-white border rounded mt-5">
                             {house.address
                                 && <div>
                                     <MapWithSearch initialAddress={house.address}/>
@@ -207,7 +231,7 @@ export function HouseDetail() {
                     <div className="bg-white property-body border-bottom border-left border-right">
                         <div className="row mb-5">
                             <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
-                            <h5>{house.totalBedrooms} Bed room . {house.totalBathrooms} Bath room</h5>
+                            <h5><BedIcon/>{house.totalBedrooms} Bed room . <BathtubIcon/>{house.totalBathrooms} Bath room</h5>
                         </div>
                         <h2 className="h4 text-black">More Info</h2>
                         <p>{house.description}</p>

@@ -62,8 +62,8 @@ const Reviews = ({ house }) => {
             <div className="col-12">
                 <h2>Reviews</h2>
                 <StarIcon fontSize="small" />
-                {house.ratingScore + " - " + house.numberOfReviews + " reviews"}
-                <br /><br />
+                {house.ratingScore} {" - " + house.numberOfReviews + " reviews"}
+                <br/><br />
 
                 <div className="row" style={{ marginLeft: '20px', marginRight: '30px' }}>
                     {house.reviews &&

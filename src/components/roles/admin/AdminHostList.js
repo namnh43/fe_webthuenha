@@ -140,7 +140,7 @@ export function AdminHostList() {
 
     return (
         <>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <label htmlFor="name-input"></label>
                 <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />
                 <label htmlFor="home-input"></label>
@@ -150,7 +150,6 @@ export function AdminHostList() {
                 <input id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter numberPhone" required />
 
 
-                <button onClick={search}>Search</button>
             </div>
             {hosts.length <= 0 ? <h2>There no data</h2> : (
                 <section className="main">
