@@ -79,13 +79,14 @@ export default function Menubar() {
     }
 
     return (
-        <>
+        <div className='mb-2 border-bottom' style={{position: 'sticky', top: '-16px', zIndex: '1000', backgroundColor: 'white'}}>
             <Grid
                 container
                 spacing={2}
                   sx={{
                       color: "black",
                       height: '80px',
+                      display:"flex", justifyContent:"space-around"
                   }}
                 alignItems="center"
             >
@@ -93,7 +94,7 @@ export default function Menubar() {
                     <Box
                         sx={{display:"flex", justifyContent:"flex-end",  alignItems: 'center'}}
                     >
-                        <h1 className="mb-0"><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
+                        <h1 className="mb-2 mr-4"><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
                             className="text-danger">.</span></strong></Link></h1>
                     </Box>
                 </Grid>
@@ -274,7 +275,7 @@ export default function Menubar() {
                 </Grid>
 
             </Grid>
-        </>
+        </div>
 
     );
 }

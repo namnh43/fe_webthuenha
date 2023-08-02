@@ -5,7 +5,6 @@ export function HouseDetailPage() {
     return (
         <>
             <Menubar/>
-            <Divider />
             <HouseDetail/>
         </>
     )

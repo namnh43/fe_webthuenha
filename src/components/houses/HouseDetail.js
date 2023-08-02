@@ -67,40 +67,58 @@ export function HouseDetail() {
     function postResult() {
         try {
             console.log('post_result', result);
-            axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
-                handleFetchBookingList();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Booking successful!',
-                    html: `
-                    <div>House: ${result.house.name}</div>
-                    <div>Address: ${result.house.address}</div>
+            Swal.fire({
+                title: 'Booking house',
+                text: "Are you sure you want to book this house ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3B71CA',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, book it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
+                        handleFetchBookingList();
+                        console.log(res.data);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Booking successful!',
+                            html: `
+                    <div>House: ${house.name}</div>
+                    <div>Address: ${house.address}</div>
                     <div>Start Date: ${result.startDate}</div>
                     <div>End Date: ${result.endDate}</div>
                     <div>Price: ${result.price}</div>
                     <div>Total: ${result.total}</div>
                     `,
-                    footer: '<a href="/user/booking-history">Click here to see booking list</a>'
-                });
-            }).catch((error) => {
-                if (error.response && error.response.status === 400) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error...',
-                        text: 'This house is already booked!',
-                    })
-                } else {
-                    console.error('Error occurred while posting result:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error...',
-                        text: 'An error occurred. Please try again later.',
-                    })
+                            footer: '<a href="/user/booking-history">Click here to see booking list</a>'
+                        });
+                    }).catch((error) => {
+                        if (error.response && error.response.status === 400) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error...',
+                                text: 'This house is already booked!',
+                            })
+                        } else {
+                            console.error('Error occurred while posting result:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error...',
+                                text: 'An error occurred. Please try again later.',
+                            })
+                        }
+                    });
                 }
             });
+
         } catch (error) {
             console.error('Error occurred while posting result:', error);
-            alert('An error occurred. Please try again later.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'An error occurred. Please try again later.',
+            })
         }
     }
 
@@ -131,11 +149,12 @@ export function HouseDetail() {
 
     return (
         <>
-            <div className="container">
+            <div className="container col-10">
                 <div className="row">
                     <div className="col-12">
-                        <h3 className="text-capitalize mb-0 mt-3"><HomeIcon color="secondary"/> {house.name}</h3>
-                        <p className="text-decoration-underline"><LocationOnIcon color="primary"/> {house.address}</p>
+                        <h3 className="text-capitalize mb-0 mt-3"><HomeIcon style={{paddingBottom: '5px', fontSize: '40px'}} color="primary"/>{house.name}</h3>
+                        <p style={{fontSize: '17px'}} className="mb-0">&nbsp;<LocationOnIcon style={{paddingBottom: '5px', fontSize: '30px'}} color="error"/>{house.address}</p>
+                        <p style={{fontSize: '15px', marginTop: '0px'}}>&nbsp; <BedIcon/>{house.totalBedrooms} Bed room &nbsp;  &nbsp;<BathtubIcon/>{house.totalBathrooms} Bath room</p>
                     </div>
                 </div>
                 <div className="row">
@@ -228,10 +247,9 @@ export function HouseDetail() {
                         </div>
                     </div>
 
-                    <div className="bg-white property-body border-bottom border-left border-right">
-                        <div className="row mb-5">
+                    <div className="bg-white property-body border-top">
+                        <div className="row mb-3">
                             <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
-                            <h5><BedIcon/>{house.totalBedrooms} Bed room . <BathtubIcon/>{house.totalBathrooms} Bath room</h5>
                         </div>
                         <h2 className="h4 text-black">More Info</h2>
                         <p>{house.description}</p>
