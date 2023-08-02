@@ -91,6 +91,7 @@ function SearchBar() {
                                         type="number"
                                         className="form-control search-slt"
                                         id="minPrice"
+                                        min="0"
                                         value={minPrice}
                                         onChange={(e) => setMinPrice(e.target.value)}
                                         placeholder="Min Price($)"
@@ -101,6 +102,7 @@ function SearchBar() {
                                         type="number"
                                         className="form-control search-slt"
                                         id="maxPrice"
+                                        min="0"
                                         value={maxPrice}
                                         onChange={(e) => setMaxPrice(e.target.value)}
                                         placeholder="Max Price($)"

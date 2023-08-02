@@ -99,7 +99,7 @@ export function UserProfile() {
                 <div className="row">
                     <div className="col-md-4">
                         <div className="profile-img">
-                            <img style={{width: "400px", border: "2px solid #ccc"}}
+                            <img style={{width: "400px", borderRadius: "6px"}}
                                  src={selectedImage || user.profileImage}
                             />
                             <div>

@@ -95,7 +95,6 @@ const MapWithSearch = ({ initialAddress }) => {
             {/*<button onClick={handleSearch}>Tìm kiếm</button>*/}
             {/*<button onClick={getUserLocation}>Đến vị trí của tôi</button>*/}
             {/*{userLocation && <p>Khoảng cách: {distance} km</p>}*/}
-            <h4 className='pt-1 pl-3'>Map</h4>
             <LoadScript googleMapsApiKey={apiKey}>
                 <GoogleMap
                     mapContainerStyle={{ width: '100%', height: '400px' }}
