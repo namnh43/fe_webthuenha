@@ -71,6 +71,9 @@ function BookingHistory() {
     useEffect(() => {
         refreshBookingList();
     }, []);
+    useEffect(() => {
+        search()
+    }, [selectedRange]);
 
     const refreshBookingList = () => {
         axios.get(`http://localhost:8080/user/list-booking`, config)
@@ -124,16 +127,10 @@ function BookingHistory() {
             ) : (
                 <>
                     <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <label htmlFor="house-name-input"></label>
-                        <input id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required />
-
-                        <label htmlFor="address-input"></label>
+                        <input id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required  />
+                        &nbsp;
                         <input id="address-input" name="address" type="text" placeholder="Enter address" required />
-
-                        <label htmlFor="date-range-picker"></label>
-                        <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange} />
-
-                        <label htmlFor="status-select"></label>
+                        &nbsp;
                         <select id="status-select" name="status">
                             <option value="">-- Select status --</option>
                             <option value="CANCELLED">CANCELLED</option>
@@ -141,6 +138,11 @@ function BookingHistory() {
                             <option value="CHECKED_IN">CHECKED_IN</option>
                             <option value="CHECKED_OUT">CHECKED_OUT</option>
                         </select>
+                        &nbsp;
+                        <div style={{border:"1px solid grey"}}>
+                            <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange} />
+                        </div>
+
                     </div>
                     <h2>Booking List</h2>
                     <section className="main">
