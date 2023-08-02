@@ -22,14 +22,15 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import './Menubar.css'
 import AlertDialog from "../../dialog/AlertDialog";
+
 function HomePageMenuBar() {
     const menuBarStyle = {
         fontFamily: 'Roboto, sans-serif',
-        color:'blue',
+        color: 'blue',
         fontWeight: 'bold'
     };
     const logoStyle = {
-        color:'blue',
+        color: 'blue',
         '&:hover': {
             backgroundColor: 'transparent',
             color: '#007bff'
@@ -75,7 +76,7 @@ function HomePageMenuBar() {
         axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
             .then(() => localStorage.clear())
             .then(() => setLogin(false))
-            .then(()=> navigate('/login'))
+            .then(() => navigate('/login'))
     }
 
     const handleLoginClick = () => {
@@ -101,14 +102,15 @@ function HomePageMenuBar() {
             >
                 <Grid item xs={2}>
                     <Box
-                        sx={{display:"flex", justifyContent:"flex-end",  alignItems: 'center'}}
+                        sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}
                     >
-                        <h2 className="mb-0 logo text-decoration-underline pe-auto" onClick={()=> navigate('/')}><strong>Homeland<span
-                            className="text-danger">.</span></strong></h2>
+                        <h2 className="mb-0 logo text-decoration-underline pe-auto" onClick={() => navigate('/')}>
+                            <strong>Homeland<span
+                                className="text-danger">.</span></strong></h2>
                     </Box>
                 </Grid>
                 <Grid item xs={9}>
-                    <Box sx={{display:"flex", justifyContent:"flex-end",alignItems: 'center'}}>
+                    <Box sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}>
                         <Dialog
                             open={openDialog}
                             onClose={handleCloseDialog}
@@ -172,28 +174,31 @@ function HomePageMenuBar() {
                         </Dialog>
                         <React.Fragment>
                             <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                                <ListItemButton sx={{minWidth: '100px', maxWidth: '100px',fontFamily:'Raleway',
+                                <ListItemButton sx={{
+                                    minWidth: '100px', maxWidth: '100px', fontFamily: 'Raleway',
                                     '&:hover': {
                                         backgroundColor: 'transparent',
                                         color: '#007bff'
-                                    }}}
+                                    }
+                                }}
                                                 onClick={() => {
                                                     navigate("/")
-                                                }}><ListItemText sx={{textAlign: 'center'}} >Home</ListItemText></ListItemButton>
+                                                }}><ListItemText
+                                    sx={{textAlign: 'center'}}>Home</ListItemText></ListItemButton>
                                 {
                                     !login ? <ListItemButton sx={{minWidth: '100px', maxWidth: '100px'}}
                                                              onClick={() => {
                                                                  handleLoginClick();
                                                                  navigate("/login");
-                                                             }}> <ListItemText >Login </ListItemText></ListItemButton> :
+                                                             }}> <ListItemText>Login </ListItemText></ListItemButton> :
                                         <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                                            <ListItemText >Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
+                                            <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
                                             <Tooltip title="Account settings">
                                                 <IconButton
                                                     onClick={handleClick}
                                                     size="small"
                                                     sx={{ml: 2}}
-                                                    aria-controls={open ? 'account-menu' : undefined}
+                                                    aria-controls={ open ? 'account-menu' : undefined}
                                                     aria-haspopup="true"
                                                     aria-expanded={open ? 'true' : undefined}
                                                 >
@@ -254,7 +259,7 @@ function HomePageMenuBar() {
                                 </MenuItem>
                                 {localStorage.getItem('currentUserRole') === "ADMIN" &&
                                     <MenuItem onClick={() => {
-                                        navigate("/admin")
+                                        navigate("/admin/users")
                                     }}>
                                         <Avatar/> Admin Dashboard
                                     </MenuItem>

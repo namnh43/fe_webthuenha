@@ -244,7 +244,7 @@ export default function Menubar() {
                             </MenuItem>
                             {localStorage.getItem('currentUserRole') === "ADMIN" &&
                                 <MenuItem onClick={() => {
-                                    navigate("/admin")
+                                    navigate("/admin/users")
                                 }}>
                                     <Avatar/> Admin Dashboard
                                 </MenuItem>
