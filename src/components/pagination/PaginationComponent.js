@@ -22,21 +22,22 @@ export function PaginationComponent({data,numberPerpage,changeCurentPage}) {
     };
 
     return (
-        <div className="clearfix">
-            <div className="hint-text">Showing <b>{currentDisplayNumber}</b> out of <b>{data.length}</b> entries</div>
-            <ul className="pagination">
+        <div className="d-flex justify-content-between align-items-center">
+            <div className="">Showing <b>{currentDisplayNumber}</b> out of <b>{data.length}</b> entries</div>
+            <nav aria-label="Page navigation example">
                 <ReactPaginate
                     previousLabel={"Previous"}
                     nextLabel={"Next"}
                     pageCount={pageCount}
                     onPageChange={changePage}
-                    containerClassName={"paginationBttns"}
-                    previousLinkClassName={"previousBttn"}
-                    nextLinkClassName={"nextBttn"}
-                    disabledClassName={"paginationDisabled"}
-                    activeClassName={"paginationActive"}
+                    containerClassName={"pagination mb-0"}
+                    pageLinkClassName={"page-link"}
+                    previousLinkClassName={"page-link"}
+                    nextLinkClassName={"page-link"}
+                    disabledClassName={"page-item disabled"}
+                    activeClassName={"page-item active"}
                 />
-            </ul>
+            </nav>
         </div>
     )
 }
