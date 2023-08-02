@@ -140,31 +140,34 @@ export function AdminHostList() {
 
     return (
         <>
-            <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <label htmlFor="name-input"></label>
-                <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />
-                <label htmlFor="home-input"></label>
-                <input id="home-input" name="name" type="number" placeholder="Enter total home" required />
-
-                <label htmlFor="numberPhone-input"></label>
-                <input id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter numberPhone" required />
-
-
+            <div className={'row g-3'} onChange={search}>
+                <div className="col-sm-7">
+                    <label htmlFor="name-input"></label>
+                    <input className={'form-control'} id="name-input" name="name" type="text" placeholder="Enter username" required />
+                </div>
+                <div className="col-sm">
+                    <label htmlFor="home-input"></label>
+                    <input className={'form-control'} id="home-input" name="name" type="number" placeholder="Enter total home" required />
+                </div>
+                <div className="col-sm">
+                    <label htmlFor="numberPhone-input"></label>
+                    <input className={'form-control'} id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter number phone" required />
+                </div>
             </div>
             {hosts.length <= 0 ? <h2>There no data</h2> : (
                 <section className="main">
-                    <h2 className="mb-3">List hosts</h2>
-                    <table className="table table-striped table-hover">
+                    <h2 className="my-3">Host List</h2>
+                    <table className="table table-bordered table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>UserName</th>
-                            <th>Date Created</th>
-                            <th>Phone number</th>
-                            <th>Number home</th>
-                            <th>Earn money($)</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th className="text-center">#</th>
+                            <th className="text-center">UserName</th>
+                            <th className="text-center">Phone number</th>
+                            <th className="text-center">Number home</th>
+                            <th className="text-center">Earn money($)</th>
+                            <th className="text-center">Created at</th>
+                            <th className="text-center">Status</th>
+                            <th className="text-center">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -177,18 +180,25 @@ export function AdminHostList() {
                                     <td><img src="./images/profile/user-1.jpg" alt=""
                                              className="avatar"/>{item.user.username}
                                     </td>
-                                    <td>04/10/2013</td>
                                     <td>{item.user.phoneNumber}</td>
                                     <td>{item.houseCount}</td>
                                     <td>10000</td>
+                                    <td>{item.user.createAt}</td>
                                     {!item.user.blocked ?
                                         <td><span className="status text-success">&bull;</span> Active</td> :
                                         <td><span className="status text-danger">&bull;</span> Suspended</td>}
-                                    <td>
-                                        <Tooltip title="info"><InfoIcon onClick={() => handleProfileEdit(item.user.id)}/></Tooltip>
+                                    <td style={{width: '100px'}} className="text-center">
+                                        <Tooltip title="INFO">
+                                            <button onClick={() => handleProfileEdit(item.user.id)} style={{backgroundColor: 'transparent'}} className="mr-3">
+                                                <i className="material-icons">&#xe88e;</i></button>
+                                        </Tooltip>
                                         {item.user.blocked ?
-                                            <IconButton title='deactive' color='inherit'><LockIcon onClick={() => unlockHost(item.user.id)}/></IconButton> :
-                                            <IconButton title='active' color='primary'><LockOpenIcon onClick={() => lockHost(item.user.id)}/></IconButton>}
+                                            <Tooltip title="DEACTIVE">
+                                                <button style={{backgroundColor: 'transparent'}} onClick={() => unlockHost(item.user.id)}><i className="material-icons">&#xe897;</i></button>
+                                            </Tooltip> :
+                                            <Tooltip title="ACTIVE">
+                                                <button style={{backgroundColor: 'transparent'}} onClick={() => lockHost(item.user.id)}><i className="material-icons">&#xe898;</i></button>
+                                            </Tooltip>}
                                     </td>
                                 </tr>
                             )

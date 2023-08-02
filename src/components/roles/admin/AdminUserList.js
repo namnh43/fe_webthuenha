@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {useNavigate} from "react-router";
+import Tooltip from '@mui/material/Tooltip';
 
 export function AdminUserList() {
 
@@ -50,18 +51,18 @@ export function AdminUserList() {
             {/*    <span>Create new</span></button>*/}
         </div>
         <section className="main">
-            <table className="table table-striped table-hover">
+            <table className="table table-bordered table-striped table-hover">
                 <thead>
                 <tr>
-                    <th className="text-left">#</th>
-                    <th className="text-left"></th>
-                    <th className="text-left">Username</th>
-                    <th className="text-left">E-mail</th>
-                    <th className="text-left">Phone number</th>
-                    <th className="text-left">Address</th>
-                    <th className="text-left">Created at</th>
-                    <th className="text-left">Action</th>
-                    <th className="text-left"></th>
+                    <th className="text-center">#</th>
+                    <th className="text-center">Avatar</th>
+                    <th className="text-center">Username</th>
+                    <th className="text-center">E-mail</th>
+                    <th className="text-center">Phone number</th>
+                    <th className="text-center">Role</th>
+                    <th className="text-center">Created at</th>
+                    <th className="text-center">Status</th>
+                    <th className="text-center">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,42 +70,41 @@ export function AdminUserList() {
                     .slice(pagesVisited, pagesVisited + userPerPage)
                     .map((item, index) => {
                         return (<tr key={item.id}>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="text-center"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {index + 1 + pagesVisited}</span></td>
                             {
                                 item.profileImage &&
-                                <td><img src={item.profileImage}
-                                         style={{height: '5rem', width: '6rem', borderRadius: '50%'}}/></td>
+                                <td style={{width: '5rem'}}><img className="w-100 rounded-circle" src={item.profileImage} /></td>
                             }
                             <td className="text-left pt-10"><span className="d-inline-block"
                                                                   style={{paddingTop: '1.5rem'}}>
                                 {item.username}</span></td>
                             <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {item.email}</span></td>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="text-right"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {item.phoneNumber}</span></td>
                             <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {item.role}</span></td>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="text-center"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {item.createAt}</span></td>
 
                             {item.blocked === false ?
-                                (<td className="text-left"><span className="d-inline-block"
+                                (<td className="text-center"><span className="d-inline-block"
                                                                  style={{paddingTop: '1.5rem'}}>
                                 <span style={signalLightStyle}></span>Active</span></td>)
-                                : (<td className="text-left"><span className="d-inline-block"
+                                : (<td className="text-center"><span className="d-inline-block"
                                                                    style={{paddingTop: '1.5rem'}}>
                                 <span style={signalLightStyle}></span>Blocked</span></td>)}
 
-                            <td className="col-2">
+                            <td style={{width: '100px'}} className="text-center">
                                 <span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
-                                <button style={{backgroundColor: 'transparent'}} className="mr-3">
-                                    <i className="material-icons">&#xe88e;</i></button>
+                                <Tooltip title="INFO"><button style={{backgroundColor: 'transparent'}} className="mr-3">
+                                    <i className="material-icons">&#xe88e;</i></button></Tooltip>
                                     {item.blocked === false ?
-                                        (<button style={{backgroundColor: 'transparent'}}>
-                                            <i className="material-icons">&#xe897;</i></button>)
-                                        : (<button style={{backgroundColor: 'transparent'}}>
-                                            <i className="material-icons">&#xe898;</i></button>)}
+                                        (<Tooltip title="INFO"><button style={{backgroundColor: 'transparent'}}>
+                                            <i className="material-icons">&#xe897;</i></button></Tooltip>)
+                                        : (<Tooltip title="INFO"><button style={{backgroundColor: 'transparent'}}>
+                                            <i className="material-icons">&#xe898;</i></button></Tooltip>)}
                             </span>
                             </td>
 
