@@ -1,6 +1,6 @@
 import {List, ListItem, ListItemButton} from "@mui/material";
-import {useState} from "react";
-import {useNavigate} from "react-router";
+import {useEffect, useState} from "react";
+import {useLocation, useNavigate} from "react-router";
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import VillaIcon from '@mui/icons-material/Villa';
@@ -9,16 +9,23 @@ export function AdminSidebar() {
     // const drawerWidth = 240;
     const [selectedItem, setSelectedItem] = useState('user-list');
     const navigate = useNavigate();
+    const location = useLocation();
+    const currentUrl = location.pathname;
+
+    useEffect(() => {
+        setSelectedItem(currentUrl);
+    })
+
     const drawer = (<div>
         <List>
             <ListItem className="">
                 <span><p className="h4">USERS</p></span>
             </ListItem>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem === 'user-list'}
+                key='/admin/users'
+                selected={selectedItem === '/admin/users'}
                 onClick={() => {
-                    setSelectedItem('user-list');
+                    setSelectedItem('/admin/users');
                     navigate('users')
                 }}
             >
@@ -28,10 +35,10 @@ export function AdminSidebar() {
                 <span className="hide-menu">User List</span>
             </ListItemButton>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem === 'host-list'}
+                key='/admin/hosts'
+                selected={selectedItem === '/admin/hosts'}
                 onClick={() => {
-                    setSelectedItem('host-list');
+                    setSelectedItem('/admin/hosts');
                     navigate('hosts')
                 }}
             >
@@ -41,10 +48,10 @@ export function AdminSidebar() {
                 <span className="hide-menu">Host List</span>
             </ListItemButton>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem === 'waiting-list'}
+                key='/admin/waiting-hosts'
+                selected={selectedItem === '/admin/waiting-hosts'}
                 onClick={() => {
-                    setSelectedItem('waiting-list');
+                    setSelectedItem('/admin/waiting-hosts');
                     navigate('waiting-hosts');
                 }}
             >
