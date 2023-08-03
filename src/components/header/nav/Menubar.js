@@ -180,7 +180,7 @@ export default function Menubar() {
                                     <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
                                         <ListItemText >Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
                                         <Tooltip title="Account settings">
-                                            <IconButton
+                                            <Button
                                                 onClick={handleClick}
                                                 size="small"
                                                 sx={{ml: 2}}
@@ -197,7 +197,7 @@ export default function Menubar() {
                                                     : <img src="/images/profile/user-1.jpg" alt="" width="35"
                                                            height="35" className="rounded-circle"
                                                            onClick={handleLoginClick}/>}
-                                            </IconButton>
+                                            </Button>
                                         </Tooltip>
                                     </Box>
 
