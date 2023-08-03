@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import StarIcon from "@mui/icons-material/Star";
 import BedIcon from '@mui/icons-material/Bed';
 import BathtubIcon from '@mui/icons-material/Bathtub';
+import {Link} from "react-router-dom";
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -41,6 +42,7 @@ export function HouseDetail() {
 
     function booking() {
         if (localStorage.getItem("currentUser") == null) {
+            localStorage.setItem("houseUrl",`/houses/${house.id}/detail`);
             navigate("/login")
             return;
         }
@@ -52,6 +54,7 @@ export function HouseDetail() {
             })
             return;
         }
+
         result = {
             startDate: startDate,
             endDate: endDate,
@@ -61,6 +64,8 @@ export function HouseDetail() {
                 id: house.id
             }
         };
+
+        console.log(result);
         postResult();
     }
 
@@ -75,8 +80,8 @@ export function HouseDetail() {
                 confirmButtonColor: '#3B71CA',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, book it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+            }).then((confirm) => {
+                if (confirm.isConfirmed) {
                     axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
                         handleFetchBookingList();
                         console.log(res.data);
@@ -147,6 +152,10 @@ export function HouseDetail() {
         }
     }
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <>
             <div className="container col-10">
@@ -204,7 +213,8 @@ export function HouseDetail() {
                             </h5>
                             <form action="src/components#" className="">
                                 <div style={{width: 'fit-content', margin: 'auto'}}>
-                                    <TestDatePicker setStartDate={setStartDate} setEndDate={setEndDate}
+                                    <TestDatePicker startDate={startDate} endDate={endDate}
+                                        setStartDate={setStartDate} setEndDate={setEndDate}
                                                     calculateDiff={calculateDiff} listBooking={listBooking}/>
                                 </div>
                                 <hr/>

@@ -88,13 +88,33 @@ function HomePageMenuBar() {
         console.log('open search dialog')
     }
 
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        function handleScroll() {
+            setIsSticky(window.scrollY >= window.innerHeight);
+        }
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     return (
+        <div
+            style={{
+                position: "sticky",
+                top: "-16px",
+                zIndex: "1000",
+            }}
+        >
             <Grid
                 container
                 spacing={2}
                 sx={{
-                    backgroundColor: "rgb(1,1,1,.4)",
-                    color: "white",
+                    backgroundColor: isSticky ? "white" : "rgb(1,1,1,.4)",
+                    color: isSticky ? "black" : "white",
                     height: '80px',
                 }}
                 alignItems="center"
@@ -103,9 +123,8 @@ function HomePageMenuBar() {
                     <Box
                         sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}
                     >
-                        <h2 className="mb-0 logo text-decoration-underline pe-auto" onClick={() => navigate('/')}>
-                            <strong>Homeland<span
-                                className="text-danger">.</span></strong></h2>
+                        <h1 className="mb-2"><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
+                            className="text-danger">.</span></strong></Link></h1>
                     </Box>
                 </Grid>
                 <Grid item xs={9}>
@@ -288,6 +307,7 @@ function HomePageMenuBar() {
                 </Grid>
 
             </Grid>
+        </div>
 
     );
 }
