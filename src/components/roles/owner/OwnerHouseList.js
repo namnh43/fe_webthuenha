@@ -191,17 +191,18 @@ function OwnerHouseList() {
                            maintainedHouseId={maintainedHouseId}/>
         <div className="d-flex justify-content-between my-3">
             <h2>House List</h2>
-            <button className="btn btn-light d-flex" style={{paddingTop: '10px'}}
+            <button className="btn btn-light d-flex align-items-center"
                     onClick={() => navigate('/owner/add-house-form')}>
                 <i className="material-icons">&#xf8eb;</i>
                 <span>Create new</span></button>
         </div>
         <section className="main">
-            <table className="table table-bordered table-striped table-hover">
+            <div className="table-responsive">
+                <table className="table table-bordered table-striped table-hover border border-secondary-subtle">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th></th>
+                    <th style={{width: '60px'}}>#</th>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Price</th>
                     <th>Address</th>
@@ -217,7 +218,7 @@ function OwnerHouseList() {
                         return (<tr key={item.id} style={{height: '80px'}}>
                             <td className="pt-4">{index + 1 + pagesVisited}</td>
                             {item.images.length > 0 ?
-                                <td><img src={item.images[0].fileUrl} style={{height: '4rem', width: '7rem'}} alt=""/>
+                                <td style={{width: '80px'}}><img className={'w-100'} src={item.images[0].fileUrl} alt={item.name}/>
                                 </td> : <td></td>}
                             <td className="pt-4">{item.name}</td>
                             <td className="pt-4">{item.price}</td>
@@ -264,8 +265,8 @@ function OwnerHouseList() {
 
                 </tbody>
             </table>
+            </div>
             <PaginationComponent data={houseList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
-
         </section>
     </>);
 }
