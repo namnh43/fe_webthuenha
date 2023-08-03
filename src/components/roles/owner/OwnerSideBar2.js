@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useNavigate} from "react-router";
+import React, {useEffect, useState} from 'react';
+import {useLocation, useNavigate} from "react-router";
 import {List, ListItem, ListItemButton} from "@mui/material";
 import ConstructionIcon from '@mui/icons-material/Construction';
 import HouseIcon from '@mui/icons-material/House';
@@ -9,6 +9,14 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 function OwnerSideBar2() {
     const [selectedItem, setSelectedItem] = useState('user-list');
     const navigate = useNavigate();
+    const currentUrl = useLocation().pathname
+
+    console.log(currentUrl)
+    useEffect(() => {
+        setSelectedItem(currentUrl)
+    });
+
+
     const drawer = (<div>
         <List>
             <ListItem className="">
@@ -16,9 +24,9 @@ function OwnerSideBar2() {
             </ListItem>
             <ListItemButton
                 key='owner-list'
-                selected={selectedItem == 'house-list'}
+                selected={selectedItem === '/owner'}
                 onClick={() => {
-                    setSelectedItem('house-list');
+                    setSelectedItem('/owner');
                     navigate('')
                 }}
             >
@@ -27,24 +35,11 @@ function OwnerSideBar2() {
                     </span>
                 <span className="hide-menu">House List</span>
             </ListItemButton>
-            {/*<ListItemButton*/}
-            {/*    key='owner-list'*/}
-            {/*    selected={selectedItem == 'add-house-form'}*/}
-            {/*    onClick={() => {*/}
-            {/*        setSelectedItem('add-house-form');*/}
-            {/*        navigate('add-house-form')*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <span className="me-3">*/}
-            {/*      <HouseIcon/>*/}
-            {/*    </span>*/}
-            {/*    <span className="hide-menu">Add a new house</span>*/}
-            {/*</ListItemButton>*/}
             <ListItemButton
                 key='owner-list'
-                selected={selectedItem == 'booking-list'}
+                selected={selectedItem === '/owner/booking'}
                 onClick={() => {
-                    setSelectedItem('booking-list');
+                    setSelectedItem('/owner/booking');
                     navigate('booking');
                 }}
             >
@@ -55,9 +50,9 @@ function OwnerSideBar2() {
             </ListItemButton>
             <ListItemButton
                 key='owner-list'
-                selected={selectedItem == 'maintenance-list'}
+                selected={selectedItem === '/owner/maintenance'}
                 onClick={() => {
-                    setSelectedItem('maintenance-list');
+                    setSelectedItem('/owner/maintenance');
                     navigate('maintenance');
                 }}
             >

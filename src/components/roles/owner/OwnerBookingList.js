@@ -10,8 +10,7 @@ function OwnerBookingList() {
 
     const [bookingList, setBookingList] = useState([])
     const [searchBooking, setSearchBooking] = useState([])
-    const [selectedRange, setSelectedRange] = useState(['','']);
-
+    const [selectedRange, setSelectedRange] = useState(['', '']);
 
 
     //pagination
@@ -31,7 +30,7 @@ function OwnerBookingList() {
         axios.get('http://localhost:8080/booking/owner', config)
             .then((res) =>
                 setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"),
-                setSearchBooking(res.data)))
+                    setSearchBooking(res.data)))
     }, []);
 
     const checkIn = (item) =>
@@ -68,7 +67,7 @@ function OwnerBookingList() {
                                 'warning'
                             );
                         })
-                }else {
+                } else {
                     Swal.fire(
                         'Forbidden!',
                         'You must wait until start date on the booking to check in.',
@@ -89,34 +88,35 @@ function OwnerBookingList() {
     }).then((result) => {
         if (result.isConfirmed) {
 
-                axios.put(`http://localhost:8080/booking/check-out/${item.id}`, null, config)
-                    .then(() => axios.get('http://localhost:8080/booking/owner', config)
-                        .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))))
-                    .then(() => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Checked out!',
-                        });
-                    })
-                    .catch(() => {
-                        Swal.fire(
-                            'Something went wrong!',
-                            'You cannot check out this booking.',
-                            'warning'
-                        );
-                    })
+            axios.put(`http://localhost:8080/booking/check-out/${item.id}`, null, config)
+                .then(() => axios.get('http://localhost:8080/booking/owner', config)
+                    .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))))
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Checked out!',
+                    });
+                })
+                .catch(() => {
+                    Swal.fire(
+                        'Something went wrong!',
+                        'You cannot check out this booking.',
+                        'warning'
+                    );
+                })
 
         }
     })
     const handleDateRangeChange = (ranges) => {
         if (ranges && ranges.length === 2)
-            setSelectedRange([ranges[0].toLocaleDateString('en-CA'),ranges[1].toLocaleDateString('en-CA')]);
+            setSelectedRange([ranges[0].toLocaleDateString('en-CA'), ranges[1].toLocaleDateString('en-CA')]);
         else
-            setSelectedRange(['',''])
+            setSelectedRange(['', ''])
     };
     useEffect(() => {
         search()
     }, [selectedRange]);
+
     function search() {
         const houseName = document.getElementById('house-name-input').value.trim().toLowerCase();
         const status = document.getElementById('status-select').value;
@@ -125,9 +125,9 @@ function OwnerBookingList() {
             if (
                 (!houseName || booking.house?.name?.toLowerCase().includes(houseName)) &&
                 (!status || booking.bookingStatus === status) &&
-                (selectedRange[0]==="" ||
-                    ((selectedRange[1]>=booking.startDate && booking.startDate >= selectedRange[0] ) ||
-                        (selectedRange[0]<=booking.endDate&& booking.endDate <=selectedRange[1])) || (selectedRange[0]>booking.startDate && selectedRange[1]<booking.endDate)
+                (selectedRange[0] === "" ||
+                    ((selectedRange[1] >= booking.startDate && booking.startDate >= selectedRange[0]) ||
+                        (selectedRange[0] <= booking.endDate && booking.endDate <= selectedRange[1])) || (selectedRange[0] > booking.startDate && selectedRange[1] < booking.endDate)
                 )
             ) {
                 return true;
@@ -138,25 +138,28 @@ function OwnerBookingList() {
     }
 
     return (<>
-        <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
-            <input id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required  />
-            &nbsp;
-            <select id="status-select" name="status">
-                <option value="">-- Select status --</option>
-                <option value="CANCELLED">CANCELLED</option>
-                <option value="BOOKING">BOOKING</option>
-                <option value="CHECKED_IN">CHECKED_IN</option>
-                <option value="CHECKED_OUT">CHECKED_OUT</option>
-            </select>
-            &nbsp;
-            <div style={{border:"1px solid grey"}}>
-                <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange} />
+        <div className={'row g-3 my-0'} onChange={search}>
+            <div className="col-4">
+                <input className={'form-control'} id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required/>
+                {/*&nbsp;*/}
+            </div>
+            <div className="col-2">
+                <select className={'form-control'} id="status-select" name="status">
+                    <option value="">-- Select status --</option>
+                    <option value="CANCELLED">CANCELLED</option>
+                    <option value="BOOKING">BOOKING</option>
+                    <option value="CHECKED_IN">CHECKED_IN</option>
+                    <option value="CHECKED_OUT">CHECKED_OUT</option>
+                </select>
+            </div>
+            <div className="col-4">
+                <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange}/>
             </div>
 
         </div>
-        <h2>Booking List</h2>
+        <h2 className={'my-3'}>Booking List</h2>
         <section className="main">
-            <table className="table table-striped table-hover">
+            <table className="table table-bordered table-striped table-hover">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -172,21 +175,22 @@ function OwnerBookingList() {
                 {bookingList
                     .slice(pagesVisited, pagesVisited + bookingPerpage)
                     .map((item, key) => {
-                        return (<tr>
-                            <td>{key + 1 + pagesVisited}</td>
-                            <td>{item.house.name}</td>
-                            <td>{item.createAt}</td>
-                            <td>{item.startDate}/{item.endDate}</td>
-                            <td>{item.price}/{item.total}</td>
-                            <td>{item.bookingStatus}</td>
+                        return (<tr style={{height: '80px'}}>
+                            <td className={'pt-4'}>{key + 1 + pagesVisited}</td>
+                            <td className={'text-start pt-4'}>{item.house.name}</td>
+                            <td className={'pt-4'}>{item.createAt}</td>
+                            <td className={'pt-4'}>{item.startDate}/{item.endDate}</td>
+                            <td className={'pt-4'}>{item.price}/{item.total}</td>
+                            <td className={'pt-4'}>{item.bookingStatus}</td>
                             {item.bookingStatus === "BOOKING" && (
-                                <td>
+                                <td className={'pt-4'}>
                                     <button className="btn btn-primary" onClick={() => checkIn(item)}>Check in</button>
                                 </td>
                             )}
                             {item.bookingStatus === "CHECKED_IN" && (
-                                <td>
-                                    <button className="btn btn-secondary" onClick={() => checkOut(item)}>Check out</button>
+                                <td className={'pt-4'}>
+                                    <button className="btn btn-secondary" onClick={() => checkOut(item)}>Check out
+                                    </button>
                                 </td>
                             )}
                             {item.bookingStatus === "CANCELLED" && (
