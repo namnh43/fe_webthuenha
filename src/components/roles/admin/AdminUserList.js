@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {useNavigate} from "react-router";
 import Tooltip from '@mui/material/Tooltip';
@@ -27,7 +26,6 @@ export function AdminUserList() {
     useEffect(() => {
         axios.get(`http://localhost:8080/user`, config)
             .then((res) => {
-                console.log(res.data)
                 setUserList(res.data.reverse())
             });
     }, []);
