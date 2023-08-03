@@ -3,7 +3,6 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from "react";
 import Swal from "sweetalert2";
-import "./datePickerCss.css";
 
 export default function TestDatePicker({startDate, endDate,listBooking, setStartDate, setEndDate, calculateDiff}) {
 
