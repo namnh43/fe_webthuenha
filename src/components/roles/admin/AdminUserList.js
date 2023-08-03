@@ -68,34 +68,35 @@ export function AdminUserList() {
                     .slice(pagesVisited, pagesVisited + userPerPage)
                     .map((item, index) => {
                         return (<tr key={item.id}>
-                            <td className="text-center"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="text-center"><span className="d-inline-block" style={{paddingTop: '1rem'}}>
                                 {index + 1 + pagesVisited}</span></td>
                             {
-                                item.profileImage &&
-                                <td style={{width: '5rem'}}><img className="w-100 rounded-circle" src={item.profileImage} /></td>
+                                item.profileImage ?
+                                <td style={{width: '4rem',padding:'2px'}}><img style={{width: '4rem', height: '4rem', borderRadius: '50%'}} src={item.profileImage} /></td>
+                                : <td></td>
                             }
                             <td className="text-left pt-10"><span className="d-inline-block"
-                                                                  style={{paddingTop: '1.5rem'}}>
+                                                                  style={{paddingTop: '1rem'}}>
                                 {item.username}</span></td>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1rem'}}>
                                 {item.email}</span></td>
-                            <td className="text-right"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="text-right"><span className="d-inline-block" style={{paddingTop: '1rem'}}>
                                 {item.phoneNumber}</span></td>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1rem'}}>
                                 {item.role}</span></td>
-                            <td className="text-center"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="text-center"><span className="d-inline-block" style={{paddingTop: '1rem'}}>
                                 {item.createAt}</span></td>
 
                             {item.blocked === false ?
                                 (<td className="text-center"><span className="d-inline-block"
-                                                                 style={{paddingTop: '1.5rem'}}>
+                                                                 style={{paddingTop: '1rem'}}>
                                 <span style={signalLightStyle}></span>Active</span></td>)
                                 : (<td className="text-center"><span className="d-inline-block"
-                                                                   style={{paddingTop: '1.5rem'}}>
+                                                                   style={{paddingTop: '1rem'}}>
                                 <span style={signalLightStyle}></span>Blocked</span></td>)}
 
                             <td style={{width: '100px'}} className="text-center">
-                                <span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                                <span className="d-inline-block" style={{paddingTop: '1rem'}}>
                                 <Tooltip title="INFO"><button style={{backgroundColor: 'transparent'}} className="mr-3">
                                     <i className="material-icons">&#xe88e;</i></button></Tooltip>
                                     {item.blocked === false ?
