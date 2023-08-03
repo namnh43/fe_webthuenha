@@ -7,13 +7,13 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocalHotelRoundedIcon from '@mui/icons-material/LocalHotelRounded';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import {ListComponent} from "./ListComponent";
+import Constants from "../../utils/constants";
 export function HouseList() {
     const [list, setList] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get(`http://localhost:8080/house`, {}).then(res => {
-            setList(res.data)
-            console.log(res.data)
+        axios.get(`${Constants.BASE_API}/house/latest`, {}).then(res => {
+            setList(res.data);
         })
         //get search params
         const searchParams = new URLSearchParams(window.location.search);
