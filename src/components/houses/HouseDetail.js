@@ -244,7 +244,7 @@ export function HouseDetail() {
                                         </table>
                                     </div>}
                                 </div>
-                                <button style={{width: '100%', margin: 'auto', fontSize: '18px', height: '50px'}} type="button" className="btn btn-primary mt-2"
+                                <button style={{width: '100%', margin: 'auto', fontSize: '14px', height: '50px'}} type="button" className="btn btn-primary mt-2"
                                         onClick={booking}>
                                     {startDate !== "" && endDate !== "" ? "Booking Now" : "Choose date to check home status"}
                                 </button>
