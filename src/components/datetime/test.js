@@ -5,14 +5,14 @@ import React from "react";
 import Swal from "sweetalert2";
 import "./datePickerCss.css";
 
-export default function TestDatePicker({listBooking, setStartDate, setEndDate, calculateDiff}) {
+export default function TestDatePicker({startDate, endDate,listBooking, setStartDate, setEndDate, calculateDiff}) {
 
     const handleDateChange = (event, inst) => {
         console.log(inst.value);
-        let startDate = inst.value[0];
-        let endDate = inst.value[1];
+        let start= inst.value[0];
+        let end = inst.value[1];
 
-        if(startDate === endDate) {
+        if(start === end) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops...',
@@ -21,9 +21,9 @@ export default function TestDatePicker({listBooking, setStartDate, setEndDate, c
             inst.setVal([]);
             return
         }
-        setStartDate(startDate);
-        setEndDate(endDate);
-        calculateDiff(startDate, endDate);
+        setStartDate(start);
+        setEndDate(end);
+        calculateDiff(start, end);
     };
 
     return (

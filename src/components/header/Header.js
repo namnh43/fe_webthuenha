@@ -13,7 +13,6 @@ export function Header() {
 
     return (
         <div className="position-relative">
-            {/*<HomePageMenuBar/>*/}
             <HomePageCarousel/>
         </div>
     )
