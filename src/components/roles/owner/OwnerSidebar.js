@@ -1,14 +1,14 @@
-export function AdminSidebar() {
+import React from 'react';
+import {Link} from "react-router-dom";
+
+function OwnerSidebar() {
     return (
         <>
             <div>
                 <div className="brand-logo d-flex align-items-center justify-content-between">
-                    <a href="./index.html" className="text-nowrap logo-img">
-                        <img src="../assets/images/logos/dark-logo.svg" width="180" alt=""/>
-                    </a>
-                    <div className="close-btn d-xl-none d-block sidebartoggler cursor-pointer"
-                         id="sidebarCollapse">
-                        <i className="ti ti-x fs-8"></i>
+                    <div className="col-8 col-md-8 col-lg-4">
+                        <h1 className="mb-0"><Link to="/" className="h2 mb-0"><strong>Homeland<span
+                            className="text-danger">.</span></strong></Link></h1>
                     </div>
                 </div>
                 <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
@@ -22,7 +22,8 @@ export function AdminSidebar() {
                 <span>
                   <i className="ti ti-layout-dashboard"></i>
                 </span>
-                                <span className="hide-menu">Dashboard</span>
+                                <Link to='/owner' style={{color: 'inherit'}}><span
+                                    className="hide-menu">House List</span></Link>
                             </a>
                         </li>
                         <li className="nav-small-cap">
@@ -34,16 +35,17 @@ export function AdminSidebar() {
                 <span>
                   <i className="ti ti-article"></i>
                 </span>
-                                <span className="hide-menu">Buttons</span>
+                                <Link to='/owner/add-house-form' style={{color: 'inherit'}}><span className="hide-menu">Add a new house</span></Link>
                             </a>
                         </li>
                         <li className="sidebar-item">
+                            <Link to='/owner/booking'>
                             <a className="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
-                <span>
-                  <i className="ti ti-alert-circle"></i>
-                </span>
-                                <span className="hide-menu">Alerts</span>
-                            </a>
+                             <span>
+                                <i className="ti ti-alert-circle"></i>
+                             </span>
+                                <span className="hide-menu">Booking list</span>
+                            </a></Link>
                         </li>
                         <li className="sidebar-item">
                             <a className="sidebar-link" href="./ui-card.html" aria-expanded="false">
@@ -129,5 +131,7 @@ export function AdminSidebar() {
                 </nav>
             </div>
         </>
-    )
+    );
 }
+
+export default OwnerSidebar;

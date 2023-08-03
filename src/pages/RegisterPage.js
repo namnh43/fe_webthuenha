@@ -2,38 +2,50 @@ import {Link} from "react-router-dom";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import * as Yup from "yup";
-import React from "react";
+import React, {useState} from "react";
 import {useNavigate} from "react-router";
-import {LoginPage} from "./LoginPage";
 
 const SignupSchema = Yup.object().shape({
-    username: Yup.string().required('* Required'),
-    phone: Yup.string()
+    username: Yup.string()
+        .min(6, '* Username must be longer than 6 characters')
+        .max(32, '* Username must not be longer than 32 characters')
+        .required('* Required'),
+    phoneNumber: Yup.string()
         .matches('^\\+?[0-9]{3}-?[0-9]{6,12}$', '* Invalid phone number')
         .required('* Required'),
     email: Yup.string().email('* Invalid email')
         .matches('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$', '* Invalid email')
         .required('* Required'),
     password: Yup.string()
-        .min(6, '* Password must be longer than 5 characters')
+        .min(6, '* Password must be longer than 6 characters')
         .max(32, '* Password must not be longer than 32 characters')
         .required('* Required'),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], '* Password must match')
 });
 
-
 export function RegisterPage() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
+
 
     return (
         <Formik
-            initialValues={{username: '', phone: '', email: '', password: '', confirmPassword: ''}}
+            initialValues={{username: '', phoneNumber: '', email: '', password: '', confirmPassword: ''}}
             validationSchema={SignupSchema}
             onSubmit={values => {
+                console.log(values)
                 axios.post('http://localhost:8080/jwt/signup', values)
-                    .then(() => navigate('/login'))
-                    .catch(() => navigate('/register'))
+                    .then((res) =>{
+                        console.log(res.data)
+                        if(res.data.code === '201'){
+                            setErrorMessage('')
+                            alert('Successfully registered')
+                            navigate('/login')
+                        } else {
+                            setErrorMessage(res.data.msg)
+                        }
+                    })
             }}
         >
             {({ errors, touched }) => (
@@ -64,10 +76,10 @@ export function RegisterPage() {
                                             </div>
                                             <div className="mb-3 text-start">
                                                 <label htmlFor="exampleInputEmail1" className="form-label">Phone Number</label>
-                                                <Field type="text" name="phone" className="form-control" id="exampleInputEmail1"
+                                                <Field type="text" name="phoneNumber" className="form-control" id="exampleInputEmail1"
                                                        aria-describedby="emailHelp"/>
-                                                {errors.phone && touched.phone ? (
-                                                    <div style={{color: "red", fontSize: 'small'}}>{errors.phone}</div>
+                                                {errors.phoneNumber && touched.phoneNumber ? (
+                                                    <div style={{color: "red", fontSize: 'small'}}>{errors.phoneNumber}</div>
                                                 ) : null}
                                             </div>
                                             <div className="mb-3 text-start">
@@ -97,7 +109,8 @@ export function RegisterPage() {
                                                     <div style={{color: "red", fontSize: 'small'}}>{errors.confirmPassword}</div>
                                                 ) : null}
                                             </div>
-                                            <button
+                                            {errorMessage && <p style={{ color: "red", paddingBottom: "10px"}}>{errorMessage}</p>}
+                                            <button type="submit"
                                                   className="btn btn-primary w-100 py-8 mb-4 rounded-2" >Sign Up</button>
                                             <div className="d-flex align-items-center justify-content-center">
                                                 <p className="mb-0">Already have an Account?</p>

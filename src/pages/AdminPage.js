@@ -1,6 +1,7 @@
-import {AdminNavbar} from "../components/AdminNavbar";
-import {AdminSidebar} from "../components/AdminSidebar";
-import {AdminFooter} from "../components/AdminFooter";
+import {AdminNavbar} from "../components/roles/admin/AdminNavbar";
+import {AdminSidebar} from "../components/roles/admin/AdminSidebar";
+import {AdminFooter} from "../components/roles/admin/AdminFooter";
+import {Outlet} from "react-router";
 
 export function AdminPage() {
     return (
@@ -16,13 +17,11 @@ export function AdminPage() {
                         <AdminNavbar/>
                     </header>
                     <div className="container-fluid">
-                        <h1>Admin main content</h1>
+                        <Outlet></Outlet>
+                        <AdminFooter/>
                     </div>
                 </div>
             </div>
-            {/*<AdminNavbar/>*/}
-            {/*<AdminSidebar/>*/}
-            {/*<AdminFooter/>*/}
         </>
     )
 }
