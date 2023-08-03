@@ -163,7 +163,7 @@ function BookingHistory() {
                             </tr>
                             </thead>
                             <tbody>
-                            {bookingList
+                            {bookingList.reverse()
                                 .slice(pagesVisited, pagesVisited + bookingPerpage)
                                 .map((item, key) => {
                                     return (

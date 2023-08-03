@@ -172,7 +172,7 @@ function OwnerBookingList() {
                 </tr>
                 </thead>
                 <tbody>
-                {bookingList
+                {bookingList.reverse()
                     .slice(pagesVisited, pagesVisited + bookingPerpage)
                     .map((item, key) => {
                         return (<tr style={{height: '80px'}}>

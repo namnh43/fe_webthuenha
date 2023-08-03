@@ -7,7 +7,7 @@ const MapWithSearch = ({ initialAddress }) => {
     const [userLocation, setUserLocation] = useState(null);
     const [directions, setDirections] = useState(null);
     const [distance, setDistance] = useState(null);
-    const apiKey = 'AIzaSyAS8dmq6SOjst1K0oYY-B-kwLz8zqlqUA0';
+    const apiKey = 'AIzaSyB4iBYf4qOoWI7FGVSLNUggY5h_Y6mmlrU';
 
     useEffect(() => {
         handleSearch();

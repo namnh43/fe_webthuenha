@@ -33,10 +33,12 @@ export function HouseList() {
         <>
             <div className="bg-light pt-4 pb-4">
                 <div className="container">
+                    <h1>Top Visited</h1>
                     <div className="row">
-                        <h1>Top Visited</h1>
                         <ListComponent listHouse={topHouse}/>
-                        <h1 className='mt-5'>Popular Houses</h1>
+                    </div>
+                    <h1 className='mt-5'>Popular Houses</h1>
+                    <div className="row">
                         <ListComponent listHouse={list}/>
                     </div>
                 </div>
