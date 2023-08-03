@@ -83,7 +83,7 @@ export function AdminWaitingHost() {
         })
     }
     return (
-        <>{hosts.length <= 0 ? <h2>There no data</h2> : (
+        <>
             <section className="main">
                 <h2 className="mb-3">Waiting confirmation hosts</h2>
                 <table className="table table-striped table-hover">
@@ -96,9 +96,11 @@ export function AdminWaitingHost() {
                         <th>Action</th>
                     </tr>
                     </thead>
+                    {hosts.length <= 0 ? (
+                        <tbody><tr><td colSpan={5}>There no data</td></tr></tbody>
+                    ) : (
                     <tbody>
                     {hosts.slice(pagesVisited, pagesVisited + hostsPerPage).map((item,key) => {
-                        console.log(item)
                         return (
                             <tr>
                                 <td>{key + 1 + pagesVisited}</td>
@@ -114,10 +116,10 @@ export function AdminWaitingHost() {
                         )
                     })}
                     </tbody>
+                    )}
                 </table>
                 <PaginationComponent data={hosts} numberPerpage={hostsPerPage} changeCurentPage={handlePageChange}/>
-            </section>)
-        }
+            </section>
             <UserProfileDialog open={openProfileDialog} onClose={handleCloseProfileDialog} id={currentUserId}/>
         </>
     )

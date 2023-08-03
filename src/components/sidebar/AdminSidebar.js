@@ -1,24 +1,28 @@
 import {List, ListItem, ListItemButton} from "@mui/material";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useNavigate} from "react-router";
+import {  useLocation } from 'react-router-dom';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import VillaIcon from '@mui/icons-material/Villa';
 
 export function AdminSidebar() {
     // const drawerWidth = 240;
-    const [selectedItem, setSelectedItem] = useState('user-list');
     const navigate = useNavigate();
+    const location = useLocation();
+    const [selectedItem, setSelectedItem] = useState(location.pathname);
+    useEffect( () => setSelectedItem(location.pathname));
     const drawer = (<div>
         <List>
-            <ListItem className="">
-                <span><p className="h4">USERS</p></span>
+            <ListItem
+                key='dashboard' className="">
+                <span className="h4">Dashboard</span>
             </ListItem>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem === 'user-list'}
+                key='users'
+                selected={selectedItem === '/admin/users'}
                 onClick={() => {
-                    setSelectedItem('user-list');
+                    setSelectedItem('/admin/users');
                     navigate('users')
                 }}
             >
@@ -28,10 +32,10 @@ export function AdminSidebar() {
                 <span className="hide-menu">User List</span>
             </ListItemButton>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem === 'host-list'}
+                key='hosts'
+                selected={selectedItem === '/admin/hosts'}
                 onClick={() => {
-                    setSelectedItem('host-list');
+                    setSelectedItem('/admin/hosts');
                     navigate('hosts')
                 }}
             >
@@ -41,10 +45,10 @@ export function AdminSidebar() {
                 <span className="hide-menu">Host List</span>
             </ListItemButton>
             <ListItemButton
-                key='user-list'
-                selected={selectedItem === 'waiting-list'}
+                key='waiting-hosts'
+                selected={selectedItem === '/admin/waiting-hosts'}
                 onClick={() => {
-                    setSelectedItem('waiting-list');
+                    setSelectedItem('/admin/waiting-hosts');
                     navigate('waiting-hosts');
                 }}
             >
