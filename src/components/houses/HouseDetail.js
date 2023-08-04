@@ -12,6 +12,7 @@ import StarIcon from "@mui/icons-material/Star";
 import BedIcon from '@mui/icons-material/Bed';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import {Link} from "react-router-dom";
+import {Footer} from "../Footer";
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -202,7 +203,7 @@ export function HouseDetail() {
 
                         </div>
                     </div>
-                    <div className="col">
+                    <div className="col-4">
                         <div className="bg-white p-4 border rounded">
                             <h5 className="text-black mb-3" style={{ display: 'flex', alignItems: 'center'}}>
                                 <b><span style={{fontSize: '24px'}}>${house.price} /</span> night</b>
@@ -243,7 +244,7 @@ export function HouseDetail() {
                                         </table>
                                     </div>}
                                 </div>
-                                <button style={{width: '100%', margin: 'auto', fontSize: '18px', height: '50px'}} type="button" className="btn btn-primary mt-2"
+                                <button style={{width: '100%', margin: 'auto', fontSize: '14px', height: '50px'}} type="button" className="btn btn-primary mt-2"
                                         onClick={booking}>
                                     {startDate !== "" && endDate !== "" ? "Booking Now" : "Choose date to check home status"}
                                 </button>
@@ -275,126 +276,7 @@ export function HouseDetail() {
                 <br/><br/>
 
             </div>
-
-            <div className="site-section site-section-sm bg-light">
-                <div className="container">
-
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="site-section-title mb-5">
-                                <h2>Related Properties</h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="row mb-5">
-                        <div className="col-md-6 col-lg-4 mb-4">
-                            <div className="property-entry h-100">
-                                <a href="property-details.html" className="property-thumbnail">
-                                    <div className="offer-type-wrap">
-                                        <span className="offer-type bg-danger">Sale</span>
-                                        <span className="offer-type bg-success">Rent</span>
-                                    </div>
-                                    <img src="images/img_1.jpg" alt="Image" className="img-fluid"/>
-                                </a>
-                                <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">625 S. Berendo St</a>
-                                    </h2>
-                                    <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> 625 S. Berendo St Unit 607 Los Angeles, CA 90005</span>
-                                    <strong
-                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
-                                    <ul className="property-specs-wrap mb-3 mb-lg-0">
-                                        <li>
-                                            <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">2 <sup>+</sup></span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">2</span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">SQ FT</span>
-                                            <span className="property-specs-number">7,000</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-6 col-lg-4 mb-4">
-                            <div className="property-entry h-100">
-                                <a href="property-details.html" className="property-thumbnail">
-                                    <div className="offer-type-wrap">
-                                        <span className="offer-type bg-danger">Sale</span>
-                                        <span className="offer-type bg-success">Rent</span>
-                                    </div>
-                                    <img src="images/img_2.jpg" alt="Image" className="img-fluid"/>
-                                </a>
-                                <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite active"><span
-                                        className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">871 Crenshaw Blvd</a>
-                                    </h2>
-                                    <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> 1 New York Ave, Warners Bay, NSW 2282</span>
-                                    <strong
-                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
-                                    <ul className="property-specs-wrap mb-3 mb-lg-0">
-                                        <li>
-                                            <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">2 <sup>+</sup></span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">2</span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">SQ FT</span>
-                                            <span className="property-specs-number">1,620</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-6 col-lg-4 mb-4">
-                            <div className="property-entry h-100">
-                                <a href="property-details.html" className="property-thumbnail">
-                                    <div className="offer-type-wrap">
-                                        <span className="offer-type bg-info">Lease</span>
-                                    </div>
-                                    <img src="images/img_3.jpg" alt="Image" className="img-fluid"/>
-                                </a>
-                                <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">853 S Lucerne
-                                        Blvd</a></h2>
-                                    <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> 853 S Lucerne Blvd Unit 101 Los Angeles, CA 90005</span>
-                                    <strong
-                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
-                                    <ul className="property-specs-wrap mb-3 mb-lg-0">
-                                        <li>
-                                            <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">2 <sup>+</sup></span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">2</span>
-                                        </li>
-                                        <li>
-                                            <span className="property-specs">SQ FT</span>
-                                            <span className="property-specs-number">5,500</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Footer/>
         </>
     )
 }

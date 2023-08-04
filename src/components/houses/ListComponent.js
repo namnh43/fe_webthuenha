@@ -15,7 +15,7 @@ export function ListComponent({listHouse}) {
                     <>
                         <div className="col-md-6 col-lg-3 mb-3 mt-2"
                              onClick={() => {
-                                 const url = 'houses/' + item.id + '/detail';
+                                 const url = 'houses/' + item.id;
                                  navigate(url)
                              }}>
                             <Card sx={{borderRadius:'6px'}}

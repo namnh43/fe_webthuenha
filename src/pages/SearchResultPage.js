@@ -10,7 +10,7 @@ export function SearchResultPage() {
     return (
         <>
             <Menubar/>
-            <Divider/>
+            {/*<Divider/>*/}
             <SearchBar/>
             <SearchHouseResult/>
             <Footer/>
