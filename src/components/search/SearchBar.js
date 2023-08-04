@@ -32,9 +32,6 @@ function SearchBar() {
     const [maxPrice, setMaxPrice] = useState('');
     const [selectedRange, setSelectedRange] = useState(['','']);
     let [searchParams, setSearchParams] = useSearchParams();
-    // const searchQuery = useSelector((state) => {
-    //     return state.search.searchQuery;
-    // });
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -80,7 +77,7 @@ function SearchBar() {
 
     useEffect(() => {
         function handleScroll() {
-            setIsSticky(window.scrollY >= window.innerHeight);
+            setIsSticky(window.pageYOffset >= 60); // Set to true when the scroll position is 60px or more
         }
 
         window.addEventListener("scroll", handleScroll);
@@ -90,8 +87,8 @@ function SearchBar() {
     }, []);
 
     return (
-        <div className="search-sec col-7 m-auto my-5" style={{position: 'sticky', top: "0px", zIndex: "1000", backgroundColor: isSticky ? "white" : '#D7D9DDFF',    padding: isSticky ? "7px" : "20px"}}>
-            <div className="row pl-2" >
+        <div className="search-sec col-8 m-auto my-5" style={{position: 'sticky', top: "0px", zIndex: "1000",    padding: isSticky ? "12px" : "20px"}}>
+            <div className="row pl-4" >
                 <div className="col-3 p-1">
                     <input
                         type="text"
@@ -126,7 +123,6 @@ function SearchBar() {
                         onChange={(e) => setMaxPrice(e.target.value)}
                         placeholder="Max Price($)"
                         style={{height: '42px'}}
-
                     />
                 </div>
                 <div className="col-3 p-1">

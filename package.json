@@ -2,6 +2,7 @@
   "name": "fe_webthuenha",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://namnh43.github.io/fe_webthuenha/",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -25,6 +26,7 @@
     "fine-uploader": "^5.16.2",
     "firebase": "^10.0.0",
     "formik": "^2.4.2",
+    "gh-pages": "^5.0.0",
     "install": "^0.13.0",
     "mdb-react-ui-kit": "^6.1.0",
     "npm": "^9.8.0",
@@ -55,7 +57,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

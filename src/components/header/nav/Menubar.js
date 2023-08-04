@@ -5,13 +5,17 @@ import {Navbar} from "./Navbar";
 
 export default function Menubar() {
     return (
-        <div className='mb-2 border-bottom' style={{position: 'sticky', top: '-16px', zIndex: '1000', backgroundColor: 'white'}}>
+        <div className='mb-2 border-bottom'
+             style={{
+                 position: 'sticky', top: '-16px', zIndex: '1000', backgroundColor: 'white',
+            boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)"}}
+        >
             <Grid
                 container
-                spacing={2}
+                spacing={3}
                   sx={{
                       color: "black",
-                      height: '80px',
+                      height: '88px',
                       display:"flex", justifyContent:"space-around"
                   }}
                 alignItems="center"

@@ -31,7 +31,7 @@ export function HouseList() {
 
     return (
         <>
-            <div className="bg-light pt-4 pb-4">
+            <div className="bg-light pt-4 pb-4 border-top">
                 <div className="container">
                     <h1>Top Visited</h1>
                     <div className="row">

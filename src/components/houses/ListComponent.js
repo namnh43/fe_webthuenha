@@ -15,7 +15,7 @@ export function ListComponent({listHouse}) {
                     <>
                         <div className="col-md-6 col-lg-3 mb-3 mt-2 card-container"
                              onClick={() => {
-                                 const url = 'houses/' + item.id;
+                                 const url = '/houses/' + item.id;
                                  navigate(url)
                              }}>
                             <Card sx={{borderRadius:'6px'}}
@@ -27,6 +27,10 @@ export function ListComponent({listHouse}) {
                                         image={item.images.length > 0 ? item.images[0].fileUrl
                                             : "https://firebasestorage.googleapis.com/v0/b/casemd4-3a742.appspot.com/o/images%2Fstarbucks.jpg?alt=media&token=543189a3-7d56-4647-a834-8d05d6f69969"}
                                         alt="house image"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = "https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200";
+                                        }}
                                     />
                                     <CardContent style={{padding:'8px'}}>
                                         <Typography gutterBottom variant="h6" component="div" style={{ lineHeight: '1', marginBottom: '1px'}}>

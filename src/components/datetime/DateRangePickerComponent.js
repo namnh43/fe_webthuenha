@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {DateRangePicker} from 'rsuite';
 import {endOfDay, startOfDay} from "date-fns";
+import './style.css'
 
 const { beforeToday } = DateRangePicker;
 function createDateFromString(dateString) {

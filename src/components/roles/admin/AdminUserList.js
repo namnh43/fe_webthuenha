@@ -12,7 +12,7 @@ export function AdminUserList() {
 
     //pagination
     const [pagesVisited, setPagesVisited] = useState(0);
-    const userPerPage = 5;
+    const userPerPage = 4;
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -42,12 +42,7 @@ export function AdminUserList() {
 
 
     return (<>
-        <div className="d-flex justify-content-between">
-            <h2>User List</h2>
-            {/*<button className="btn btn-light d-flex" style={{paddingTop: '10px'}} onClick={() => navigate('/owner/add-house-form')}>*/}
-            {/*    <i className="material-icons">&#xf8eb;</i>*/}
-            {/*    <span>Create new</span></button>*/}
-        </div>
+        <h2>User List</h2>
         <section className="main">
             <table className="table table-bordered table-striped table-hover">
                 <thead>

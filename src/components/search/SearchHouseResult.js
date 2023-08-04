@@ -36,7 +36,7 @@ export function SearchHouseResult() {
         }
     },[searchParams])
     return (
-        <div className="bg-light pt-3 ">
+        <div className="bg-light pt-3 border-top">
             <div className="container my-1">
                 {listSearch.length <= 0 ? (
                     <h2 className='text-center mb-3'>Not found any results !</h2>

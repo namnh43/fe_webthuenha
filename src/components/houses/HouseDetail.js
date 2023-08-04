@@ -179,11 +179,17 @@ export function HouseDetail() {
                                              margin={8}>
                                     {list.map((item) => {
                                         return (
-                                            <div className="col-sm-12 col-md-12 col-lg-12">
+                                            <div key={item.id} className="col-sm-12 col-md-12 col-lg-12">
                                                 <a target="_blank" href={item.fileUrl}
-                                                   className="image-popup gal-item"><img
+                                                   className="image-popup gal-item" rel="noreferrer"><img
                                                     src={item.fileUrl} alt="Image" className="img-fluid vh-100"
-                                                    style={{maxHeight: '460px'}}/></a>
+                                                    style={{maxHeight: '460px'}}
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = "https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200";
+                                                    }}
+                                                />
+                                                </a>
                                             </div>
                                         )
                                     })}
@@ -192,9 +198,14 @@ export function HouseDetail() {
                                 <div className="row">
                                     {list.map((item) => {
                                         return (
-                                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
-                                                <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
-                                                    src={item.fileUrl} alt="Image" className="img-thumbnail h-100"/></a>
+                                            <div key={item.id} className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
+                                                {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+                                                <a target="_blank" href={item.fileUrl} className="image-popup gal-item" rel="noreferrer"><img
+                                                    src={item.fileUrl} alt="Image" className="img-thumbnail h-100"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = "https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200";
+                                                    }}/></a>
                                             </div>
                                         )
                                     })}

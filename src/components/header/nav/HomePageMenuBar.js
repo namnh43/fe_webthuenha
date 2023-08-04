@@ -18,20 +18,21 @@ function HomePageMenuBar() {
     }, []);
 
     return (
-        <div
+        <div className={isSticky ? "border-bottom" : ""}
             style={{
                 position: "sticky",
                 top: "-16px",
                 zIndex: "1000",
+                boxShadow: isSticky ? "0 1px 2px rgba(0, 0, 0, 0.12)" : "none"
             }}
         >
             <Grid
                 container
-                spacing={2}
+                spacing={3}
                 sx={{
                     backgroundColor: isSticky ? "white" : "rgb(1,1,1,.3)",
                     color: isSticky ? "black" : "white",
-                    height: '80px', display:"flex", justifyContent:"space-around"
+                    height: '88px', display:"flex", justifyContent:"space-around",
                 }}
                 alignItems="center"
             >
