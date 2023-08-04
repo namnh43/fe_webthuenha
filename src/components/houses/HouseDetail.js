@@ -19,7 +19,6 @@ export function HouseDetail() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [day, setDay] = useState(0);
-
     const navigate = useNavigate();
     const [listBooking, setListBooking] = useState([]);
 
@@ -109,15 +108,35 @@ export function HouseDetail() {
             setListBooking(res.data)
         })
     }
+    const [listHouse, setListHouse] = useState([]);
+    let checkHouse;
+    const handleHostListHouse = (res) => {
+        axios.get(`http://localhost:8080/house/host/` + res.user.id,config).then(res => {
+            console.log(9,res.data[0])
+            checkHouse = res.data.filter(item => item?.id != id)
+            if (checkHouse!=[]){
+            for (let i = 0;i<res.data.length;i++){
+                listHouse.unshift(checkHouse[i])
+            }}
+
+        })
+        if (checkHouse!=[]){
+            axios.get(`http://localhost:8080/house`).then(res => {
+                let a = ((res.data).filter(item => item?.id != id));
+            })
+        }
+
+    }
 
     useEffect(() => {
-        console.log('get_house_id', id);
+
         axios.get(`http://localhost:8080/house/` + id).then(res => {
             console.log('get_data', res)
             setHouse(res.data)
             setList(res.data.images)
+            handleFetchBookingList();
+            handleHostListHouse(res.data);
         })
-        handleFetchBookingList();
     }, [])
 
     function calculateDiff(startDate, endDate) {
@@ -258,33 +277,33 @@ export function HouseDetail() {
                             </div>
                         </div>
                     </div>
-
+                    {listHouse &&
                     <div className="row mb-5">
                         <div className="col-md-6 col-lg-4 mb-4">
                             <div className="property-entry h-100">
-                                <a href="property-details.html" className="property-thumbnail">
+                                <a href={"/houses/"+listHouse[0]?.id+"/detail"} className="property-thumbnail">
                                     <div className="offer-type-wrap">
                                         <span className="offer-type bg-danger">Sale</span>
                                         <span className="offer-type bg-success">Rent</span>
                                     </div>
-                                    <img src="images/img_1.jpg" alt="Image" className="img-fluid"/>
+                                    <img style={{width:300,height:250}} src={listHouse[0]?.images[0]?.fileUrl} alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
                                     <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">625 S. Berendo St</a>
+                                    <h2 className="property-title"><a href="property-details.html">{listHouse[0]?.name}</a>
                                     </h2>
                                     <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> 625 S. Berendo St Unit 607 Los Angeles, CA 90005</span>
+                                        className="property-icon icon-room"></span> {listHouse[0]?.address}</span>
                                     <strong
-                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
+                                        className="property-price text-primary mb-3 d-block text-success">${listHouse[0]?.price}</strong>
                                     <ul className="property-specs-wrap mb-3 mb-lg-0">
                                         <li>
                                             <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">2 <sup>+</sup></span>
+                                            <span className="property-specs-number">{listHouse[0]?.totalBedrooms} <sup>+</sup></span>
                                         </li>
                                         <li>
                                             <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">2</span>
+                                            <span className="property-specs-number">{listHouse[0]?.totalBathrooms}</span>
                                         </li>
                                         <li>
                                             <span className="property-specs">SQ FT</span>
@@ -297,34 +316,33 @@ export function HouseDetail() {
 
                         <div className="col-md-6 col-lg-4 mb-4">
                             <div className="property-entry h-100">
-                                <a href="property-details.html" className="property-thumbnail">
+                                <a href={"/houses/"+listHouse[1]?.id+"/detail"} className="property-thumbnail">
                                     <div className="offer-type-wrap">
                                         <span className="offer-type bg-danger">Sale</span>
                                         <span className="offer-type bg-success">Rent</span>
                                     </div>
-                                    <img src="images/img_2.jpg" alt="Image" className="img-fluid"/>
+                                    <img style={{width:300,height:250}} src={listHouse[1]?.images[0]?.fileUrl} alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite active"><span
-                                        className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">871 Crenshaw Blvd</a>
+                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
+                                    <h2 className="property-title"><a href="property-details.html">{listHouse[1]?.name}</a>
                                     </h2>
                                     <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> 1 New York Ave, Warners Bay, NSW 2282</span>
+                                        className="property-icon icon-room"></span> {listHouse[1]?.address}</span>
                                     <strong
-                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
+                                        className="property-price text-primary mb-3 d-block text-success">${listHouse[1]?.price}</strong>
                                     <ul className="property-specs-wrap mb-3 mb-lg-0">
                                         <li>
                                             <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">2 <sup>+</sup></span>
+                                            <span className="property-specs-number">{listHouse[1]?.totalBedrooms} <sup>+</sup></span>
                                         </li>
                                         <li>
                                             <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">2</span>
+                                            <span className="property-specs-number">{listHouse[1]?.totalBathrooms}</span>
                                         </li>
                                         <li>
                                             <span className="property-specs">SQ FT</span>
-                                            <span className="property-specs-number">1,620</span>
+                                            <span className="property-specs-number">7,000</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -333,38 +351,39 @@ export function HouseDetail() {
 
                         <div className="col-md-6 col-lg-4 mb-4">
                             <div className="property-entry h-100">
-                                <a href="property-details.html" className="property-thumbnail">
+                                <a href={"/houses/"+listHouse[2]?.id+"/detail"} className="property-thumbnail">
                                     <div className="offer-type-wrap">
-                                        <span className="offer-type bg-info">Lease</span>
+                                        <span className="offer-type bg-danger">Sale</span>
+                                        <span className="offer-type bg-success">Rent</span>
                                     </div>
-                                    <img src="images/img_3.jpg" alt="Image" className="img-fluid"/>
+                                    <img style={{width:300,height:250}} src={listHouse[2]?.images[0]?.fileUrl} alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
                                     <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">853 S Lucerne
-                                        Blvd</a></h2>
+                                    <h2 className="property-title"><a href="property-details.html">{listHouse[2]?.name}</a>
+                                    </h2>
                                     <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> 853 S Lucerne Blvd Unit 101 Los Angeles, CA 90005</span>
+                                        className="property-icon icon-room"></span> {listHouse[2]?.address}</span>
                                     <strong
-                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
+                                        className="property-price text-primary mb-3 d-block text-success">${listHouse[2]?.price}</strong>
                                     <ul className="property-specs-wrap mb-3 mb-lg-0">
                                         <li>
                                             <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">2 <sup>+</sup></span>
+                                            <span className="property-specs-number">{listHouse[2]?.totalBedrooms} <sup>+</sup></span>
                                         </li>
                                         <li>
                                             <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">2</span>
+                                            <span className="property-specs-number">{listHouse[2]?.totalBathrooms}</span>
                                         </li>
                                         <li>
                                             <span className="property-specs">SQ FT</span>
-                                            <span className="property-specs-number">5,500</span>
+                                            <span className="property-specs-number">7,000</span>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </>

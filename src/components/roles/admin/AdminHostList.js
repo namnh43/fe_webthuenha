@@ -41,7 +41,7 @@ export function AdminHostList() {
 
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const housesPerPage = 2;
+    const housesPerPage = 5;
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -128,7 +128,7 @@ export function AdminHostList() {
         const searchFilter = searchHost.filter((host) => {
             if (
                 (!userName || host.user?.username?.toLowerCase().includes(userName)) &&
-                (!home || host.houseCount == home ) &&
+                (!home || host.houseCount >= home ) &&
                 (!numberPhone || host.user.phoneNumber === numberPhone )
             ) {
                 return true;
@@ -141,12 +141,8 @@ export function AdminHostList() {
     return (
         <>
             <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <label htmlFor="name-input"></label>
-                <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />
-                <label htmlFor="home-input"></label>
-                <input id="home-input" name="name" type="number" placeholder="Enter total home" required />
-
-                <label htmlFor="numberPhone-input"></label>
+                <input id="name-input" name="name" type="text" placeholder="Enter  UserName" required />&nbsp;
+                <input id="home-input" name="name" type="number" placeholder="Enter total home" required />&nbsp;
                 <input id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter numberPhone" required />
 
 
@@ -158,7 +154,7 @@ export function AdminHostList() {
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>UserName</th>
+                            <th>Username</th>
                             <th>Date Created</th>
                             <th>Phone number</th>
                             <th>Number home</th>

@@ -26,7 +26,7 @@ export function HouseList() {
     }, [])
     const topHouse = list
         .sort((a, b) => b.numberOfRented - a.numberOfRented)
-        .slice(0, 4);
+        .slice(0, list.length >= 4 ? 4 : list.length);
 
     return (
         <>
