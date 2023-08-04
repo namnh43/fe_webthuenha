@@ -5,7 +5,7 @@ import LocalHotelRoundedIcon from "@mui/icons-material/LocalHotelRounded";
 import BathtubIcon from "@mui/icons-material/Bathtub";
 import React from "react";
 import {useNavigate} from "react-router";
-
+import "./listHouse.css"
 export function ListComponent({listHouse}) {
     const navigate = useNavigate();
     return (
@@ -13,7 +13,7 @@ export function ListComponent({listHouse}) {
             {listHouse.map((item) => {
                 return (
                     <>
-                        <div className="col-md-6 col-lg-3 mb-3 mt-2"
+                        <div className="col-md-6 col-lg-3 mb-3 mt-2 card-container"
                              onClick={() => {
                                  const url = 'houses/' + item.id;
                                  navigate(url)

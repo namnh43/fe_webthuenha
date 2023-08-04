@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import Swal from "sweetalert2";
 
 function createQueryString(params) {
     let queryString = '';
@@ -38,6 +39,14 @@ function SearchBar() {
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const handleInputChange = (event) => {
+        if (minPrice > maxPrice) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Min price must be less than max price!',
+            })
+            return;
+        }
         // dispatch(searchAction({address:address,minPrice:minPrice?minPrice:0,maxPrice:maxPrice?maxPrice:10000,startDate:selectedRange[0],endDate:selectedRange[1]}))
         const queryString = createQueryString({address:address,minprice:minPrice,maxprice:maxPrice,startdate:selectedRange[0],enddate:selectedRange[1]});
         console.log('query',queryString)
@@ -67,66 +76,71 @@ function SearchBar() {
         }
     }
 
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        function handleScroll() {
+            setIsSticky(window.scrollY >= window.innerHeight);
+        }
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     return (
-        <section>
-            <Grid container spacing={2}>
-                <Grid item xs={2}/>
-                <Grid item xs={8}>
-                    <div className="search-sec">
-                        <table >
-                            <tbody >
-                            <tr>
-                                <td colSpan={2}>
-                                    <input
-                                        type="text"
-                                        className="form-control search-slt"
-                                        id="location"
-                                        value={address}
-                                        onChange={(e) => setAddress(e.target.value)}
-                                        placeholder="Location"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        className="form-control search-slt"
-                                        id="minPrice"
-                                        min="0"
-                                        value={minPrice}
-                                        onChange={(e) => setMinPrice(e.target.value)}
-                                        placeholder="Min Price($)"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        className="form-control search-slt"
-                                        id="maxPrice"
-                                        min="0"
-                                        value={maxPrice}
-                                        onChange={(e) => setMaxPrice(e.target.value)}
-                                        placeholder="Max Price($)"
-                                    />
-                                </td>
-                                <td>
-                                        <DateRangePickerComponent onChange={handleDateRangeChange} inputRange={selectedRange}/>
-                                </td>
-                                <td>
-                                    <Button variant="outlined" startIcon={<SearchIcon />}
-                                        onClick={handleInputChange}
-                                    >
-                                        Search
-                                    </Button>
-                                </td>
+        <div className="search-sec col-7 m-auto my-5" style={{position: 'sticky', top: "0px", zIndex: "1000", backgroundColor: isSticky ? "white" : '#D7D9DDFF',    padding: isSticky ? "7px" : "20px"}}>
+            <div className="row pl-2" >
+                <div className="col-3 p-1">
+                    <input
+                        type="text"
+                        className="form-control search-slt"
+                        id="location"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="Location"
+                        style={{height: '42px'}}
+                    />
+                </div>
+                <div className="col-2 p-1">
+                    <input
+                        type="number"
+                        className="form-control search-slt"
+                        id="minPrice"
+                        min="0"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                        placeholder="Min Price($)"
+                        style={{height: '42px'}}
 
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    />
+                </div>
+                <div className="col-2 p-1">
+                    <input
+                        type="number"
+                        className="form-control search-slt"
+                        id="maxPrice"
+                        min="0"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                        placeholder="Max Price($)"
+                        style={{height: '42px'}}
 
-                </Grid>
-            </Grid>
-        </section>
+                    />
+                </div>
+                <div className="col-3 p-1">
+                    <DateRangePickerComponent onChange={handleDateRangeChange} inputRange={selectedRange} />
+                </div>
+                <div className="col-2 p-1">
+                    <Button variant="outlined" startIcon={<SearchIcon/>} onClick={handleInputChange}
+                            style={{height: '40px'}}>
+                        Search
+                    </Button>
+                </div>
+            </div>
+        </div>
+
     );
 }
 

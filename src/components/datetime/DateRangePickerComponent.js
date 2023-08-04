@@ -47,6 +47,7 @@ const DateRangePickerComponent = ({ onChange,inputRange }) => {
             <DateRangePicker
                 placeholder="Select Date Range"
                 value={selectedRange}
+                size='lg'
                 editable={false}
                 format='yyyy-MM-dd'
                 onChange={handleSelect}

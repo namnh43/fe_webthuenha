@@ -6,9 +6,45 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import {Link} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import {ListItemButton} from "@mui/material";
+import ListItemText from "@mui/material/ListItemText";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Avatar from "@mui/material/Avatar";
+import Divider from "@mui/material/Divider";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Logout from "@mui/icons-material/Logout";
+import {useNavigate} from "react-router";
 
 export function Navbar() {
+    const menuBarStyle = {
+        fontFamily: 'Roboto, sans-serif',
+        color: 'blue',
+        fontWeight: 'bold'
+    };
+    const logoStyle = {
+        color: 'blue',
+        '&:hover': {
+            backgroundColor: 'transparent',
+            color: '#007bff'
+        }
+    };
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const navigate = useNavigate();
+    const handleClick = (event) => {
+        console.log(event)
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     const [openDialog, setOpenDialog] = useState(false);
     const [openOwnerRequestSentDialog, setOpenOwnerRequestSentDialog] = useState(false);
     const handleClickOpenDialog = () => {
@@ -38,164 +74,194 @@ export function Navbar() {
         axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
             .then(() => localStorage.clear())
             .then(() => setLogin(false))
+            .then(() => navigate('/login'))
     }
 
-    const handleClick = () => {
+    const handleLoginClick = () => {
         setLogin(true)
         console.log('login state', login)
     }
+
+    function openSearchBox() {
+        console.log('open search dialog')
+    }
     return (
         <>
-            <div>
-                <Dialog
-                    open={openDialog}
-                    onClose={handleCloseDialog}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
+            <Grid item xs={2}>
+                <Box
+                    sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}
                 >
-                    <DialogTitle id="alert-dialog-title">
-                        {"Confirm"}
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            You will send a request to the administrator to become an owner.
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseDialog}>Cancel</Button>
-                        <Button onClick={() => {
-                            const config = {
-                                headers: {
-                                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    <h1 className="mb-2 mr-5"><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
+                        className="text-danger">.</span></strong></Link></h1>
+                </Box>
+            </Grid>
+            <Grid item xs={9}>
+                <Box sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}>
+                    <Dialog
+                        open={openDialog}
+                        onClose={handleCloseDialog}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Confirm"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                You will send a request to the administrator to become an owner.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDialog}>Cancel</Button>
+                            <Button onClick={() => {
+                                const config = {
+                                    headers: {
+                                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                                    }
                                 }
+
+                                axios.post('http://localhost:8080/user/apply-host', {}, config)
+                                    .then((res) => {
+                                        handleCloseDialog()
+                                        console.log('haha')
+                                    })
+                                    .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
+                                        .then((res) => {
+                                            localStorage.setItem('currentUser', JSON.stringify(res.data))
+                                            localStorage.setItem("currentUserId", res.data.id)
+                                            localStorage.setItem("currentUserRole", res.data.role)
+                                            localStorage.setItem("currentUserApplyHost", res.data.applyHost)
+                                            console.log(localStorage.getItem("currentUserApplyHost"))
+                                        }))
+                                    .catch(() => alert('Shit'))
+                            }} autoFocus>
+                                Confirm
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={openOwnerRequestSentDialog}
+                        onClose={handleCloseDialog}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Confirm"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Your request has already sent. Please wait...
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDialog}>OK</Button>
+
+                        </DialogActions>
+                    </Dialog>
+                    <React.Fragment>
+                        <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+                            {
+                                !login ? <ListItemButton sx={{minWidth: '100px', maxWidth: '100px'}}
+                                                         onClick={() => {
+                                                             handleLoginClick();
+                                                             navigate("/login");
+                                                         }}> <ListItemText>Login </ListItemText></ListItemButton> :
+                                    <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+                                        <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
+                                        <Tooltip title="Account settings">
+                                            <IconButton
+                                                onClick={handleClick}
+                                                size="small"
+                                                sx={{ml: 2}}
+                                                aria-controls={ open ? 'account-menu' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={open ? 'true' : undefined}
+                                            >
+                                                {JSON.parse(localStorage.getItem('currentUser')).profileImage ?
+                                                    <img
+                                                        src={JSON.parse(localStorage.getItem('currentUser')).profileImage}
+                                                        alt="avatar" width="35"
+                                                        height="35" className="rounded-circle"
+                                                        onClick={handleLoginClick}/>
+                                                    : <img src="/images/profile/user-1.jpg" alt="" width="35"
+                                                           height="35" className="rounded-circle"
+                                                           onClick={handleLoginClick}/>}
+                                            </IconButton>
+                                        </Tooltip>
+                                    </Box>
+
+                            }
+                        </Box>
+                        <Menu
+                            anchorEl={anchorEl}
+                            id="account-menu"
+                            open={open}
+                            onClose={handleClose}
+                            onClick={handleClose}
+                            PaperProps={{
+                                elevation: 0,
+                                sx: {
+                                    overflow: 'visible',
+                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                    mt: 1.5,
+                                    '& .MuiAvatar-root': {
+                                        width: 32,
+                                        height: 32,
+                                        ml: -0.5,
+                                        mr: 1,
+                                    },
+                                    '&:before': {
+                                        content: '""',
+                                        display: 'block',
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 14,
+                                        width: 10,
+                                        height: 10,
+                                        bgcolor: 'background.paper',
+                                        transform: 'translateY(-50%) rotate(45deg)',
+                                        zIndex: 0,
+                                    },
+                                },
+                            }}
+                            transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+                        >
+                            <MenuItem onClick={() => {
+                                navigate("/user")
+                            }}>
+                                <Avatar/> My Account
+                            </MenuItem>
+                            {localStorage.getItem('currentUserRole') === "ADMIN" &&
+                                <MenuItem onClick={() => {
+                                    navigate("/admin/users")
+                                }}>
+                                    <Avatar/> Admin Dashboard
+                                </MenuItem>
+                            }
+                            {
+                                localStorage.getItem('currentUserRole') === "USER" ?
+                                    <MenuItem onClick={handleClickOpenDialog}>
+                                        <Avatar/> Become Owner
+                                    </MenuItem> :
+                                    <MenuItem onClick={() => {
+                                        navigate("/owner")
+                                    }}>
+                                        <Avatar/> My Houses
+                                    </MenuItem>
                             }
 
-                            axios.post('http://localhost:8080/user/apply-host', {}, config)
-                                .then((res) => {
-                                    handleCloseDialog()
-                                    console.log('haha')
-                                })
-                                .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
-                                    .then((res) => {
-                                        localStorage.setItem('currentUser', JSON.stringify(res.data))
-                                        localStorage.setItem("currentUserId", res.data.id)
-                                        localStorage.setItem("currentUserRole", res.data.role)
-                                        localStorage.setItem("currentUserApplyHost", res.data.applyHost)
-                                        console.log(localStorage.getItem("currentUserApplyHost"))
-                                    }))
-                                .catch(() => alert('Shit'))
-                        }} autoFocus>
-                            Confirm
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-            <div>
-                <Dialog
-                    open={openOwnerRequestSentDialog}
-                    onClose={handleCloseDialog}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">
-                        {"Confirm"}
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Your request has already sent. Please wait...
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseDialog}>OK</Button>
-
-                    </DialogActions>
-                </Dialog>
-            </div>
-            <div className="site-wrap">
-                <div className="site-navbar">
-                    <div className="container-fluid py-1">
-                        <div className="row align-items-center">
-                            <div className="col-8 col-md-8 col-lg-4">
-                                <h1 className="mb-0"><Link to="/" className="text-white h2 mb-0"><strong>Homeland<span
-                                    className="text-danger">.</span></strong></Link></h1>
-                            </div>
-                            <div className="col-4 col-md-4 col-lg-8">
-                                <nav className="site-navigation text-right text-md-right text-end" role="navigation">
-                                    <div className="d-inline-block d-lg-none ml-md-0 mr-auto py-3">
-                                        <a href="src/components/header/nav#" className="site-menu-toggle js-menu-toggle text-white">
-                                            <span className="icon-menu h3"/>
-                                        </a>
-                                    </div>
-                                    <ul className="site-menu js-clone-nav d-none d-lg-block">
-                                        <li className="active">
-                                            <Link to="/">Home</Link>
-                                        </li>
-                                        <li><a href="src/components/header/nav#">About</a></li>
-                                        {
-                                            !login ? <li><Link to="/login" onClick={handleClick}>Login</Link></li> :
-                                                <li className="nav-item dropdown">
-                                                    <a className="nav-link nav-icon-hover" href="javascript:void(0)"
-                                                       id="drop2"
-                                                       data-bs-toggle="dropdown"
-                                                       aria-expanded="false">
-                                                        {JSON.parse(localStorage.getItem('currentUser')).profileImage ?
-                                                            <img
-                                                                src={JSON.parse(localStorage.getItem('currentUser')).profileImage}
-                                                                alt="avatar" width="35"
-                                                                height="35" className="rounded-circle"
-                                                                onClick={handleClick}/>
-                                                            : <img src="./images/profile/user-1.jpg" alt="" width="35"
-                                                                   height="35" className="rounded-circle"
-                                                                   onClick={handleClick}/>}
-                                                    </a>
-                                                    <div
-                                                        className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
-                                                        aria-labelledby="drop2">
-                                                        <div className="message-body">
-                                                                <Link to="/user" className="d-flex align-items-center gap-2 dropdown-item">
-                                                                    <i className="ti ti-user fs-6"></i>
-                                                                    <p className="mb-0 ">My Profile</p>
-                                                                </Link>
-
-                                                            {localStorage.getItem('currentUserRole') === "ADMIN" &&
-                                                                <Link to={"/admin"}
-                                                                      className="d-flex align-items-center gap-2 dropdown-item">
-                                                                    <i className="ti ti-user-circle fs-6"></i>
-                                                                    <p className="mb-0 ">Admin Dashboard</p>
-                                                                </Link>}
-
-                                                            <a href="javascript:void(0)"
-                                                               className="d-flex align-items-center gap-2 dropdown-item">
-                                                                <i className="ti ti-home fs-6"></i>
-                                                                {
-                                                                    localStorage.getItem('currentUserRole') === "USER" ?
-                                                                        <p className="mb-0 "
-                                                                           onClick={handleClickOpenDialog}>Become
-                                                                            Owner</p> :
-                                                                        <Link to={"/owner"} className="mb-0 ">My Houses</Link>
-                                                                }
-                                                            </a>
-                                                            <a href="javascript:void(0)"
-                                                               className="d-flex align-items-center gap-2 dropdown-item">
-                                                                <i className="ti ti-list-check fs-6"></i>
-                                                                <p className="mb-0 ">List Agency</p>
-                                                            </a>
-                                                            <button
-                                                                className="btn btn-outline-primary mx-3 mt-2 d-block"
-                                                                onClick={clearAllInfo}>Logout
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                        }
-                                        <li></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            <Divider/>
+                            <MenuItem onClick={clearAllInfo}>
+                                <ListItemIcon>
+                                    <Logout fontSize="small"/>
+                                </ListItemIcon>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </React.Fragment>
+                </Box>
+            </Grid>
         </>
     )
 }
