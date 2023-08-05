@@ -25,6 +25,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
 import HostProfileDialog from "../../dialog/HostProfileDialog";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
+import '../../scroll/scroll.css'
 
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
@@ -41,7 +42,7 @@ export function AdminHostList() {
 
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const housesPerPage = 5;
+    const housesPerPage = 10;
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }

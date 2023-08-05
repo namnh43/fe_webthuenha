@@ -6,6 +6,7 @@ import StarIcon from '@mui/icons-material/Star';
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocalHotelRoundedIcon from '@mui/icons-material/LocalHotelRounded';
 import BathtubIcon from '@mui/icons-material/Bathtub';
+
 export function HouseList() {
     const [list, setList] = useState([]);
     const navigate = useNavigate();

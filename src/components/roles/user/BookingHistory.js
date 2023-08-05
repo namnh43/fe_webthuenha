@@ -5,13 +5,16 @@ import "./BookingList.css";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
 import ReviewForm from "../../ReviewForm";
+import '../../scroll/scroll.css';
+import {formatDate} from "../../../utils/api";
+import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
+import 'datatables.net-select-bs4/css/select.bootstrap4.min.css';
+
 
 function BookingHistory() {
     const [bookingList, setBookingList] = useState([]);
-    const [pageNumber, setPageNumber] = useState(0);
-    const housesPerPage = 5;
-    // const pagesVisited = pageNumber * housesPerPage;
-    const pageCount = Math.ceil(bookingList.length / housesPerPage);
     const [selectedRange, setSelectedRange] = useState(['','']);
     const [searchBooking, setSearchBooking] = useState([]);
     const [reviewBookingId, setReviewBookingId] = useState(null);
@@ -29,7 +32,7 @@ function BookingHistory() {
     };
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const bookingPerpage = 5;
+    const bookingPerpage = 10;
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -60,16 +63,10 @@ function BookingHistory() {
         }
     };
 
-    function formatDate(dateString) {
-        const dateObject = new Date(dateString);
-        const day = dateObject.getDate().toString().padStart(2, '0');
-        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-        const year = dateObject.getFullYear();
-        return `${day}-${month}-${year}`;
-    }
 
     useEffect(() => {
         refreshBookingList();
+
     }, []);
     useEffect(() => {
         search()
@@ -81,7 +78,16 @@ function BookingHistory() {
                 console.log(res.data)
                 setSearchBooking(res.data);
                 setBookingList(res.data);
+            }).then((res)=>{
+            $(document).ready(function() {
+                if (!$.fn.DataTable.isDataTable('#dtBasicExample')) {
+                    $('#dtBasicExample').DataTable({
+                        paging: true,
+                        lengthMenu: [3, 5, 10,15],
+                    });
+                    $('.dataTables_length').addClass('bs-select'); }
             });
+        });
     }
 
     const isCancellable = (startDate) => {
@@ -116,6 +122,8 @@ function BookingHistory() {
         setBookingList(searchFilter);
     }
 
+
+
     return (
         <>
             {reviewBookingId !== null ? (
@@ -146,17 +154,18 @@ function BookingHistory() {
                     </div>
                     <h2>Booking List</h2>
                     <section className="main">
-                        <table className="table table-striped table-hover">
+                        <table id="dtBasicExample" className="table table-striped table-hover dataTables_length">
                             <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>House Name</th>
-                                <th>Total</th>
-                                <th>Address</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th className="text-left" style={{verticalAlign:'middle',width:"70px"}}>#</th>
+                                <th className="text-left"></th>
+                                <th className="text-left">Start Date</th>
+                                <th className="text-left">End Date</th>
+                                <th className="text-left">House Name</th>
+                                <th className="text-left">Total</th>
+                                <th className="text-left">Address</th>
+                                <th className="text-left">Status</th>
+                                <th className="text-left">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -165,25 +174,26 @@ function BookingHistory() {
                                 .map((item, key) => {
                                     return (
                                         <tr key={key}>
-                                            <td>{key + 1+ pagesVisited}</td>
-                                            <td>{formatDate(item.startDate)}</td>
-                                            <td>{formatDate(item.endDate)}</td>
-                                            <td>{item.house.name}</td>
-                                            <td>{item.total}</td>
-                                            <td>{item.house.address}</td>
-                                            <td>{item.bookingStatus}</td>
+                                            <td className="text-left" style={{verticalAlign:'middle',width:"70px"}}>{key + 1+ pagesVisited}</td>
+                                            <td className="text-left"><img src={item.house.images[0].fileUrl} style={{width:"80px",height:"80px", borderRadius:"50%"}}/></td>
+                                            <td className="text-left" style={{verticalAlign:'middle'}}>{formatDate(item.startDate)}</td>
+                                            <td className="text-left" style={{verticalAlign:'middle'}}>{formatDate(item.endDate)}</td>
+                                            <td className="text-left" style={{verticalAlign:'middle'}}>{item.house.name}</td>
+                                            <td className="text-left" style={{verticalAlign:'middle'}}>{item.total}</td>
+                                            <td className="text-left" style={{verticalAlign:'middle'}}>{item.house.address}</td>
+                                            <td className="text-left" style={{verticalAlign:'middle'}}>{item.bookingStatus}</td>
                                             {(item.bookingStatus === "CHECKED_OUT" && item.review === null) ? (
-                                                <td>
+                                                <td  style={{verticalAlign:'middle'}}>
                                                     <button className="btn btn-success" onClick={() => setReviewBookingId(item.id)}>
                                                         Review
                                                     </button>
                                                 </td>
                                             ) : isCancellable(item.startDate) && item.bookingStatus === "BOOKING" ? (
-                                                <td>
+                                                <td style={{verticalAlign:'middle'}}>
                                                     <button type="button" className="btn btn-danger" onClick={() => handleCancel(item.id)}>Cancel</button>
                                                 </td>
                                             ) : (
-                                                <td>
+                                                <td style={{verticalAlign:'middle'}}>
                                                     <button type="button" className="btn btn-primary">Detail</button>
                                                 </td>
                                             )}
@@ -192,12 +202,12 @@ function BookingHistory() {
                                 })}
                             </tbody>
                         </table>
-                        <PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>
+                        {/*<PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>*/}
                     </section>
                 </>
             )}
         </>
     );
 }
-
 export default BookingHistory;
+

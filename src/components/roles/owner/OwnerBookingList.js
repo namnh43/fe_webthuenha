@@ -5,6 +5,9 @@ import "./OwnerHouseList.css"
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import Swal from "sweetalert2";
 import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
+import {formatDate} from "../../../utils/api";
+
+
 
 function OwnerBookingList() {
 
@@ -175,8 +178,8 @@ function OwnerBookingList() {
                         return (<tr>
                             <td>{key + 1 + pagesVisited}</td>
                             <td>{item.house.name}</td>
-                            <td>{item.createAt}</td>
-                            <td>{item.startDate}/{item.endDate}</td>
+                            <td>{formatDate(item.createAt)}</td>
+                            <td>{formatDate(item.startDate)} to {formatDate(item.endDate)}</td>
                             <td>{item.price}/{item.total}</td>
                             <td>{item.bookingStatus}</td>
                             {item.bookingStatus === "BOOKING" && (

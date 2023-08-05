@@ -3,6 +3,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {useNavigate} from "react-router";
+import '../../scroll/scroll.css';
+
 
 export function AdminUserList() {
 
@@ -12,7 +14,7 @@ export function AdminUserList() {
 
     //pagination
     const [pagesVisited, setPagesVisited] = useState(0);
-    const userPerPage = 5;
+    const userPerPage = 10;
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -53,15 +55,15 @@ export function AdminUserList() {
             <table className="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th className="text-left">#</th>
-                    <th className="text-left"></th>
+                    <th className="text-left" style={{width:"50px"}} >#</th>
+                    <th className="text-center">Avata</th>
                     <th className="text-left">Username</th>
-                    <th className="text-left">E-mail</th>
+                    <th className="text-left" style={{width:"220px"}}>E-mail</th>
                     <th className="text-left">Phone number</th>
-                    <th className="text-left">Address</th>
+                    <th className="text-left" style={{width:"80px"}}>Role</th>
                     <th className="text-left">Created at</th>
-                    <th className="text-left">Action</th>
-                    <th className="text-left"></th>
+                    <th className="text-left">Status</th>
+                    <th className="text-center">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,21 +71,21 @@ export function AdminUserList() {
                     .slice(pagesVisited, pagesVisited + userPerPage)
                     .map((item, index) => {
                         return (<tr key={item.id}>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td style={{width:"50px"}} className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {index + 1 + pagesVisited}</span></td>
                             {
                                 item.profileImage &&
                                 <td><img src={item.profileImage}
                                          style={{height: '5rem', width: '6rem', borderRadius: '50%'}}/></td>
                             }
-                            <td className="text-left pt-10"><span className="d-inline-block"
+                            <td className="text-left"><span className="d-inline-block"
                                                                   style={{paddingTop: '1.5rem'}}>
                                 {item.username}</span></td>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td style={{width:"220px"}} className="text-left "><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {item.email}</span></td>
                             <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {item.phoneNumber}</span></td>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td style={{width:"80px"}} className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {item.role}</span></td>
                             <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
                                 {item.createAt}</span></td>
@@ -96,8 +98,8 @@ export function AdminUserList() {
                                                                    style={{paddingTop: '1.5rem'}}>
                                 <span style={signalLightStyle}></span>Blocked</span></td>)}
 
-                            <td className="col-2">
-                                <span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td className="">
+                                <span className="d-inline-block">
                                 <button style={{backgroundColor: 'transparent'}} className="mr-3">
                                     <i className="material-icons">&#xe88e;</i></button>
                                     {item.blocked === false ?
