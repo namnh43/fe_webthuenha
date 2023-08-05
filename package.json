@@ -38,6 +38,7 @@
     "owl-carousel": "^1.0.0",
     "owl.carousel": "^2.3.4",
     "react": "^18.2.0",
+    "react-data-table-component": "^7.5.3",
     "react-datepicker": "^4.16.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
