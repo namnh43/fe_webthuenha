@@ -984,7 +984,9 @@ a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
-  opacity: 1; }
+  opacity: 1;
+  object-fit: contain;
+}
 
 .gal-item:hover img {
   cursor: -webkit-zoom-in;

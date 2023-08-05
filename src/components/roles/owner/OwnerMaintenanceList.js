@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import Swal from "sweetalert2";
+import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 function OwnerMaintenanceList() {
     const [bookingList, setBookingList] = useState([])
@@ -10,10 +11,8 @@ function OwnerMaintenanceList() {
     const housesPerPage = 5;
     const pagesVisited = pageNumber * housesPerPage;
 
-    const pageCount = Math.ceil(bookingList.length / housesPerPage);
-
-    const changePage = ({selected}) => {
-        setPageNumber(selected);
+    const handlePageChange = (values) => {
+        setPageNumber(values);
     };
 
     let config = {
@@ -61,9 +60,9 @@ function OwnerMaintenanceList() {
 
     return (
         <>
-            <h2>Maintenance List</h2>
+            <h2 className="my-3">Maintenance List</h2>
             <section className="main">
-                <table className="table table-striped table-hover">
+                <table className="table table-bordered table-striped table-hover">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -71,19 +70,20 @@ function OwnerMaintenanceList() {
                         <th>Booking date</th>
                         <th>Duration</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {bookingList
                         .slice(pagesVisited, pagesVisited + housesPerPage)
                         .map((item, key) => {
-                            return (<tr>
-                                <td>{key + 1 + pagesVisited}</td>
-                                <td>{item.house.name}</td>
-                                <td>{item.createAt}</td>
-                                <td>{item.startDate}/{item.endDate}</td>
-                                <td>{item.bookingStatus}</td>
-                                <td>
+                            return (<tr style={{height: '80px'}}>
+                                <td className="pt-4">{key + 1 + pagesVisited}</td>
+                                <td className="pt-4">{item.house.name}</td>
+                                <td className="pt-4">{item.createAt}</td>
+                                <td className="pt-4">{item.startDate}/{item.endDate}</td>
+                                <td className="pt-4">{item.bookingStatus}</td>
+                                <td className="pt-4">
                                     <button className="btn btn-danger"
                                             onClick={() => cancelMaintenance(item.id)}>Cancel
                                     </button>
@@ -93,17 +93,7 @@ function OwnerMaintenanceList() {
 
                     </tbody>
                 </table>
-                <ReactPaginate
-                    previousLabel={"Previous"}
-                    nextLabel={"Next"}
-                    pageCount={pageCount}
-                    onPageChange={changePage}
-                    containerClassName={"paginationBttns"}
-                    previousLinkClassName={"previousBttn"}
-                    nextLinkClassName={"nextBttn"}
-                    disabledClassName={"paginationDisabled"}
-                    activeClassName={"paginationActive"}
-                />
+                <PaginationComponent data={bookingList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
 
             </section>
         </>

@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {Link} from "react-router-dom";
+import Tooltip from "@mui/material/Tooltip";
 
 function MaintenanceDialog(props) {
 
@@ -90,7 +91,7 @@ function OwnerHouseList() {
     const [houseList, setHouseList] = useState([])
 
     //pagination
-    const [pagesVisited,setPagesVisited] = useState(0);
+    const [pagesVisited, setPagesVisited] = useState(0);
     const housesPerPage = 5;
     const handlePageChange = (value) => {
         setPagesVisited(value)
@@ -120,7 +121,7 @@ function OwnerHouseList() {
             confirmButtonText: 'Yes, block it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.put(`http://localhost:8080/house/block/${itemId}`,null, config)
+                axios.put(`http://localhost:8080/house/block/${itemId}`, null, config)
                     .then(res => console.log(res))
                     .then(() => axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
                         .then(res => {
@@ -145,7 +146,7 @@ function OwnerHouseList() {
         });
     }
 
-    const unBlockHouse = (itemId) =>  Swal.fire({
+    const unBlockHouse = (itemId) => Swal.fire({
         title: 'Unblock this house?',
         icon: 'warning',
         showCancelButton: true,
@@ -154,7 +155,7 @@ function OwnerHouseList() {
         confirmButtonText: 'Yes, unblock it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            axios.put(`http://localhost:8080/house/un-block/${itemId}`,null, config)
+            axios.put(`http://localhost:8080/house/un-block/${itemId}`, null, config)
                 .then(res => console.log(res))
                 .then(() => axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
                     .then(res => {
@@ -188,18 +189,20 @@ function OwnerHouseList() {
     return (<>
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
                            maintainedHouseId={maintainedHouseId}/>
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between my-3">
             <h2>House List</h2>
-            <button className="btn btn-light d-flex" style={{paddingTop: '10px'}} onClick={() => navigate('/owner/add-house-form')}>
+            <button className="btn btn-light d-flex align-items-center"
+                    onClick={() => navigate('/owner/add-house-form')}>
                 <i className="material-icons">&#xf8eb;</i>
                 <span>Create new</span></button>
         </div>
         <section className="main">
-            <table className="table table-striped table-hover">
+            <div className="table-responsive">
+                <table className="table table-bordered table-striped table-hover border border-secondary-subtle">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th></th>
+                    <th style={{width: '60px'}}>#</th>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Price</th>
                     <th>Address</th>
@@ -212,31 +215,49 @@ function OwnerHouseList() {
                 {houseList
                     .slice(pagesVisited, pagesVisited + housesPerPage)
                     .map((item, index) => {
-                        return (<tr key={item.id}>
-                            <td>{index + 1 + pagesVisited}</td>
+                        return (<tr key={item.id} style={{height: '80px'}}>
+                            <td className="pt-4">{index + 1 + pagesVisited}</td>
                             {item.images.length > 0 ?
-                                <td><img src={item.images[0].fileUrl} style={{height:'4rem', width:'7rem' }} alt=""/></td> : <td></td>}
-                            <td>{item.name}</td>
-                            <td>{item.price}</td>
-                            <td>{item.address}</td>
-                            <td>add later</td>
+                                <td style={{width: '80px'}}><img className={'w-100'} src={item.images[0].fileUrl} alt={item.name}/>
+                                </td> : <td></td>}
+                            <td className="pt-4">{item.name}</td>
+                            <td className="pt-4">{item.price}</td>
+                            <td className="pt-4">{item.address}</td>
+                            <td className="pt-4">add later</td>
                             {item.blocked === false ?
-                                (<td><span style={{display: 'inline-block', backgroundColor: '#198754', height: '8px', width: '8px', borderRadius: '50%', marginBottom: '2px', marginRight: '5px'}}></span>Active</td>)
-                                :(<td><span style={{display: 'inline-block', backgroundColor: '#dc3545', height: '8px', width: '8px', borderRadius: '50%', marginBottom: '2px', marginRight: '5px'}}></span>Blocked</td>)}
-                            <td className="col-2">
-                                {/*<button style={{backgroundColor: 'transparent'}}><i className="material-icons">&#xe88e;</i></button>*/}
+                                (<td className="pt-4"><span style={{
+                                    display: 'inline-block',
+                                    backgroundColor: '#198754',
+                                    height: '8px',
+                                    width: '8px',
+                                    borderRadius: '50%',
+                                    marginBottom: '2px',
+                                    marginRight: '5px'
+                                }}></span>Active</td>)
+                                : (<td className="pt-4"><span style={{
+                                    display: 'inline-block',
+                                    backgroundColor: '#dc3545',
+                                    height: '8px',
+                                    width: '8px',
+                                    borderRadius: '50%',
+                                    marginBottom: '2px',
+                                    marginRight: '5px'
+                                }}></span>Blocked</td>)}
+                            <td className="col-2 pt-4">
                                 <button style={{backgroundColor: 'transparent'}}
-                                         onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>
-                                    <i className="material-icons">&#xe3c9;</i></button>
-                                <button  style={{backgroundColor: 'transparent'}} className="ml-3 mr-3" onClick={() => {
+                                        onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>
+                                    <Tooltip title={'EDIT'}><i className="material-icons">&#xe3c9;</i></Tooltip></button>
+                                <button style={{backgroundColor: 'transparent'}} className="ml-3 mr-3" onClick={() => {
                                     setMaintainedHouseId(item.id)
                                     setOpenDialog(true)
-                                }}><i className="material-icons" >&#xea3c;</i></button>
+                                }}><Tooltip title={'MAINTENANCE'}><i className="material-icons">&#xea3c;</i></Tooltip></button>
                                 {item.blocked === false ?
-                                    (<button style={{backgroundColor: 'transparent'}} onClick={() => blockHouse(item.id)}>
-                                        <i className="material-icons">&#xe897;</i></button>)
-                                :(<button style={{backgroundColor: 'transparent'}} onClick={() => unBlockHouse(item.id)}>
-                                        <i className="material-icons">&#xe898;</i></button>)}
+                                    (<button style={{backgroundColor: 'transparent'}}
+                                             onClick={() => blockHouse(item.id)}>
+                                        <Tooltip title={'BLOCK'}><i className="material-icons">&#xe897;</i></Tooltip></button>)
+                                    : (<button style={{backgroundColor: 'transparent'}}
+                                               onClick={() => unBlockHouse(item.id)}>
+                                        <Tooltip title={'UN_BLOCK'}><i className="material-icons">&#xe898;</i></Tooltip></button>)}
 
                             </td>
                         </tr>)
@@ -244,8 +265,8 @@ function OwnerHouseList() {
 
                 </tbody>
             </table>
+            </div>
             <PaginationComponent data={houseList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
-
         </section>
     </>);
 }

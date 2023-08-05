@@ -1,76 +1,128 @@
+import React from 'react';
+import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
+
 export function Footer() {
     return (
-        <>
-            <footer className="site-footer">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-4">
-                            <div className="mb-5">
-                                <h3 className="footer-heading mb-4">About Homeland</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe pariatur
-                                    reprehenderit vero
-                                    atque, consequatur id ratione, et non dignissimos culpa? Ut veritatis, quos illum
-                                    totam quis
-                                    blanditiis, minima minus odio!</p>
-                            </div>
-
-
-                        </div>
-                        <div className="col-lg-4 mb-5 mb-lg-0">
-                            <div className="row mb-5">
-                                <div className="col-md-12">
-                                    <h3 className="footer-heading mb-4">Navigations</h3>
-                                </div>
-                                <div className="col-md-6 col-lg-6">
-                                    <ul className="list-unstyled">
-                                        <li><a href="#">Home</a></li>
-                                        <li><a href="#">Buy</a></li>
-                                        <li><a href="#">Rent</a></li>
-                                        <li><a href="#">Properties</a></li>
-                                    </ul>
-                                </div>
-                                <div className="col-md-6 col-lg-6">
-                                    <ul className="list-unstyled">
-                                        <li><a href="#">About Us</a></li>
-                                        <li><a href="#">Privacy Policy</a></li>
-                                        <li><a href="#">Contact Us</a></li>
-                                        <li><a href="#">Terms</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <div className="col-lg-4 mb-5 mb-lg-0">
-                            <h3 className="footer-heading mb-4">Follow Us</h3>
-
-                            <div>
-                                <a href="#" className="pl-0 pr-3"><span className="icon-facebook"></span></a>
-                                <a href="#" className="pl-3 pr-3"><span className="icon-twitter"></span></a>
-                                <a href="#" className="pl-3 pr-3"><span className="icon-instagram"></span></a>
-                                <a href="#" className="pl-3 pr-3"><span className="icon-linkedin"></span></a>
-                            </div>
-
-
-                        </div>
-
-                    </div>
-                    <div className="row pt-5 mt-5 text-center">
-                        <div className="col-md-12">
-                            <p>
-                                Copyright &copy;
-                                <script data-cfasync="false"
-                                        src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-                                <script>document.write(new Date().getFullYear());</script>
-                                All rights reserved | This template is made with <i className="icon-heart text-danger"
-                                                                                    aria-hidden="true"></i> by <a
-                                href="https://colorlib.com" target="_blank">Colorlib</a>
-                            </p>
-                        </div>
-                    </div>
+        <MDBFooter bgColor='light' className='text-center text-lg-start text-muted border-top mt-2'>
+            <section className='d-flex justify-content-center justify-content-lg-between p-4 border-bottom'>
+                <div className='me-5 d-none d-lg-block'>
+                    <span>Get connected with us on social networks:</span>
                 </div>
-            </footer>
-        </>
-    )
+
+                <div>
+                    <a href='' className='me-4 text-reset'>
+                        <MDBIcon fab icon="facebook-f" />
+                    </a>
+                    <a href='' className='me-4 text-reset'>
+                        <MDBIcon fab icon="twitter" />
+                    </a>
+                    <a href='' className='me-4 text-reset'>
+                        <MDBIcon fab icon="google" />
+                    </a>
+                    <a href='' className='me-4 text-reset'>
+                        <MDBIcon fab icon="instagram" />
+                    </a>
+                    <a href='' className='me-4 text-reset'>
+                        <MDBIcon fab icon="linkedin" />
+                    </a>
+                    <a href='' className='me-4 text-reset'>
+                        <MDBIcon fab icon="github" />
+                    </a>
+                </div>
+            </section>
+
+            <section className=''>
+                <MDBContainer className='text-center text-md-start mt-5'>
+                    <MDBRow className='mt-3'>
+                        <MDBCol md="3" lg="4" xl="3" className='mx-auto mb-4'>
+                            <h6 className='text-uppercase fw-bold mb-4'>
+                                <MDBIcon icon="gem" className="me-3" />
+                                About Homeland
+                            </h6>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe pariatur
+                                reprehenderit vero
+                                atque, consequatur id ratione, et non dignissimos culpa? Ut veritatis, quos illum
+                                totam quis
+                                blanditiis, minima minus odio!
+                            </p>
+                        </MDBCol>
+
+                        <MDBCol md="2" lg="2" xl="2" className='mx-auto mb-4'>
+                            <h6 className='text-uppercase fw-bold mb-4'>Products</h6>
+                            <p>
+                                <a href='#!' className='text-reset'>
+                                    Angular
+                                </a>
+                            </p>
+                            <p>
+                                <a href='#!' className='text-reset'>
+                                    React
+                                </a>
+                            </p>
+                            <p>
+                                <a href='#!' className='text-reset'>
+                                    Vue
+                                </a>
+                            </p>
+                            <p>
+                                <a href='#!' className='text-reset'>
+                                    Laravel
+                                </a>
+                            </p>
+                        </MDBCol>
+
+                        <MDBCol md="3" lg="2" xl="2" className='mx-auto mb-4'>
+                            <h6 className='text-uppercase fw-bold mb-4'>Useful links</h6>
+                            <p>
+                                <a href='#!' className='text-reset'>
+                                    Pricing
+                                </a>
+                            </p>
+                            <p>
+                                <a href='#!' className='text-reset'>
+                                    Settings
+                                </a>
+                            </p>
+                            <p>
+                                <a href='#!' className='text-reset'>
+                                    Orders
+                                </a>
+                            </p>
+                            <p>
+                                <a href='#!' className='text-reset'>
+                                    Help
+                                </a>
+                            </p>
+                        </MDBCol>
+
+                        <MDBCol md="4" lg="3" xl="3" className='mx-auto mb-md-0 mb-4'>
+                            <h6 className='text-uppercase fw-bold mb-4'>Contact</h6>
+                            <p>
+                                <MDBIcon icon="home" className="me-2" />
+                                My Dinh, Tu Liem, VN
+                            </p>
+                            <p>
+                                <MDBIcon icon="envelope" className="me-3" />
+                                QuaNhiMaiYeuCoCo@gmail.com
+                            </p>
+                            <p>
+                                <MDBIcon icon="phone" className="me-3" /> + 01 234 567 88
+                            </p>
+                            <p>
+                                <MDBIcon icon="print" className="me-3" /> + 01 234 567 89
+                            </p>
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </section>
+
+            <div className='text-center p-4' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
+                © 2023 Copyright:
+                <a className='text-reset fw-bold' href='https://mdbootstrap.com/'>
+                   Homeland.com
+                </a>
+            </div>
+        </MDBFooter>
+    );
 }

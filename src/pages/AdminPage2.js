@@ -7,7 +7,7 @@ export function AdminPage2() {
     return (
         <>
             <Menubar/>
-            <Divider />
+            {/*<Divider />*/}
             <Grid container spacing={1}>
                 <Grid item xs={2.5}>
                     <AdminSidebar/>
@@ -25,6 +25,7 @@ export function AdminPage2() {
                     </div>
                 </Grid>
             </Grid>
+
         </>
 
     )

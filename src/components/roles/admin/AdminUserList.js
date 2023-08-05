@@ -28,7 +28,6 @@ export function AdminUserList() {
     useEffect(() => {
         axios.get(`http://localhost:8080/user`, config)
             .then((res) => {
-                console.log(res.data)
                 setUserList(res.data.reverse())
             });
     }, []);
@@ -45,14 +44,9 @@ export function AdminUserList() {
 
 
     return (<>
-        <div className="d-flex justify-content-between">
-            <h2>User List</h2>
-            {/*<button className="btn btn-light d-flex" style={{paddingTop: '10px'}} onClick={() => navigate('/owner/add-house-form')}>*/}
-            {/*    <i className="material-icons">&#xf8eb;</i>*/}
-            {/*    <span>Create new</span></button>*/}
-        </div>
+        <h2>User List</h2>
         <section className="main">
-            <table className="table table-striped table-hover">
+            <table className="table table-bordered table-striped table-hover">
                 <thead>
                 <tr>
                     <th className="text-left" style={{width:"50px"}} >#</th>

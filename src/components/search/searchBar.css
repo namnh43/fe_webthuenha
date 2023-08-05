@@ -1,20 +1,6 @@
 .search-sec {
-    padding: 50px;
     position: relative;
     margin-top: 35px;
     margin-bottom: 35px;
-    background: rgb(215,217,221);
-    background: -moz-radial-gradient(circle, rgba(215,217,221,1) 0%, rgba(228,233,247,0.5215336134453781) 100%);
-    background: -webkit-radial-gradient(circle, rgba(215,217,221,1) 0%, rgba(228,233,247,0.5215336134453781) 100%);
-    background: radial-gradient(circle, rgba(215,217,221,1) 0%, rgba(228,233,247,0.5215336134453781) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d7d9dd",endColorstr="#e4e9f7",GradientType=1);
     border-radius: 15px;
-
-}
-
-td {
-    padding: 10px;
-}
-tr {
-    text-align: center;
 }

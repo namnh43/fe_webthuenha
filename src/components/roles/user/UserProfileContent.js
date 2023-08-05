@@ -5,9 +5,10 @@ import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import {initializeApp} from "firebase/app";
 import {useNavigate} from "react-router";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 export function UserProfile() {
-    const navigator =  useNavigate();
+    const navigator = useNavigate();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const [showForm, setShowForm] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -22,6 +23,9 @@ export function UserProfile() {
         phoneNumber: Yup.string()
             .matches(/^\d{10}$/, "Please enter a valid 10-digit phone number")
             .required("Phone number is required"),
+    });
+
+    const validationPasswords = Yup.object().shape({
         newPassword: Yup.string()
             .required("New password is required")
             .min(6, "Password must be at least 6 characters")
@@ -99,15 +103,16 @@ export function UserProfile() {
                 <div className="row">
                     <div className="col-md-4">
                         <div className="profile-img">
-                            <img style={{width: "400px", border: "2px solid #ccc"}}
+                            <img style={{width: "400px", borderRadius: "6px"}}
                                  src={selectedImage || user.profileImage}
                             />
                             <div>
-                                <label htmlFor="fileInput" className="btn btn-outline-success mt-2">Change Avatar</label>
+                                <label htmlFor="fileInput" className="btn btn-outline-success mt-2">Change
+                                    Avatar</label>
                                 <input type="file" id="fileInput" onChange={handleImageChange}/>
-                            <button className="btn btn-outline-danger ml-2" onClick={changePassword}>
-                                Change password
-                            </button>
+                                <button className="btn btn-outline-danger ml-2" onClick={changePassword}>
+                                    Change password
+                                </button>
                             </div>
                             <Formik initialValues={
                                 {
@@ -116,23 +121,26 @@ export function UserProfile() {
                                 }
                             }
                                     onSubmit={(values) => {
-                                        if (values.newPassword.length < 6) {
-                                            alert("Password is too short");
-                                            return;
-                                        }
-                                        if (values.newPassword.length > 32) {
-                                            alert("Password is too long");
-                                            return;
-                                        }
                                         console.log(values)
                                         axios.post(`http://localhost:8080/user/change-password`, values, config).then((res) => {
-                                            alert(res.data);
+                                            let code;
+                                            if (res.data == "Password changed successfully") code = "success";
+                                            else code = "error";
+                                            Swal.fire({
+                                                icon: code,
+                                                title: "Error",
+                                                text: res.data,
+                                            })
                                         }).catch((error) => {
-                                            console.log(error)
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Oops...',
+                                                text: 'Something went wrong! Try again later',
+                                            })
                                         });
                                     }
                                     }
-                                    validationSchema={validationSchema}
+                                    validationSchema={validationPasswords}
                                     enableReinitialize={true}>
                                 {showForm && <Form>
                                     <div className="form-group">
@@ -174,7 +182,7 @@ export function UserProfile() {
                                             className="text-danger"
                                         />
                                     </div>
-                                    <button className="btn btn-primary">Update</button>
+                                    <button type="submit" className="btn btn-primary">Update</button>
                                 </Form>}
                             </Formik>
                         </div>
@@ -193,44 +201,46 @@ export function UserProfile() {
                                 }
                             }
                                     onSubmit={(values) => {
-                                        if (values.firstName === "" || values.lastName === "") {
-                                            alert("name cannot empty")
-                                            return
-                                        }
-                                        if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(values.email)) {
-                                            alert('Please enter a valid Gmail address');
-                                            return;
-                                        }
-                                        if (!/^\d{10}$/.test(values.phoneNumber)) {
-                                            alert('Please enter a valid 10-digit phone number');
-                                        }
                                         uploadFileToFirebase().then((url) => {
                                             axios.put(`http://localhost:8080/user/current`, {
                                                 ...values,
                                                 profileImage: url
                                             }, config).then((res) => {
                                                 localStorage.setItem("currentUser", JSON.stringify(res.data))
-                                                alert("update success");
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Update Successful',
+                                                    showConfirmButton: false,
+                                                    timer: 1500
+                                                })
                                                 navigator("/user");
                                             }).catch((error) => {
                                                 if (error.response && error.response.status === 401) {
-                                                    alert('email or phoneNumber already exist');
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Oops...',
+                                                        text: 'Email has been exists !',
+                                                    })
                                                 } else {
                                                     console.error('Error occurred while posting result:', error);
-                                                    alert('An error occurred. Please try again later.');
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Oops...',
+                                                        text: 'An error occurred. Please try again later.',
+                                                    })
                                                 }
                                             })
-                                        } )
+                                        })
                                     }
                                     }
                                     validationSchema={validationSchema}
                                     enableReinitialize={true}>
                                 <Form>
                                     <div>
-                                        <fieldset style={{border: "1px solid #ccc", padding: "10px", borderRadius: "5px"}}>
+                                        <div style={{border: "1px solid #ccc", padding: "15px", borderRadius: "5px"}}>
                                             <div className="form-group">
                                                 UserName<br/>
-                                                <input className="form-control" readOnly={true} value={currentUser.username}/>
+                                                < input className="form-control" value={currentUser.username}/>
                                             </div>
                                             <div className="form-group">
                                                 FirstName<br/>
@@ -250,10 +260,11 @@ export function UserProfile() {
                                             <div className="form-group">
                                                 PhoneNumber<br/>
                                                 <Field className="form-control" name={"phoneNumber"}/>
-                                                <ErrorMessage name="phoneNumber" component="div" className="text-danger"/>
+                                                <ErrorMessage name="phoneNumber" component="div"
+                                                              className="text-danger"/>
                                             </div>
-                                            <button className="btn btn-primary" type="submit">Update</button>
-                                        </fieldset>
+                                            <button type="submit" className="btn btn-primary">Update</button>
+                                        </div>
                                     </div>
                                 </Form>
                             </Formik>

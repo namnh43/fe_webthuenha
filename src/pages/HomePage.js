@@ -6,6 +6,7 @@ import {ParentUsingDatePicker} from "../components/datetime/ParentUsingDatePicke
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {searchAction} from "../components/redux/searchSlice";
+import HomePageMenuBar from "../components/header/nav/HomePageMenuBar";
 
 export function HomePage() {
     const dispatch = useDispatch()
@@ -14,6 +15,7 @@ export function HomePage() {
     },[])
     return (
         <>
+            <HomePageMenuBar/>
             <Header/>
             <SearchBar/>
             <Outlet/>

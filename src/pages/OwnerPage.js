@@ -25,7 +25,7 @@ function OwnerPage() {
             {/*    </div>*/}
             {/*</div>*/}
             <Menubar/>
-            <Divider />
+            {/*<Divider />*/}
             <Grid container spacing={1}>
                 <Grid item xs={2.5}>
                     <OwnerSideBar2/>

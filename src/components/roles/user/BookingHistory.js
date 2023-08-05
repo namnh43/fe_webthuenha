@@ -48,7 +48,7 @@ function BookingHistory() {
         console.log(url);
         if (confirmCancel) {
             axios
-                .put(url,{}, config)
+                .put(url, {}, config)
                 .then((res) => {
                     console.log('Hủy đặt phòng thành công!');
                     axios.get(`http://localhost:8080/user/list-booking`, config)
@@ -66,7 +66,6 @@ function BookingHistory() {
 
     useEffect(() => {
         refreshBookingList();
-
     }, []);
     useEffect(() => {
         search()
@@ -87,8 +86,7 @@ function BookingHistory() {
                     });
                     $('.dataTables_length').addClass('bs-select'); }
             });
-        });
-    }
+    });}
 
     const isCancellable = (startDate) => {
         const startDateObj = new Date(startDate);
@@ -121,8 +119,6 @@ function BookingHistory() {
 
         setBookingList(searchFilter);
     }
-
-
 
     return (
         <>
@@ -209,5 +205,5 @@ function BookingHistory() {
         </>
     );
 }
-export default BookingHistory;
 
+export default BookingHistory;

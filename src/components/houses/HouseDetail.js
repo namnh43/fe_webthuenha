@@ -11,6 +11,8 @@ import Swal from "sweetalert2";
 import StarIcon from "@mui/icons-material/Star";
 import BedIcon from '@mui/icons-material/Bed';
 import BathtubIcon from '@mui/icons-material/Bathtub';
+import {Link} from "react-router-dom";
+import {Footer} from "../Footer";
 
 export function HouseDetail() {
     const [list, setList] = useState([]);
@@ -40,6 +42,7 @@ export function HouseDetail() {
 
     function booking() {
         if (localStorage.getItem("currentUser") == null) {
+            localStorage.setItem("houseUrl",`/houses/${house.id}/detail`);
             navigate("/login")
             return;
         }
@@ -66,40 +69,57 @@ export function HouseDetail() {
     function postResult() {
         try {
             console.log('post_result', result);
-            axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
-                handleFetchBookingList();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Booking successful!',
-                    html: `
-                    <div>House: ${result.house.name}</div>
-                    <div>Address: ${result.house.address}</div>
+            Swal.fire({
+                title: 'Booking house',
+                text: "Are you sure you want to book this house ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3B71CA',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, book it!'
+            }).then((confirm) => {
+                if (confirm.isConfirmed) {
+                    axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
+                        handleFetchBookingList();
+                        console.log(res.data);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Booking successful!',
+                            html: `
+                    <div>House: ${house.name}</div>
+                    <div>Address: ${house.address}</div>
                     <div>Start Date: ${result.startDate}</div>
                     <div>End Date: ${result.endDate}</div>
                     <div>Price: ${result.price}</div>
                     <div>Total: ${result.total}</div>
                     `,
-                    footer: '<a href="/user/booking-history">Click here to see booking list</a>'
-                });
-            }).catch((error) => {
-                if (error.response && error.response.status === 400) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error...',
-                        text: 'This house is already booked!',
-                    })
-                } else {
-                    console.error('Error occurred while posting result:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error...',
-                        text: 'An error occurred. Please try again later.',
-                    })
+                            footer: '<a href="/user/booking-history">Click here to see booking list</a>'
+                        });
+                    }).catch((error) => {
+                        if (error.response && error.response.status === 400) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error...',
+                                text: 'This house is already booked!',
+                            })
+                        } else {
+                            console.error('Error occurred while posting result:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error...',
+                                text: 'An error occurred. Please try again later.',
+                            })
+                        }
+                    });
                 }
             });
         } catch (error) {
             console.error('Error occurred while posting result:', error);
-            alert('An error occurred. Please try again later.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'An error occurred. Please try again later.',
+            })
         }
     }
 
@@ -108,35 +128,15 @@ export function HouseDetail() {
             setListBooking(res.data)
         })
     }
-    const [listHouse, setListHouse] = useState([]);
-    let checkHouse;
-    const handleHostListHouse = (res) => {
-        axios.get(`http://localhost:8080/house/host/` + res.user.id,config).then(res => {
-            console.log(9,res.data[0])
-            checkHouse = res.data.filter(item => item?.id != id)
-            if (checkHouse!=[]){
-            for (let i = 0;i<res.data.length;i++){
-                listHouse.unshift(checkHouse[i])
-            }}
-
-        })
-        if (checkHouse!=[]){
-            axios.get(`http://localhost:8080/house`).then(res => {
-                let a = ((res.data).filter(item => item?.id != id));
-            })
-        }
-
-    }
 
     useEffect(() => {
-
+        console.log('get_house_id', id);
         axios.get(`http://localhost:8080/house/` + id).then(res => {
             console.log('get_data', res)
             setHouse(res.data)
             setList(res.data.images)
-            handleFetchBookingList();
-            handleHostListHouse(res.data);
         })
+        handleFetchBookingList();
     }, [])
 
     function calculateDiff(startDate, endDate) {
@@ -148,13 +148,18 @@ export function HouseDetail() {
         }
     }
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <>
-            <div className="container">
+            <div className="container col-10">
                 <div className="row">
                     <div className="col-12">
-                        <h3 className="text-capitalize mb-0 mt-3"><HomeIcon color="secondary"/> {house.name}</h3>
-                        <p className="text-decoration-underline"><LocationOnIcon color="primary"/> {house.address}</p>
+                        <h3 className="text-capitalize mb-0 mt-3"><HomeIcon style={{paddingBottom: '5px', fontSize: '40px'}} color="primary"/>{house.name}</h3>
+                        <p style={{fontSize: '17px'}} className="mb-0">&nbsp;<LocationOnIcon style={{paddingBottom: '5px', fontSize: '30px'}} color="error"/>{house.address}</p>
+                        <p style={{fontSize: '15px', marginTop: '0px'}}>&nbsp; <BedIcon/>{house.totalBedrooms} Bed room &nbsp;  &nbsp;<BathtubIcon/>{house.totalBathrooms} Bath room</p>
                     </div>
                 </div>
                 <div className="row">
@@ -169,11 +174,17 @@ export function HouseDetail() {
                                              margin={8}>
                                     {list.map((item) => {
                                         return (
-                                            <div className="col-sm-12 col-md-12 col-lg-12">
+                                            <div key={item.id} className="col-sm-12 col-md-12 col-lg-12">
                                                 <a target="_blank" href={item.fileUrl}
-                                                   className="image-popup gal-item"><img
+                                                   className="image-popup gal-item" rel="noreferrer"><img
                                                     src={item.fileUrl} alt="Image" className="img-fluid vh-100"
-                                                    style={{maxHeight: '460px'}}/></a>
+                                                    style={{maxHeight: '460px'}}
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = "https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200";
+                                                    }}
+                                                />
+                                                </a>
                                             </div>
                                         )
                                     })}
@@ -182,9 +193,14 @@ export function HouseDetail() {
                                 <div className="row">
                                     {list.map((item) => {
                                         return (
-                                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
-                                                <a target="_blank" href={item.fileUrl} className="image-popup gal-item"><img
-                                                    src={item.fileUrl} alt="Image" className="img-thumbnail h-100"/></a>
+                                            <div key={item.id} className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
+                                                {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+                                                <a target="_blank" href={item.fileUrl} className="image-popup gal-item" rel="noreferrer"><img
+                                                    src={item.fileUrl} alt="Image" className="img-thumbnail h-100"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = "https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200";
+                                                    }}/></a>
                                             </div>
                                         )
                                     })}
@@ -277,33 +293,33 @@ export function HouseDetail() {
                             </div>
                         </div>
                     </div>
-                    {listHouse &&
+
                     <div className="row mb-5">
                         <div className="col-md-6 col-lg-4 mb-4">
                             <div className="property-entry h-100">
-                                <a href={"/houses/"+listHouse[0]?.id+"/detail"} className="property-thumbnail">
+                                <a href="property-details.html" className="property-thumbnail">
                                     <div className="offer-type-wrap">
                                         <span className="offer-type bg-danger">Sale</span>
                                         <span className="offer-type bg-success">Rent</span>
                                     </div>
-                                    <img style={{width:300,height:250}} src={listHouse[0]?.images[0]?.fileUrl} alt="Image" className="img-fluid"/>
+                                    <img src="images/img_1.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
                                     <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">{listHouse[0]?.name}</a>
+                                    <h2 className="property-title"><a href="property-details.html">625 S. Berendo St</a>
                                     </h2>
                                     <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> {listHouse[0]?.address}</span>
+                                        className="property-icon icon-room"></span> 625 S. Berendo St Unit 607 Los Angeles, CA 90005</span>
                                     <strong
-                                        className="property-price text-primary mb-3 d-block text-success">${listHouse[0]?.price}</strong>
+                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
                                     <ul className="property-specs-wrap mb-3 mb-lg-0">
                                         <li>
                                             <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">{listHouse[0]?.totalBedrooms} <sup>+</sup></span>
+                                            <span className="property-specs-number">2 <sup>+</sup></span>
                                         </li>
                                         <li>
                                             <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">{listHouse[0]?.totalBathrooms}</span>
+                                            <span className="property-specs-number">2</span>
                                         </li>
                                         <li>
                                             <span className="property-specs">SQ FT</span>
@@ -316,33 +332,34 @@ export function HouseDetail() {
 
                         <div className="col-md-6 col-lg-4 mb-4">
                             <div className="property-entry h-100">
-                                <a href={"/houses/"+listHouse[1]?.id+"/detail"} className="property-thumbnail">
+                                <a href="property-details.html" className="property-thumbnail">
                                     <div className="offer-type-wrap">
                                         <span className="offer-type bg-danger">Sale</span>
                                         <span className="offer-type bg-success">Rent</span>
                                     </div>
-                                    <img style={{width:300,height:250}} src={listHouse[1]?.images[0]?.fileUrl} alt="Image" className="img-fluid"/>
+                                    <img src="images/img_2.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
-                                    <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">{listHouse[1]?.name}</a>
+                                    <a href="src/components#" className="property-favorite active"><span
+                                        className="icon-heart-o"></span></a>
+                                    <h2 className="property-title"><a href="property-details.html">871 Crenshaw Blvd</a>
                                     </h2>
                                     <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> {listHouse[1]?.address}</span>
+                                        className="property-icon icon-room"></span> 1 New York Ave, Warners Bay, NSW 2282</span>
                                     <strong
-                                        className="property-price text-primary mb-3 d-block text-success">${listHouse[1]?.price}</strong>
+                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
                                     <ul className="property-specs-wrap mb-3 mb-lg-0">
                                         <li>
                                             <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">{listHouse[1]?.totalBedrooms} <sup>+</sup></span>
+                                            <span className="property-specs-number">2 <sup>+</sup></span>
                                         </li>
                                         <li>
                                             <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">{listHouse[1]?.totalBathrooms}</span>
+                                            <span className="property-specs-number">2</span>
                                         </li>
                                         <li>
                                             <span className="property-specs">SQ FT</span>
-                                            <span className="property-specs-number">7,000</span>
+                                            <span className="property-specs-number">1,620</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -351,39 +368,38 @@ export function HouseDetail() {
 
                         <div className="col-md-6 col-lg-4 mb-4">
                             <div className="property-entry h-100">
-                                <a href={"/houses/"+listHouse[2]?.id+"/detail"} className="property-thumbnail">
+                                <a href="property-details.html" className="property-thumbnail">
                                     <div className="offer-type-wrap">
-                                        <span className="offer-type bg-danger">Sale</span>
-                                        <span className="offer-type bg-success">Rent</span>
+                                        <span className="offer-type bg-info">Lease</span>
                                     </div>
-                                    <img style={{width:300,height:250}} src={listHouse[2]?.images[0]?.fileUrl} alt="Image" className="img-fluid"/>
+                                    <img src="images/img_3.jpg" alt="Image" className="img-fluid"/>
                                 </a>
                                 <div className="p-4 property-body">
                                     <a href="src/components#" className="property-favorite"><span className="icon-heart-o"></span></a>
-                                    <h2 className="property-title"><a href="property-details.html">{listHouse[2]?.name}</a>
-                                    </h2>
+                                    <h2 className="property-title"><a href="property-details.html">853 S Lucerne
+                                        Blvd</a></h2>
                                     <span className="property-location d-block mb-3"><span
-                                        className="property-icon icon-room"></span> {listHouse[2]?.address}</span>
+                                        className="property-icon icon-room"></span> 853 S Lucerne Blvd Unit 101 Los Angeles, CA 90005</span>
                                     <strong
-                                        className="property-price text-primary mb-3 d-block text-success">${listHouse[2]?.price}</strong>
+                                        className="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
                                     <ul className="property-specs-wrap mb-3 mb-lg-0">
                                         <li>
                                             <span className="property-specs">Beds</span>
-                                            <span className="property-specs-number">{listHouse[2]?.totalBedrooms} <sup>+</sup></span>
+                                            <span className="property-specs-number">2 <sup>+</sup></span>
                                         </li>
                                         <li>
                                             <span className="property-specs">Baths</span>
-                                            <span className="property-specs-number">{listHouse[2]?.totalBathrooms}</span>
+                                            <span className="property-specs-number">2</span>
                                         </li>
                                         <li>
                                             <span className="property-specs">SQ FT</span>
-                                            <span className="property-specs-number">7,000</span>
+                                            <span className="property-specs-number">5,500</span>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                    </div>}
+                    </div>
                 </div>
             </div>
         </>

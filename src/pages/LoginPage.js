@@ -5,6 +5,7 @@ import axios from "axios";
 import * as Yup from "yup";
 import React from "react";
 import GoogleOAuth2Login from "../components/OAuth2/googleOAuth2";
+import Swal from "sweetalert2";
 
 const LoginSchema = Yup.object().shape({
     username: Yup.string().required('* Required'),
@@ -28,12 +29,22 @@ export function LoginPage() {
                         localStorage.setItem("currentUserId", res.data.user.id)
                         localStorage.setItem("currentUserRole", res.data.user.role)
                         localStorage.setItem("currentUserApplyHost", res.data.user.applyHost)
-                        console.log(localStorage.getItem("currentUserApplyHost"))
-                        res.data.user.role === "ADMIN" ? navigate('/admin/hosts') : navigate('/');
+                        console.log(localStorage.getItem("currentUserApplyHost"));
+                        if (localStorage.getItem("houseUrl") != null){
+                            navigate(localStorage.getItem("houseUrl"));
+                            localStorage.removeItem("houseUrl");
+                        }
+                        else {
+                            res.data.user.role === "ADMIN" ? navigate('/admin/hosts') : navigate('/');
+                        }
                     })
                     .catch(() => {
                         navigate('/login')
-                        alert('Wrong username or password')
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Log in failed',
+                            text: 'Wrong username or password! Try again.',
+                        })
                     })
             }}
         >

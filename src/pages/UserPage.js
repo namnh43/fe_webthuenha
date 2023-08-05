@@ -24,7 +24,7 @@ export function UserPage() {
             {/*    </div>*/}
             {/*</div>*/}
             <Menubar/>
-            <Divider />
+            {/*<Divider />*/}
             <Grid container spacing={1}>
                 <Grid item xs={3}>
                     <UserSidebar/>
