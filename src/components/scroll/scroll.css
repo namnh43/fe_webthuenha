@@ -1,0 +1,16 @@
+table tbody{
+    display:block;
+    height:490px;
+    overflow:auto;
+
+}
+table thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed !important;
+}
+table{
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width:600px;
+}

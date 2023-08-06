@@ -11,6 +11,7 @@ import HomePageMenuBar from "../components/header/nav/HomePageMenuBar";
 export function HomePage() {
     const dispatch = useDispatch()
     useEffect(() => {
+        document.title = "Home Page";
         dispatch(searchAction({address:'',minPrice:'',maxPrice:'',startDate:null,endDate:null}))
     },[])
     return (
