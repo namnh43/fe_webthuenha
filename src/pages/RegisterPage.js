@@ -4,6 +4,7 @@ import axios from "axios";
 import * as Yup from "yup";
 import React, {useState} from "react";
 import {useNavigate} from "react-router";
+import Swal from "sweetalert2";
 
 const SignupSchema = Yup.object().shape({
     username: Yup.string()
@@ -40,7 +41,11 @@ export function RegisterPage() {
                         console.log(res.data)
                         if(res.data.code === '201'){
                             setErrorMessage('')
-                            alert('Successfully registered')
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Account created successfully!',
+                                timer: 1500
+                            })
                             navigate('/login')
                         } else {
                             setErrorMessage(res.data.msg)

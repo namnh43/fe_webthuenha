@@ -25,7 +25,7 @@ export function HouseList() {
         const endDate = searchParams.get('endDate');
 
     }, [])
-    const topHouse = list
+    const topHouse = [...list]
         .sort((a, b) => b.numberOfRented - a.numberOfRented)
         .slice(0, 4);
 
@@ -33,7 +33,7 @@ export function HouseList() {
         <>
             <div className="bg-light pt-4 pb-4 border-top">
                 <div className="container">
-                    <h1>Top Visited</h1>
+                    <h1>Top Rented</h1>
                     <div className="row">
                         <ListComponent listHouse={topHouse}/>
                     </div>

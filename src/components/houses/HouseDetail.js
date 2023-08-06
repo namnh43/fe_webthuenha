@@ -43,8 +43,19 @@ export function HouseDetail() {
 
     function booking() {
         if (localStorage.getItem("currentUser") == null) {
-            localStorage.setItem("houseUrl",`/houses/${house.id}/detail`);
-            navigate("/login")
+            localStorage.setItem("houseUrl",`/houses/${house.id}`);
+            Swal.fire({
+                title: 'You need to login first!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Login'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate("/login")
+                }
+            })
             return;
         }
         if (startDate === "" || endDate === "") {

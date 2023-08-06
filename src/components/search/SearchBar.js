@@ -130,7 +130,7 @@ function SearchBar() {
                 </div>
                 <div className="col-2 p-1">
                     <Button variant="outlined" startIcon={<SearchIcon/>} onClick={handleInputChange}
-                            style={{height: '41px'}}>
+                            style={{height: '41px', marginLeft: '2px'}}>
                         Search
                     </Button>
                 </div>

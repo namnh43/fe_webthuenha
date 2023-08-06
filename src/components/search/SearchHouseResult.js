@@ -19,7 +19,7 @@ export function SearchHouseResult() {
 
     },[searchParams])
     useEffect(() => {
-        if (searchParams.size > 0) {
+
             const addressQuery = searchParams.get('address')?searchParams.get('address'):'';
             const minPriceQuery = searchParams.get('minprice')?searchParams.get('minprice'):0;
             const maxPriceQuery = searchParams.get('maxprice')?searchParams.get('maxprice'):1000000;
@@ -29,11 +29,6 @@ export function SearchHouseResult() {
                 .then((res) => {
                     setListSearch(res.data)
                 })
-        } else {
-            axios.get(`http://localhost:8080/house`, {}).then(res => {
-                setListSearch(res.data)
-            })
-        }
     },[searchParams])
     return (
         <div className="bg-light pt-3 border-top">

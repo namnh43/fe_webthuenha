@@ -3,7 +3,6 @@ import axios from "axios";
 import "./BookingList.css";
 import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
 import ReviewForm from "../../ReviewForm";
-import '../../scroll/scroll.css';
 import {formatDate} from "../../../utils/api";
 import 'datatables.net';
 import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
@@ -32,8 +31,13 @@ function BookingHistory() {
         },
         {
             name: '',
-            selector: row => row.house.images[0].fileUrl,
-            cell:(row) => <img src={row.house.images[0].fileUrl} style={{width:"80px",height:"80px", borderRadius:"50%"}}/>,
+            selector: row => row.house.images.length > 0 ? row.house.images[0].fileUrl : null,
+            cell: (row) => {
+                const imageUrl = row.house.images.length > 0 ? row.house.images[0].fileUrl : "https://a0.muscache.com/im/pictures/prohost-api/Hosting-807647632904963046/original/6d41a0ce-a5a4-4d1f-bbca-5a3242f7834e.jpeg?im_w=1200";
+                return (
+                    <img src={imageUrl} style={{ width: "80px", height: "80px", borderRadius: "50%" }} />
+                );
+            },
         },
         {
             name: 'Start Date',
