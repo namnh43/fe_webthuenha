@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import ReactPaginate from "react-paginate";
 import "./BookingList.css";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
 import ReviewForm from "../../ReviewForm";
 import '../../scroll/scroll.css';
 import {formatDate} from "../../../utils/api";
-import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
 import 'datatables.net-select-bs4/css/select.bootstrap4.min.css';
@@ -32,7 +30,7 @@ function BookingHistory() {
     };
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const bookingPerpage = 10;
+    const bookingPerpage = 5;
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -48,7 +46,7 @@ function BookingHistory() {
         console.log(url);
         if (confirmCancel) {
             axios
-                .put(url, {}, config)
+                .put(url,{}, config)
                 .then((res) => {
                     console.log('Hủy đặt phòng thành công!');
                     axios.get(`http://localhost:8080/user/list-booking`, config)
@@ -62,14 +60,16 @@ function BookingHistory() {
                 });
         }
     };
+    const [ascending,setAscending] = useState(true);
 
 
     useEffect(() => {
         refreshBookingList();
+
     }, []);
     useEffect(() => {
         search()
-    }, [selectedRange]);
+    }, [selectedRange,ascending]);
 
     const refreshBookingList = () => {
         axios.get(`http://localhost:8080/user/list-booking`, config)
@@ -77,16 +77,8 @@ function BookingHistory() {
                 console.log(res.data)
                 setSearchBooking(res.data);
                 setBookingList(res.data);
-            }).then((res)=>{
-            $(document).ready(function() {
-                if (!$.fn.DataTable.isDataTable('#dtBasicExample')) {
-                    $('#dtBasicExample').DataTable({
-                        paging: true,
-                        lengthMenu: [3, 5, 10,15],
-                    });
-                    $('.dataTables_length').addClass('bs-select'); }
-            });
-    });}
+            })
+    }
 
     const isCancellable = (startDate) => {
         const startDateObj = new Date(startDate);
@@ -99,13 +91,12 @@ function BookingHistory() {
 
     function search() {
         const houseName = document.getElementById('house-name-input').value.trim().toLowerCase();
-        const address = document.getElementById('address-input').value.trim().toLowerCase();
         const status = document.getElementById('status-select').value;
 
         const searchFilter = searchBooking.filter((booking) => {
             if (
-                (!houseName || booking.house?.name?.toLowerCase().includes(houseName)) &&
-                (!address || booking.house?.address?.toLowerCase().includes(address)) &&
+                (!houseName || booking.house?.name?.toLowerCase().includes(houseName)
+                    || booking.house?.address?.toLowerCase().includes(houseName)) &&
                 (!status || booking.bookingStatus === status) &&
                 (selectedRange[0]==="" ||
                     ((selectedRange[1]>=booking.startDate && booking.startDate >= selectedRange[0] ) ||
@@ -116,9 +107,26 @@ function BookingHistory() {
             }
             return false;
         });
-
         setBookingList(searchFilter);
     }
+    function toggleAscending() {
+        setAscending(prevAscending => !prevAscending);
+    }
+    function houseClick(){
+     toggleAscending()
+        const sortedBooking = searchBooking.sort((a, b) => {
+            if (a.house?.name < b.house?.name) {
+                return ascending ? -1 : 1;
+            } else if (a.house.name > b.house.name) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+         setBookingList(sortedBooking);
+    }
+
+
 
     return (
         <>
@@ -131,9 +139,7 @@ function BookingHistory() {
             ) : (
                 <>
                     <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <input id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required  />
-                        &nbsp;
-                        <input id="address-input" name="address" type="text" placeholder="Enter address" required />
+                        <input id="house-name-input" name="house-name" type="text" placeholder="Enter keyword" required  />
                         &nbsp;
                         <select id="status-select" name="status">
                             <option value="">-- Select status --</option>
@@ -150,14 +156,14 @@ function BookingHistory() {
                     </div>
                     <h2>Booking List</h2>
                     <section className="main">
-                        <table id="dtBasicExample" className="table table-striped table-hover dataTables_length">
+                        <table  className="table table-striped table-hover ">
                             <thead>
                             <tr>
                                 <th className="text-left" style={{verticalAlign:'middle',width:"70px"}}>#</th>
                                 <th className="text-left"></th>
                                 <th className="text-left">Start Date</th>
                                 <th className="text-left">End Date</th>
-                                <th className="text-left">House Name</th>
+                                <th className="text-left"><button onClick={houseClick}>Name</button></th>
                                 <th className="text-left">Total</th>
                                 <th className="text-left">Address</th>
                                 <th className="text-left">Status</th>
@@ -198,12 +204,11 @@ function BookingHistory() {
                                 })}
                             </tbody>
                         </table>
-                        {/*<PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>*/}
+                        <PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>
                     </section>
                 </>
             )}
         </>
     );
 }
-
 export default BookingHistory;
