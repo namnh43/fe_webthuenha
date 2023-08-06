@@ -2,7 +2,6 @@
   "name": "fe_webthuenha",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://namnh43.github.io/fe_webthuenha/",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -38,6 +37,7 @@
     "owl-carousel": "^1.0.0",
     "owl.carousel": "^2.3.4",
     "react": "^18.2.0",
+    "react-data-table-component": "^7.5.3",
     "react-datepicker": "^4.16.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",

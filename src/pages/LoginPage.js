@@ -49,7 +49,7 @@ export function LoginPage() {
             }}
         >
             {({ errors, touched }) => (
-            <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+            <div className="" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
                  data-sidebartype="full"
                  data-sidebar-position="fixed" data-header-position="fixed">
                 <div
@@ -87,11 +87,10 @@ export function LoginPage() {
                                                            id="flexCheckChecked" />
                                                         <label className="form-check-label text-dark"
                                                                htmlFor="flexCheckChecked">
-                                                            Remeber this Device
+                                                            Remeber me
                                                         </label>
                                                 </div>
-                                                <a className="text-primary fw-bold" href="./index.html">Forgot Password
-                                                    ?</a>
+                                                <a className="text-primary fw-bold" href="./index.html">Forgot Password ?</a>
                                             </div>
                                             <button
                                                className="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</button>

@@ -13,9 +13,10 @@ import BedIcon from '@mui/icons-material/Bed';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import {Link} from "react-router-dom";
 import {Footer} from "../Footer";
+import LocalHotelRoundedIcon from "@mui/icons-material/LocalHotelRounded";
 
 export function HouseDetail() {
-    const [list, setList] = useState([]);
+    const [listImages, setListImages] = useState([]);
     const [house, setHouse] = useState({});
     const {id} = useParams()
     const [startDate, setStartDate] = useState("");
@@ -134,7 +135,7 @@ export function HouseDetail() {
         axios.get(`http://localhost:8080/house/` + id).then(res => {
             console.log('get_data', res)
             setHouse(res.data)
-            setList(res.data.images)
+            setListImages(res.data.images)
         })
         handleFetchBookingList();
     }, [])
@@ -156,131 +157,164 @@ export function HouseDetail() {
         <>
             <div className="container col-10">
                 <div className="row">
-                    <div className="col-12">
-                        <h3 className="text-capitalize mb-0 mt-3"><HomeIcon style={{paddingBottom: '5px', fontSize: '40px'}} color="primary"/>{house.name}</h3>
+                    <div className="col-12 mt-1">
+                        <h3 className="text-capitalize mb-0 mt-3 text-black"><HomeIcon style={{paddingBottom: '5px', fontSize: '40px'}} color="primary"/>{house.name}</h3>
                         <p style={{fontSize: '17px'}} className="mb-0">&nbsp;<LocationOnIcon style={{paddingBottom: '5px', fontSize: '30px'}} color="error"/>{house.address}</p>
-                        <p style={{fontSize: '15px', marginTop: '0px'}}>&nbsp; <BedIcon/>{house.totalBedrooms} Bed room &nbsp;  &nbsp;<BathtubIcon/>{house.totalBathrooms} Bath room</p>
+                        <p style={{fontSize: '15px', marginTop: '0px'}}>&nbsp; <LocalHotelRoundedIcon/> {house.totalBedrooms} Bed room &nbsp;  &nbsp;<BathtubIcon/> {house.totalBathrooms} Bath room</p>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-8">
-                        <div className="row">
-                            {list.length > 0 &&
-                                <OwlCarousel items={1}
-                                             className="owl-theme"
-                                             loop
-                                             dots={true}
-                                             autoplay
-                                             margin={8}>
-                                    {list.map((item) => {
-                                        return (
-                                            <div key={item.id} className="col-sm-12 col-md-12 col-lg-12">
-                                                <a target="_blank" href={item.fileUrl}
-                                                   className="image-popup gal-item" rel="noreferrer"><img
-                                                    src={item.fileUrl} alt="Image" className="img-fluid vh-100"
-                                                    style={{maxHeight: '460px'}}
-                                                    onError={(e) => {
-                                                        e.target.onerror = null;
-                                                        e.target.src = "https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200";
-                                                    }}
-                                                />
-                                                </a>
-                                            </div>
-                                        )
-                                    })}
-                                </OwlCarousel>}
-                            <div className="container">
-                                <div className="row">
-                                    {list.map((item) => {
-                                        return (
-                                            <div key={item.id} className="col-sm-6 col-md-4 col-lg-3 mb-2 mt-2 ">
-                                                {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
-                                                <a target="_blank" href={item.fileUrl} className="image-popup gal-item" rel="noreferrer"><img
-                                                    src={item.fileUrl} alt="Image" className="img-thumbnail h-100"
-                                                    onError={(e) => {
-                                                        e.target.onerror = null;
-                                                        e.target.src = "https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200";
-                                                    }}/></a>
-                                            </div>
-                                        )
-                                    })}
+                <div className="container">
+                    <div className="row mt-1">
+                        <div className="col-8">
+                            <div className="row">
+                                {listImages.length > 0 && (
+                                    <OwlCarousel
+                                        items={1}
+                                        className="owl-theme"
+                                        loop
+                                        dots={true}
+                                        autoplay
+                                    >
+                                        {listImages.map((item) => {
+                                            return (
+                                                <div key={item.id} className="col-sm-12 col-md-12 col-lg-12 p-0 rounded">
+                                                    <a target="_blank" href={item.fileUrl} className="">
+                                                        <img
+                                                            src={item.fileUrl}
+                                                            alt="Image"
+                                                            className=""
+                                                            style={{ maxHeight: '460px', width: '100%' }}
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.src =
+                                                                    'https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200';
+                                                            }}
+                                                        />
+                                                    </a>
+                                                </div>
+                                            );
+                                        })}
+                                    </OwlCarousel>
+                                )}
+                                <div className="container">
+                                    <div className="row">
+                                        {listImages.map((item) => {
+                                            return (
+                                                <div key={item.id} className="col-sm-6 col-md-4 col-lg-3 mb-4 mt-0">
+                                                    <a target="_blank" href={item.fileUrl} className="image-popup gal-item" rel="noreferrer">
+                                                        <img
+                                                            style={{ maxHeight: '120px', width: '100%' }}
+                                                            src={item.fileUrl}
+                                                            alt="Image"
+                                                            className="img-thumbnail h-100"
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.src =
+                                                                    'https://a0.muscache.com/im/pictures/d3b2b902-6143-46e1-90fc-f6eee6f66e42.jpg?im_w=1200';
+                                                            }}
+                                                        />
+                                                    </a>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
-
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="bg-white p-4 border rounded">
-                            <h5 className="text-black mb-3" style={{ display: 'flex', alignItems: 'center'}}>
-                                <b><span style={{fontSize: '24px'}}>${house.price} /</span> night</b>
-                                <span style={{ marginLeft: 'auto', fontSize: '15px', paddingTop: '9px'}}>
-                <StarIcon style={{ marginBottom: '4px', fontSize: '16px'}}/>
-                                    {house.ratingScore} {" - " + house.numberOfReviews + " reviews"}
-            </span>
-                            </h5>
-                            <form action="src/components#" className="">
-                                <div style={{width: 'fit-content', margin: 'auto'}}>
-                                    <TestDatePicker setStartDate={setStartDate} setEndDate={setEndDate}
-                                                    calculateDiff={calculateDiff} listBooking={listBooking}/>
+                            <div className="bg-white property-body border-bottom border-top mt-2">
+                                <div className="row mb-2 align-items-center border-bottom">
+                                    <div className="col-md-9 mt-2">
+                                        <h4>
+                                            <b>Host {house.user ? house.user.firstName : ''} {house.user ? house.user.lastName : ''}</b>
+                                        </h4>
+                                        <p>
+                                            <BedIcon />{house.totalBedrooms} Bed room . <BathtubIcon />{house.totalBathrooms} Bath room
+                                        </p>
+                                    </div>
+                                    <div className="col-md-3 text-md-right my-4">
+                                        <img
+                                            src={house.user ? house.user.profileImage : "https://cuongquach.com/wp-content/uploads/2016/05/linux-logo-356x220.png"}
+                                            style={{ width: '60px', height: '60px', borderRadius: '50%' }}
+                                            alt=""
+                                        />
+                                    </div>
                                 </div>
-                                <hr/>
-                                <div>
-                                    {startDate !== "" && endDate !== "" && <div>
-                                        <table style={{width: '100%'}}>
-                                            <tr>
-                                                <td style={{textAlign: 'left'}}>
-                                                    ${house.price} x {day} night
-                                                </td>
-                                                <td style={{textAlign: 'right'}}>${house.price * day}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style={{textAlign: 'left'}}>
-                                                    Service charge
-                                                </td>
-                                                <td style={{textAlign: 'right'}}>${house.price * day * 5 / 100}</td>
-                                            </tr>
-                                        </table>
-                                        <hr/>
-                                        <table style={{width: '100%'}}>
-                                            <tr>
-                                                <td style={{textAlign: 'left'}}><b>Total</b></td>
-                                                <td style={{textAlign: 'right'}}><b>${house.price * day + house.price * day * 5 / 100}</b></td>
-                                            </tr>
-                                        </table>
-                                    </div>}
+                                <h4 className="mt-4">More description of the house</h4>
+                                <p>{house.description}</p>
+                                <br />
+                            </div>
+                        </div>
+                        <div className="col-4">
+                            <div
+                                style={{ position: 'sticky', top: '120px', zIndex: '1001', borderRadius: '8px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}
+                                className="bg-white p-4 border mb-2 borde"
+                            >
+                                <h5 className="text-black mb-3" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <b>
+                                        <span style={{ fontSize: '24px' }}>${house.price} /</span> night
+                                    </b>
+                                    <span style={{ marginLeft: 'auto', fontSize: '15px', paddingTop: '9px' }}><StarIcon style={{ marginBottom: '4px', fontSize: '16px' }} />
+                                        {house.ratingScore} {' - ' + house.numberOfReviews + ' reviews'}</span>
+                                </h5>
+                                <form action="src/components#" className="">
+                                    <div style={{ width: 'fit-content', margin: 'auto' }}>
+                                        <TestDatePicker setStartDate={setStartDate} setEndDate={setEndDate} calculateDiff={calculateDiff} listBooking={listBooking} />
+                                    </div>
+                                    <hr />
+                                    <div>
+                                        {startDate !== '' && endDate !== '' && (
+                                            <div>
+                                                <table style={{ width: '100%' }}>
+                                                    <tr>
+                                                        <td style={{ textAlign: 'left' }}>${house.price} x {day} night</td>
+                                                        <td style={{ textAlign: 'right' }}>${house.price * day}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style={{ textAlign: 'left' }}>Service charge</td>
+                                                        <td style={{ textAlign: 'right' }}>${(house.price * day * 5) / 100}</td>
+                                                    </tr>
+                                                </table>
+                                                <hr />
+                                                <table style={{ width: '100%' }}>
+                                                    <tr>
+                                                        <td style={{ textAlign: 'left' }}>
+                                                            <b>Total</b>
+                                                        </td>
+                                                        <td style={{ textAlign: 'right' }}>
+                                                            <b>${house.price * day + (house.price * day * 5) / 100}</b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <button
+                                        style={{ width: '100%', margin: 'auto', fontSize: '16px', height: '50px' }}
+                                        type="button"
+                                        className="p-0 btn btn-primary mt-2"
+                                        onClick={booking}
+                                    >
+                                        {startDate !== '' && endDate !== '' ? 'Booking Now' : 'Choose date to check home status'}
+                                    </button>
+                                </form>
+                            </div>
+                            <div className="mb-3">
+                                <div className="bg-white mt-4 mb-3">
+                                    {house.address && (
+                                        <div>
+                                            <MapWithSearch initialAddress={house.address} />
+                                        </div>
+                                    )}
                                 </div>
-                                <button style={{width: '100%', margin: 'auto', fontSize: '18px', height: '50px'}} type="button" className="btn btn-primary mt-2"
-                                        onClick={booking}>
-                                    {startDate !== "" && endDate !== "" ? "Booking Now" : "Choose date to check home status"}
-                                </button>
-                            </form>
-                        </div>
-                        <div className="bg-white border rounded mt-5">
-                            {house.address
-                                && <div>
-                                    <MapWithSearch initialAddress={house.address}/>
-                                </div>}
+                            </div>
                         </div>
                     </div>
 
-                    <div className="bg-white property-body border-bottom border-left border-right">
-                        <div className="row mb-5">
-                            <h2>Host {house && house.user ? house.user.firstName : ''} {house && house.user ? house.user.lastName : ''}</h2>
-                            <h5><BedIcon/>{house.totalBedrooms} Bed room . <BathtubIcon/>{house.totalBathrooms} Bath room</h5>
-                        </div>
-                        <h2 className="h4 text-black">More Info</h2>
-                        <p>{house.description}</p>
-                        <br/>
+                    <br/>
+                    <Reviews house={house}/>
 
-                    </div>
                 </div>
 
                 <br/><br/>
-
-                <Reviews house={house}/>
-
-                <br/><br/>
-
             </div>
 
             <div className="site-section site-section-sm bg-light">

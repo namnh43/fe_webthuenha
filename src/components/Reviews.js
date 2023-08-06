@@ -58,9 +58,9 @@ const Reviews = ({ house }) => {
     }
 
     return (
-        <div className="row">
+        <div className="row mb-4">
             <div className="col-12">
-                <h2>Reviews</h2>
+                <h4>Reviews</h4>
                 <StarIcon fontSize="small" />
                 {house.ratingScore} {" - " + house.numberOfReviews + " reviews"}
                 <br/><br />
@@ -130,7 +130,7 @@ const Reviews = ({ house }) => {
                                                 {!expandedReviewId && review.content.length > 300 && (
                                                     <button
                                                         className="btn-link"
-                                                        style={{ textDecoration: "none" }}
+                                                        style={{ textDecoration: "none", backgroundColor: "white" }}
                                                         onClick={() => handleSeeMore(review.id)}
                                                     >
                                                         <b>&nbsp;...</b>
@@ -141,7 +141,8 @@ const Reviews = ({ house }) => {
                                                         className="btn-link"
                                                         style={{
                                                             textDecoration: "none",
-                                                            color: "red"
+                                                            color: "red",
+                                                            backgroundColor: "white"
                                                         }}
                                                         onClick={handleUnSeeMore}
                                                     >

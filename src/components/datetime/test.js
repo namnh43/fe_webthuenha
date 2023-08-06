@@ -27,7 +27,7 @@ export default function TestDatePicker({startDate, endDate,listBooking, setStart
 
     return (
         <>
-            <div className="d-inline-block mb-2" style={{border: '1px solid grey', borderRadius: '5px', width: 'fit-content', padding: '5px 4px 1px 4px'}}>
+            <div className="d-inline-block mb-2" style={{border: '1px solid grey', borderRadius: '5px', width: 'fit-content', padding: '5px 4px 3px 4px'}}>
                 <Datepicker
                     controls={['calendar']}
                     select="range"
