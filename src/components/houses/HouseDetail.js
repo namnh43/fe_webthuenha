@@ -30,6 +30,7 @@ export function HouseDetail() {
     const [day, setDay] = useState(0);
     const navigate = useNavigate();
     const [listBooking, setListBooking] = useState([]);
+    const [stompClient,setStompClient] = useState(null);
 
     let result = {
         startDate: "",
@@ -46,6 +47,29 @@ export function HouseDetail() {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
     }
+    const connect_to_socket = async (userId) => {
+        try {
+            const socket =new SockJS(Constants.WS_URL);
+            const stomp = Stomp.over(socket);
+            await stomp.connect({},()=> {
+                console.log("connect to socket")
+            })
+            await setStompClient(stomp);
+            return stompClient;
+        }catch (error) {
+            console.log("error when connect to socket");
+            throw error;
+        }
+    }
+    // Function to disconnect from the WebSocket server
+    const disconnectFromWebSocket = () => {
+        if (stompClient) {
+            stompClient.disconnect(() => {
+                console.log('Disconnected from WebSocket');
+                setStompClient(null);
+            });
+        }
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -58,6 +82,15 @@ export function HouseDetail() {
         })
         handleFetchBookingList();
     }, [])
+    useEffect(()=> {
+        const currentUserId = localStorage.getItem('currentUserId');
+        connect_to_socket(currentUserId).then((connection)=> {
+            console.log('connect to socket', connection)
+        })
+        return () => {
+            disconnectFromWebSocket();
+        };
+    },[])
 
     function booking() {
         if (localStorage.getItem("currentUser") == null) {
@@ -125,6 +158,20 @@ export function HouseDetail() {
                     `,
                             footer: '<a href="/user/booking-history">Click here to see booking list</a>'
                         });
+                        return res.data.id;
+                    }).then((booking_id) => {
+                        const currentUserId = localStorage.getItem('currentUserId');
+                        console.log('stomp client ', stompClient)
+                        if (!stompClient || (stompClient && !stompClient.connected) ) {
+                            connect_to_socket(currentUserId).then((connection) => {
+                                console.log('establish connection ', connection)
+                                stompClient.send("/app/notify",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                            })
+                        }else {
+                            stompClient.send("/app/notify",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                        }
+
+
                     }).catch((error) => {
                         if (error.response && error.response.status === 400) {
                             Swal.fire({

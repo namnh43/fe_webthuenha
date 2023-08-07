@@ -51,7 +51,7 @@ function App() {
           </Route>
           <Route path='/test' element={<FormWithImageUpload/>}/>
       </Routes>
-        <WebsocketComponent/>
+        {/*<WebsocketComponent/>*/}
     </div>
   );
 }

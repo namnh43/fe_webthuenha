@@ -14,7 +14,7 @@ import {SnackbarProvider} from "notistack";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <SnackbarProvider>
+    <SnackbarProvider maxSnack={30}>
         <Provider store={store}>
             <GoogleOAuthProvider clientId="696354615975-8ivuevdnm3gh9anklroh9kq3mfh4nkog.apps.googleusercontent.com">
                 <BrowserRouter>

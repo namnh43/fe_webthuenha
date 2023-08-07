@@ -22,6 +22,10 @@ import Logout from "@mui/icons-material/Logout";
 import {useNavigate} from "react-router";
 import Swal from "sweetalert2";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import SockJS from "sockjs-client";
+import Constants from "../../../utils/constants";
+import Stomp from "stompjs";
+import { useSnackbar } from 'notistack';
 
 export function Navbar() {
     const menuBarStyle = {
@@ -51,6 +55,8 @@ export function Navbar() {
     const [openOwnerRequestSentDialog, setOpenOwnerRequestSentDialog] = useState(false);
 
     //handle notifycation
+    const { enqueueSnackbar } = useSnackbar();
+    const [stompClient,setStompClient] = useState(null);
     const [notifies,setNotifies] = useState(['notify 1','notify 2']);
     const [anchorElNotify, setAnchorElNotify] = React.useState(null);
     const openNotify = Boolean(anchorElNotify);
@@ -83,8 +89,63 @@ export function Navbar() {
             setLogin(true)
         }
         console.log('initialize state', login)
-    }, [notifies]);
+    }, []);
     useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.get('http://localhost:8080/notify_booking', config).then((res) => {
+            console.log('list notify', JSON.stringify(res.data))
+            setNotifies(res.data)
+        })
+    },[])
+
+    useEffect(() => {
+        const connect_to_socket = async (userId,callback) => {
+            try {
+                if (!stompClient || (stompClient && !stompClient.connected)) {
+                    console.log('create new connection here')
+                    const socket =new SockJS(Constants.WS_URL);
+                    const stomp = Stomp.over(socket);
+                    await stomp.connect({},()=> {
+                        console.log("connect to socket",stomp )
+                        setStompClient(stomp);
+                        const subscribeURL = "/users/" + userId + "/booking"
+                        stomp.subscribe(subscribeURL,callback);
+                    })
+                    await setStompClient(stomp);
+                }
+                return stompClient;
+            }catch (error) {
+                console.log("error when connect to socket");
+                throw error;
+            }
+        }
+        // Function to disconnect from the WebSocket server
+        const disconnectFromWebSocket = () => {
+            if (stompClient) {
+                stompClient.disconnect(() => {
+                    console.log('Disconnected from WebSocket');
+                    setStompClient(null);
+                });
+            }
+        };
+        const currentUserId = localStorage.getItem('currentUserId');
+        disconnectFromWebSocket();
+        connect_to_socket(currentUserId,updateNotify).then((connection)=> {
+            console.log('finish booking');
+        })
+        return () => {
+            console.log('disconnect')
+            disconnectFromWebSocket();
+        };
+    },[])
+
+    const updateNotify = (message) => {
+        console.log('call this function')
+        enqueueSnackbar('You have a new message!', { variant: 'success' });
         const config = {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -92,10 +153,10 @@ export function Navbar() {
         }
 
         axios.get('http://localhost:8080/notify_booking', config).then((res) => {
-            console.log('list notify', JSON.stringify(res.data))
+            // console.log('list notify', JSON.stringify(res.data))
             setNotifies(res.data)
         })
-    },[])
+    }
 
     const clearAllInfo = () => {
         axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
@@ -210,18 +271,19 @@ export function Navbar() {
                                                 onClick={handleClickNotify}
                                                 size="small"
                                                 sx={{ml: 2}}
-                                                aria-controls={ openNotify ? 'account-menu' : undefined}
+                                                aria-controls={ openNotify ? 'positioned-menu' : undefined}
                                                 aria-haspopup="true"
                                                 aria-expanded={openNotify ? 'true' : undefined}
                                             >
 
                                             </NotificationsNoneIcon>
                                             <Menu
-                                                id="demo-positioned-menu"
+                                                id="positioned-menu"
                                                 aria-labelledby="demo-positioned-button"
                                                 anchorEl={anchorElNotify}
                                                 open={openNotify}
                                                 onClose={handleCloseNotify}
+                                                onClick={handleCloseNotify}
                                                 PaperProps={{
                                                     elevation: 0,
                                                     sx: {
@@ -251,9 +313,9 @@ export function Navbar() {
                                                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                                                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                                             >
-                                                {notifies.map((item,key) => {
+                                                {notifies.length <=0 ? <></> : notifies.map((item,key) => {
                                                     return (
-                                                        <MenuItem>{item.message}</MenuItem>
+                                                        <MenuItem onClick={() => navigate("/owner/booking")}>{item.message}</MenuItem>
                                                     )
                                                 })}
 
@@ -290,32 +352,32 @@ export function Navbar() {
                             open={open}
                             onClose={handleClose}
                             onClick={handleClose}
-                            // PaperProps={{
-                            //     elevation: 0,
-                            //     sx: {
-                            //         overflow: 'visible',
-                            //         filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                            //         mt: 1.5,
-                            //         '& .MuiAvatar-root': {
-                            //             width: 32,
-                            //             height: 32,
-                            //             ml: -0.5,
-                            //             mr: 1,
-                            //         },
-                            //         '&:before': {
-                            //             content: '""',
-                            //             display: 'block',
-                            //             position: 'absolute',
-                            //             top: 0,
-                            //             right: 14,
-                            //             width: 10,
-                            //             height: 10,
-                            //             bgcolor: 'background.paper',
-                            //             transform: 'translateY(-50%) rotate(45deg)',
-                            //             zIndex: 0,
-                            //         },
-                            //     },
-                            // }}
+                            PaperProps={{
+                                elevation: 0,
+                                sx: {
+                                    overflow: 'visible',
+                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                    mt: 1.5,
+                                    '& .MuiAvatar-root': {
+                                        width: 32,
+                                        height: 32,
+                                        ml: -0.5,
+                                        mr: 1,
+                                    },
+                                    '&:before': {
+                                        content: '""',
+                                        display: 'block',
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 14,
+                                        width: 10,
+                                        height: 10,
+                                        bgcolor: 'background.paper',
+                                        transform: 'translateY(-50%) rotate(45deg)',
+                                        zIndex: 0,
+                                    },
+                                },
+                            }}
                             transformOrigin={{horizontal: 'right', vertical: 'top'}}
                             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                         >
