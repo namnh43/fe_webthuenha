@@ -11,6 +11,9 @@ import {PaginationComponent} from "../../pagination/PaginationComponent";
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
+    const [searchList, setSearchList] = useState([]);
+    const [ascending,setAscending] = useState(true);
+
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
     const hostsPerPage = 2;
@@ -39,6 +42,7 @@ export function AdminWaitingHost() {
                 }; // Các tham số truyền cho API (nếu cần)
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
+                setSearchList(fetchedData);
             } catch (error) {
                 console.log(error)
             }
@@ -111,18 +115,78 @@ export function AdminWaitingHost() {
             console.log(err)
         });
     }
+    function search(){
+        const keyword = document.getElementById('name-input').value.trim().toLowerCase();
+        const searchFilter = searchList.filter((user) => {
+            if (!keyword
+                || user.email?.toLowerCase().includes(keyword)
+                || user.phoneNumber?.toString().includes(keyword)
+                || user.role?.toLowerCase().includes(keyword)
+                || user.username?.toLowerCase().includes(keyword)
+                || user.createAt?.toString().includes(keyword)
+            ) {
+                return true;
+            }
+            return false;
+        });
+        setHosts(searchFilter);
+    }
+    function toggleAscending() {
+        setAscending(prevAscending => !prevAscending);
+    }
+    function idClick(){
+        toggleAscending()
+        const sorted = searchList.sort((a, b) => {
+            if (a.id < b.id) {
+                return ascending ? -1 : 1;
+            } else if (a.id > b.id) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function userClick(){
+        toggleAscending()
+        const sorted = searchList.sort((a, b) => {
+            if (a.username < b.username) {
+                return ascending ? -1 : 1;
+            } else if (a.username > b.username) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function phoneClick(){
+        toggleAscending()
+        const sorted = searchList.sort((a, b) => {
+            if (a.phoneNumber < b.phoneNumber) {
+                return ascending ? -1 : 1;
+            } else if (a.phoneNumber > b.phoneNumber) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+
     return (
         <>
             <section className="main">
                 <h2 className="mb-3">Waiting confirmation hosts</h2>
+                <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
                 <table className="table table-striped table-hover">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Date Created</th>
-                        <th>Phone number</th>
-                        <th>Action</th>
+                        <th><button onClick={idClick}>#</button></th>
+                        <th><button onClick={userClick}>UserName</button></th>
+                        <th><button >Created at</button></th>
+                        <th><button onClick={phoneClick}>Phone number</button></th>
+                        <th><button >Action</button></th>
                     </tr>
                     </thead>
                     {hosts.length <= 0 ? (

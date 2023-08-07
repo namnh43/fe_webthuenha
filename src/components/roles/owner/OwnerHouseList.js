@@ -11,7 +11,6 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
-import {Link} from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 
 function MaintenanceDialog(props) {
@@ -87,7 +86,6 @@ function MaintenanceDialog(props) {
 function OwnerHouseList() {
 
     const navigate = useNavigate()
-
     const [houseList, setHouseList] = useState([])
     const [searchHouse, setSearchHouse] = useState([]);
     //pagination
@@ -191,7 +189,10 @@ function OwnerHouseList() {
         const searchFilter = searchHouse.filter((house)=> {
             if (
                 (!search || house.address.toLowerCase().includes(search)
-                    || house.name.toLowerCase().includes(search))
+                    || house.name.toLowerCase().includes(search)
+                    || house.price.toString().includes(search)
+                    || house.numberOfRented.toString().includes(search)
+                )
             ) {
                 return true;
             }
@@ -221,7 +222,7 @@ function OwnerHouseList() {
                     <th>Name</th>
                     <th>Price</th>
                     <th>Address</th>
-                    <th>Sale</th>
+                    <th>Rented</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -238,7 +239,7 @@ function OwnerHouseList() {
                             <td className="pt-4">{item.name}</td>
                             <td className="pt-4">{item.price}</td>
                             <td className="pt-4">{item.address}</td>
-                            <td className="pt-4">add later</td>
+                            <td className="pt-4">{item.numberOfRented}</td>
                             {item.blocked === false ?
                                 (<td className="pt-4"><span style={{
                                     display: 'inline-block',
