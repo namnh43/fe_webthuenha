@@ -11,6 +11,8 @@ export function AdminUserList() {
     const navigate = useNavigate()
 
     const [userList, setUserList] = useState([])
+    const [searchList, setSearchList] = useState([])
+    const [ascending,setAscending] = useState(true);
 
     //pagination
     const [pagesVisited, setPagesVisited] = useState(0);
@@ -29,6 +31,7 @@ export function AdminUserList() {
         axios.get(`http://localhost:8080/user`, config)
             .then((res) => {
                 setUserList(res.data.reverse())
+                setSearchList(res.data)
             });
     }, []);
 
@@ -41,23 +44,107 @@ export function AdminUserList() {
         marginBottom: '2px',
         marginRight: '5px'
     }
-
+    function search(){
+        const keyword = document.getElementById('name-input').value.trim().toLowerCase();
+        const searchFilter = searchList.filter((user) => {
+            if (!keyword
+                || user.email?.toLowerCase().includes(keyword)
+                || user.phoneNumber?.toString().includes(keyword)
+                || user.role?.toLowerCase().includes(keyword)
+                || user.username?.toLowerCase().includes(keyword)
+                || user.createAt?.toString().includes(keyword)
+            ) {
+                return true;
+            }
+            return false;
+        });
+        setUserList(searchFilter);
+    }
+    function toggleAscending() {
+        setAscending(prevAscending => !prevAscending);
+    }
+    function idClick(){
+        toggleAscending()
+        const sorted = searchList.sort((a, b) => {
+            if (a.id < b.id) {
+                return ascending ? -1 : 1;
+            } else if (a.id > b.id) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setUserList(sorted);
+    }
+    function userClick(){
+        toggleAscending()
+        const sorted = searchList.sort((a, b) => {
+            if (a.username < b.username) {
+                return ascending ? -1 : 1;
+            } else if (a.username > b.username) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setUserList(sorted);
+    }
+    function emailClick(){
+        toggleAscending()
+        const sorted = searchList.sort((a, b) => {
+            if (a.email < b.email) {
+                return ascending ? -1 : 1;
+            } else if (a.email > b.email) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setUserList(sorted);
+    }
+    function phoneClick(){
+        toggleAscending()
+        const sorted = searchList.sort((a, b) => {
+            if (a.phoneNumber < b.phoneNumber) {
+                return ascending ? -1 : 1;
+            } else if (a.phoneNumber > b.phoneNumber) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setUserList(sorted);
+    }
+    function roleClick(){
+        toggleAscending()
+        const sorted = searchList.sort((a, b) => {
+            if (a.role < b.role) {
+                return ascending ? -1 : 1;
+            } else if (a.role > b.role) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setUserList(sorted);
+    }
 
     return (<>
         <h2>User List</h2>
+        <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
         <section className="main">
             <table className="table table-bordered table-striped table-hover">
                 <thead>
                 <tr>
-                    <th className="text-left" style={{width:"50px"}} >#</th>
-                    <th className="text-center">Avata</th>
-                    <th className="text-left">Username</th>
-                    <th className="text-left" style={{width:"220px"}}>E-mail</th>
-                    <th className="text-left">Phone number</th>
-                    <th className="text-left" style={{width:"80px"}}>Role</th>
-                    <th className="text-left">Created at</th>
-                    <th className="text-left">Status</th>
-                    <th className="text-center">Action</th>
+                    <th className="text-left" style={{width:"50px"}} ><button onClick={idClick}>#</button></th>
+                    <th className="text-center"><button >Avata</button></th>
+                    <th className="text-left"><button onClick={userClick}>UserName</button></th>
+                    <th className="text-left" style={{width:"220px"}}><button onClick={emailClick}>E-mail</button></th>
+                    <th className="text-left"><button onClick={phoneClick}>Phone number</button></th>
+                    <th className="text-left" style={{width:"80px"}}><button onClick={roleClick}>Role</button></th>
+                    <th className="text-left"><button >Created at</button></th>
+                    <th className="text-left"><button >Status</button></th>
+                    <th className="text-center"><button >Action</button></th>
                 </tr>
                 </thead>
                 <tbody>

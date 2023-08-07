@@ -9,6 +9,7 @@ import {formatDate} from "../../../utils/api";
 import 'datatables.net';
 import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
 import 'datatables.net-select-bs4/css/select.bootstrap4.min.css';
+import {useLocation} from "react-router";
 
 
 function BookingHistory() {
@@ -16,7 +17,7 @@ function BookingHistory() {
     const [selectedRange, setSelectedRange] = useState(['','']);
     const [searchBooking, setSearchBooking] = useState([]);
     const [reviewBookingId, setReviewBookingId] = useState(null);
-
+    const  idBooking  = useLocation().state || 0;
 
     const handleCloseReviewForm = () => {
         setReviewBookingId(null);
@@ -67,16 +68,22 @@ function BookingHistory() {
         refreshBookingList();
 
     }, []);
-    useEffect(() => {
-        search()
-    }, [selectedRange,ascending]);
+
 
     const refreshBookingList = () => {
         axios.get(`http://localhost:8080/user/list-booking`, config)
             .then((res) => {
                 console.log(res.data)
                 setSearchBooking(res.data);
-                setBookingList(res.data);
+                if (idBooking !== 0){
+                    let booking = res.data.filter((booking) => booking.id === idBooking);
+                    booking = [booking[0], ...res.data.filter((b) => b.id !== idBooking)];
+                    setBookingList(booking);
+                    return;
+                }else {
+                    setBookingList(res.data);
+                }
+
             })
     }
 

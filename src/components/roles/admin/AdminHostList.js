@@ -31,6 +31,7 @@ export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [searchHost, setSearchHost] = useState([]);
+    const [ascending,setAscending] = useState(true);
     const [message, setMessage] = useState({
         id: '',
         msg: '',
@@ -59,6 +60,7 @@ export function AdminHostList() {
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
                 setSearchHost(fetchedData);
+                console.log(fetchedData)
 
                 //set current pagination
                 // setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
@@ -116,15 +118,14 @@ export function AdminHostList() {
         setOpenProfileDialog(true);
     }
     function search() {
-        const userName = document.getElementById('name-input').value.trim().toLowerCase();
-        const home = document.getElementById('home-input').value;
-        const numberPhone = document.getElementById('numberPhone-input').value;
-
+        const keyword = document.getElementById('name-input').value.trim().toLowerCase();
         const searchFilter = searchHost.filter((host) => {
-            if (
-                (!userName || host.user?.username?.toLowerCase().includes(userName)) &&
-                (!home || host.houseCount >= home ) &&
-                (!numberPhone || host.user.phoneNumber === numberPhone )
+            if (!keyword
+                || host.user?.username?.toLowerCase().includes(keyword)
+                || host.user?.phoneNumber?.toString().includes(keyword)
+                || host.houseCount?.toString().includes(keyword)
+                || host.user?.earnedMoney?.toString().includes(keyword)
+                || host.user?.createAt?.toString().includes(keyword)
             ) {
                 return true;
             }
@@ -132,37 +133,93 @@ export function AdminHostList() {
         });
         setHosts(searchFilter);
     }
+    function toggleAscending() {
+        setAscending(prevAscending => !prevAscending);
+    }
+
+    function idClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.user?.id < b.user?.id) {
+                return ascending ? -1 : 1;
+            } else if (a.user?.id > b.user?.id) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function userClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.user?.username < b.user?.username) {
+                return ascending ? -1 : 1;
+            } else if (a.user?.username > b.user?.username) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function phoneClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.user?.phoneNumber < b.user?.phoneNumber) {
+                return ascending ? -1 : 1;
+            } else if (a.user?.phoneNumber > b.user?.phoneNumber) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function homeClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.houseCount < b.houseCount) {
+                return ascending ? -1 : 1;
+            } else if (a.houseCount > b.houseCount) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function moneyClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.user?.earnedMoney < b.user?.earnedMoney) {
+                return ascending ? -1 : 1;
+            } else if (a.user?.earnedMoney > b.user?.earnedMoney) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
 
     return (
-        <>
-            <div className={'row g-3'} onChange={search}>
-                <div className="col-sm-7">
-                    <label htmlFor="name-input"></label>
-                    <input className={'form-control'} id="name-input" name="name" type="text" placeholder="Enter username" required />
-                </div>
-                <div className="col-sm">
-                    <label htmlFor="home-input"></label>
-                    <input className={'form-control'} id="home-input" name="name" type="number" placeholder="Enter total home" required />
-                </div>
-                <div className="col-sm">
-                    <label htmlFor="numberPhone-input"></label>
-                    <input className={'form-control'} id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter number phone" required />
-                </div>
-            </div>
+        <>  <h2 className="my-3">Host List</h2>
+            <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
             {hosts.length <= 0 ? <div className="my-3 alert alert-primary" role="alert">There no data</div> : (
                 <section className="main">
-                    <h2 className="my-3">Host List</h2>
+
                     <table className="table table-bordered table-striped table-hover">
                         <thead>
                         <tr>
-                            <th className="text-center">#</th>
-                            <th className="text-center">UserName</th>
-                            <th className="text-center">Phone number</th>
-                            <th className="text-center">Number home</th>
-                            <th className="text-center">Earn money($)</th>
-                            <th className="text-center">Created at</th>
-                            <th className="text-center">Status</th>
-                            <th className="text-center">Action</th>
+                            <th className="text-center"><button onClick={idClick}>#</button></th>
+                            <th className="text-center"><button onClick={userClick}>UserName</button></th>
+                            <th className="text-center"><button onClick={phoneClick}>Phone number</button></th>
+                            <th className="text-center"><button onClick={homeClick}>Number home</button></th>
+                            <th className="text-center"><button onClick={moneyClick}>Earn money($)</button></th>
+                            <th className="text-center"><button >Created at</button></th>
+                            <th className="text-center"><button >Status</button></th>
+                            <th className="text-center"><button >Action</button></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -177,7 +234,7 @@ export function AdminHostList() {
                                     </td>
                                     <td>{item.user.phoneNumber}</td>
                                     <td>{item.houseCount}</td>
-                                    <td>10000</td>
+                                    <td>{item.user.earnedMoney}</td>
                                     <td>{item.user.createAt}</td>
                                     {!item.user.blocked ?
                                         <td><span className="status text-success">&bull;</span> Active</td> :
