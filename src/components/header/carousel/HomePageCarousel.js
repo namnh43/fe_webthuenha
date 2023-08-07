@@ -13,9 +13,8 @@ export function HomePageCarousel() {
             .get("http://localhost:8080/house")
             .then((res) => {
                 const top5House = res.data
-                    .sort((h1, h2) => h2.numberOfRented - h1.numberOfRented)
-                    .slice(0, 4)
-                    .reverse();
+                    .sort((h1, h2) => h2.ratingScore - h1.ratingScore)
+                    .slice(0, 4);
                 setTop5RentedHouse(top5House);
             })
             .catch((error) => {

@@ -5,6 +5,7 @@ import UploadImageField from "../../upload";
 import {useNavigate} from "react-router";
 import * as Yup from "yup";
 import Constants from "../../../utils/constants";
+import Swal from "sweetalert2";
 
 const HouseSchema = Yup.object().shape({
     name: Yup.string().required('* Required'),
@@ -65,8 +66,21 @@ function OwnerAddHouseForm() {
                 config
             )
             .then((res) => {
-                alert("Added House");
+                Swal.fire({
+                    title: "Success",
+                    text: "House added successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
                 navigation("/owner");
+            })
+            .catch(() => {
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong, please try again later",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                })
             })
             .finally(() => {
             });

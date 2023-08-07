@@ -28,8 +28,12 @@ export const formatDate = (dateString) => {
     const day = dateObject.getDate().toString().padStart(2, '0');
     const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
     const year = dateObject.getFullYear();
-    return `${day}-${month}-${year}`;
+    return `${day}/${month}/${year}`;
 }
+
+export const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
 export const removeById = (list,id) => {
 

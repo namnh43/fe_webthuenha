@@ -20,6 +20,7 @@ import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import {useNavigate} from "react-router";
+import Swal from "sweetalert2";
 
 export function Navbar() {
     const menuBarStyle = {
@@ -74,7 +75,12 @@ export function Navbar() {
         axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
             .then(() => localStorage.clear())
             .then(() => setLogin(false))
-            .then(() => navigate('/login'))
+            .then(() => navigate('/'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Logged out',
+            timer: 1000
+        })
     }
 
     const handleLoginClick = () => {
@@ -112,7 +118,6 @@ export function Navbar() {
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleCloseDialog}>Cancel</Button>
                             <Button onClick={() => {
                                 const config = {
                                     headers: {
@@ -123,6 +128,11 @@ export function Navbar() {
                                 axios.post('http://localhost:8080/user/apply-host', {}, config)
                                     .then((res) => {
                                         handleCloseDialog()
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'You are sent a request to become an owner!',
+                                            timer: 2500
+                                        })
                                         console.log('haha')
                                     })
                                     .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
@@ -137,6 +147,7 @@ export function Navbar() {
                             }} autoFocus>
                                 Confirm
                             </Button>
+                            <Button className={'text-danger'} onClick={handleCloseDialog}>Cancel</Button>
                         </DialogActions>
                     </Dialog>
                     <Dialog

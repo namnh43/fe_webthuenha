@@ -59,28 +59,57 @@ export function AdminWaitingHost() {
             denyButtonText: 'Deny',
         }).then(data => {
             if (data.isConfirmed || data.isDenied) {
-                const url = data.isConfirmed ?  'http://localhost:8080/admin/accept-host/' + id :
+                const url = data.isConfirmed ? 'http://localhost:8080/admin/accept-host/' + id :
                     'http://localhost:8080/admin/reject-host/' + id;
-                console.log('url ',url)
-                const msg = {msg:data.value};
+                console.log('url ', url);
+                const msg = {msg: data.value};
                 const params = {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     }
-                }; // Các tham số truyền cho API (nếu cần)
-                postData(url, msg, params ).then(data => {
-                    //remove item from list
-                    const newList = hosts.filter((item) => {
-                        return item.id != id;
+                };
+
+                // Hiển thị thông báo chờ đợi
+                Swal.fire({
+                    title: "Please wait...",
+                    text: "Sending request...",
+                    icon: "info",
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                postData(url, msg, params)
+                    .then((data) => {
+                        // Xoá item từ danh sách
+                        const newList = hosts.filter((item) => item.id !== id);
+                        setHosts(newList);
+
+                        // Đóng thông báo chờ đợi khi thành công
+                        Swal.fire({
+                            title: "Success",
+                            text: "Action completed successfully.",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        });
                     })
-                    setHosts(newList);
-                })
+                    .catch((error) => {
+                        // Xử lý lỗi và đóng thông báo chờ đợi khi có lỗi
+                        Swal.fire({
+                            title: "Error",
+                            text: "Failed to complete action.",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    });
             }
-        }).then((data) => {
-            console.log(data)
         }).catch((err) => {
             console.log(err)
-        })
+        });
     }
     return (
         <>

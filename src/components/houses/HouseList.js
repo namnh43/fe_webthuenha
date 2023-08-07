@@ -1,11 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Card, CardActionArea, CardContent, CardMedia, Typography} from "@mui/material";
 import {useNavigate} from "react-router";
-import StarIcon from '@mui/icons-material/Star';
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import LocalHotelRoundedIcon from '@mui/icons-material/LocalHotelRounded';
-import BathtubIcon from '@mui/icons-material/Bathtub';
 import {ListComponent} from "./ListComponent";
 import Constants from "../../utils/constants";
 export function HouseList() {
@@ -25,7 +20,7 @@ export function HouseList() {
         const endDate = searchParams.get('endDate');
 
     }, [])
-    const topHouse = list
+    const topHouse = [...list]
         .sort((a, b) => b.numberOfRented - a.numberOfRented)
         .slice(0, 4);
 
@@ -33,11 +28,11 @@ export function HouseList() {
         <>
             <div className="bg-light pt-4 pb-4 border-top">
                 <div className="container">
-                    <h1>Top Visited</h1>
+                    <h2>Top Rented</h2>
                     <div className="row">
                         <ListComponent listHouse={topHouse}/>
                     </div>
-                    <h1 className='mt-5'>Popular Houses</h1>
+                    <h2 className='mt-5'>Popular Houses</h2>
                     <div className="row">
                         <ListComponent listHouse={list}/>
                     </div>

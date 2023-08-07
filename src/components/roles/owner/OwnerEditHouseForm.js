@@ -3,6 +3,7 @@ import axios from "axios";
 import {Field, Form, Formik} from "formik";
 import {useNavigate, useParams} from "react-router";
 import UploadImageField from "../../upload";
+import Swal from "sweetalert2";
 
 function OwnerEditHouseForm() {
     const navigate = useNavigate();
@@ -60,14 +61,24 @@ function OwnerEditHouseForm() {
                 config
             )
             .then((response) => {
-                alert("House updated successfully!");
+                Swal.fire({
+                    title: "Success",
+                    text: "House added successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
                 console.log("House updated successfully:", response.data);
 
                 setEditedHouse({...editedHouse, ...values});
                 navigate('/owner')
             })
             .catch((error) => {
-                console.error("Error updating house:", error);
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong, please try again later",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                })
 
             })
             .finally(() => {

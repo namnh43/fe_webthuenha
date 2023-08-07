@@ -97,7 +97,7 @@ const MapWithSearch = ({ initialAddress }) => {
             {/*{userLocation && <p>Khoảng cách: {distance} km</p>}*/}
             <LoadScript googleMapsApiKey={apiKey}>
                 <GoogleMap
-                    mapContainerStyle={{ width: '100%', height: '400px' }}
+                    mapContainerStyle={{ width: '100%', height: '358px', borderRadius: '8px' }}
                     center={mapCenter}
                     zoom={15}
                 >

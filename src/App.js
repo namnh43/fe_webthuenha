@@ -21,7 +21,6 @@ import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/roles/owner/OwnerBookingList";
 import OwnerMaintenanceList from "./components/roles/owner/OwnerMaintenanceList";
 import {SearchPage} from "./pages/SearchPage";
-import './components/scroll/scroll.css'
 function App() {
   return (
     <div className="App">

@@ -48,13 +48,14 @@ function SearchBar() {
         const queryString = createQueryString({address:address,minprice:minPrice,maxprice:maxPrice,startdate:selectedRange[0],enddate:selectedRange[1]});
         console.log('query',queryString)
         navigate('/search?'+queryString)
+        window.scrollTo(0, 180);
     }
 
     const handleDateRangeChange = (ranges) => {
         if (ranges && ranges.length === 2)
             setSelectedRange([ranges[0].toLocaleDateString('en-CA'),ranges[1].toLocaleDateString('en-CA')]);
         else
-            setSelectedRange(null)
+            setSelectedRange(['',''])
     };
 
     useEffect(() => {
@@ -87,8 +88,8 @@ function SearchBar() {
     }, []);
 
     return (
-        <div className="search-sec col-8 m-auto my-5" style={{position: 'sticky', top: "0px", zIndex: "1000",    padding: isSticky ? "12px" : "20px"}}>
-            <div className="row pl-4" >
+        <div className="search-sec col-8 m-auto my-5" style={{ position: 'sticky', top: "0px", left: '323px', zIndex: "1000", padding: "12px" }}>
+            <div className="row pl-4">
                 <div className="col-3 p-1">
                     <input
                         type="text"
@@ -97,45 +98,43 @@ function SearchBar() {
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         placeholder="Location"
-                        style={{height: '42px'}}
+                        style={{ height: '42px', border: '1px solid #bdbdbd', borderRadius: '6px' }}
                     />
                 </div>
-                <div className="col-2 p-1">
+                <div className="col-3 mt-1" style={{padding : '0px',maxWidth: '180px',maxHeight: '42px', display: 'flex', alignItems: 'center', border: '1px solid #bdbdbd', borderRadius: '6px'}}>
                     <input
-                        type="number"
+                        type="text"
                         className="form-control search-slt"
                         id="minPrice"
                         min="0"
                         value={minPrice}
                         onChange={(e) => setMinPrice(e.target.value)}
-                        placeholder="Min Price($)"
-                        style={{height: '42px'}}
-
+                        placeholder="Min price"
+                        style={{border: 'none', padding: '0px', textAlign: 'right'}}
                     />
-                </div>
-                <div className="col-2 p-1">
+                    <span style={{fontSize: '25px', color:'grey', margin: '0 5px'}}>-</span>
                     <input
-                        type="number"
+                        type="text"
                         className="form-control search-slt"
                         id="maxPrice"
                         min="0"
                         value={maxPrice}
                         onChange={(e) => setMaxPrice(e.target.value)}
-                        placeholder="Max Price($)"
-                        style={{height: '42px'}}
+                        placeholder="max price"
+                        style={{border: 'none',padding: '0px',  textAlign: 'left' }}
                     />
                 </div>
                 <div className="col-3 p-1">
                     <DateRangePickerComponent onChange={handleDateRangeChange} inputRange={selectedRange} />
                 </div>
-                <div className="col-2 p-1">
-                    <Button variant="outlined" startIcon={<SearchIcon/>} onClick={handleInputChange}
-                            style={{height: '40px'}}>
+                <div className="col-3 p-1">
+                    <Button variant="outlined" startIcon={<SearchIcon />} onClick={handleInputChange} style={{ height: '42px', marginLeft: '2px', borderRadius: '6px' }}>
                         Search
                     </Button>
                 </div>
             </div>
         </div>
+
 
     );
 }
