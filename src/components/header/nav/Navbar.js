@@ -21,6 +21,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import {useNavigate} from "react-router";
 import Swal from "sweetalert2";
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 export function Navbar() {
     const menuBarStyle = {
@@ -48,6 +49,19 @@ export function Navbar() {
 
     const [openDialog, setOpenDialog] = useState(false);
     const [openOwnerRequestSentDialog, setOpenOwnerRequestSentDialog] = useState(false);
+
+    //handle notifycation
+    const [notifies,setNotifies] = useState(['notify 1','notify 2']);
+    const [anchorElNotify, setAnchorElNotify] = React.useState(null);
+    const openNotify = Boolean(anchorElNotify);
+    const handleClickNotify = (event) => {
+        console.log('click')
+        setAnchorElNotify(event.currentTarget);
+    };
+    const handleCloseNotify = () => {
+        setAnchorElNotify(null);
+    };
+
     const handleClickOpenDialog = () => {
         if (localStorage.getItem('currentUserApplyHost') === 'false') {
             setOpenDialog(true);
@@ -177,7 +191,62 @@ export function Navbar() {
                                                              handleLoginClick();
                                                              navigate("/login");
                                                          }}> <ListItemText>Login </ListItemText></ListItemButton> :
+
                                     <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+                                        <ListItemIcon>
+                                            <NotificationsNoneIcon
+                                                onClick={handleClickNotify}
+                                                size="small"
+                                                sx={{ml: 2}}
+                                                aria-controls={ openNotify ? 'account-menu' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={openNotify ? 'true' : undefined}
+                                            >
+
+                                            </NotificationsNoneIcon>
+                                            <Menu
+                                                id="demo-positioned-menu"
+                                                aria-labelledby="demo-positioned-button"
+                                                anchorEl={anchorElNotify}
+                                                open={openNotify}
+                                                onClose={handleCloseNotify}
+                                                PaperProps={{
+                                                    elevation: 0,
+                                                    sx: {
+                                                        overflow: 'visible',
+                                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                        mt: 1.5,
+                                                        '& .MuiAvatar-root': {
+                                                            width: 32,
+                                                            height: 32,
+                                                            ml: -0.5,
+                                                            mr: 1,
+                                                        },
+                                                        '&:before': {
+                                                            content: '""',
+                                                            display: 'block',
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            right: 14,
+                                                            width: 10,
+                                                            height: 10,
+                                                            bgcolor: 'background.paper',
+                                                            transform: 'translateY(-50%) rotate(45deg)',
+                                                            zIndex: 0,
+                                                        },
+                                                    },
+                                                }}
+                                                transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                                                anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+                                            >
+                                                {notifies.map((item,key) => {
+                                                    return (
+                                                        <MenuItem>{item}</MenuItem>
+                                                    )
+                                                })}
+
+                                            </Menu>
+                                        </ListItemIcon>
                                         <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
                                         <Tooltip title="Account settings">
                                             <IconButton
@@ -209,32 +278,32 @@ export function Navbar() {
                             open={open}
                             onClose={handleClose}
                             onClick={handleClose}
-                            PaperProps={{
-                                elevation: 0,
-                                sx: {
-                                    overflow: 'visible',
-                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                    mt: 1.5,
-                                    '& .MuiAvatar-root': {
-                                        width: 32,
-                                        height: 32,
-                                        ml: -0.5,
-                                        mr: 1,
-                                    },
-                                    '&:before': {
-                                        content: '""',
-                                        display: 'block',
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 14,
-                                        width: 10,
-                                        height: 10,
-                                        bgcolor: 'background.paper',
-                                        transform: 'translateY(-50%) rotate(45deg)',
-                                        zIndex: 0,
-                                    },
-                                },
-                            }}
+                            // PaperProps={{
+                            //     elevation: 0,
+                            //     sx: {
+                            //         overflow: 'visible',
+                            //         filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                            //         mt: 1.5,
+                            //         '& .MuiAvatar-root': {
+                            //             width: 32,
+                            //             height: 32,
+                            //             ml: -0.5,
+                            //             mr: 1,
+                            //         },
+                            //         '&:before': {
+                            //             content: '""',
+                            //             display: 'block',
+                            //             position: 'absolute',
+                            //             top: 0,
+                            //             right: 14,
+                            //             width: 10,
+                            //             height: 10,
+                            //             bgcolor: 'background.paper',
+                            //             transform: 'translateY(-50%) rotate(45deg)',
+                            //             zIndex: 0,
+                            //         },
+                            //     },
+                            // }}
                             transformOrigin={{horizontal: 'right', vertical: 'top'}}
                             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                         >

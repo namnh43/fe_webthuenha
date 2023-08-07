@@ -21,6 +21,7 @@ import {HouseDetailPage} from "./pages/HouseDetailPage";
 import OwnerBookingList from "./components/roles/owner/OwnerBookingList";
 import OwnerMaintenanceList from "./components/roles/owner/OwnerMaintenanceList";
 import {SearchPage} from "./pages/SearchPage";
+import WebsocketComponent from "./components/websocket/WebsocketComponent";
 function App() {
   return (
     <div className="App">
@@ -50,6 +51,7 @@ function App() {
           </Route>
           <Route path='/test' element={<FormWithImageUpload/>}/>
       </Routes>
+        <WebsocketComponent/>
     </div>
   );
 }

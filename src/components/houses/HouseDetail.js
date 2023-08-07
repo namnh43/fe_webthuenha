@@ -17,6 +17,9 @@ import LocalHotelRoundedIcon from "@mui/icons-material/LocalHotelRounded";
 import {capitalizeFirstLetter} from "../../utils/api";
 import HouseDescription from "./HouseDescription";
 import BeenhereIcon from '@mui/icons-material/Beenhere';
+import SockJS from "sockjs-client";
+import Constants from "../../utils/constants";
+import Stomp from "stompjs";
 
 export function HouseDetail() {
     const [listImages, setListImages] = useState([]);
@@ -112,14 +115,13 @@ export function HouseDetail() {
                         Swal.fire({
                             icon: 'success',
                             title: 'Booking successful!',
-                            html: `<div style="text-align: left; margin:auto" class="col-8">
-                    <span><b>House :</b> ${house.name}</span><br>
-                    <span><b>Address :</b> ${house.address}</span><br>
-                    <span><b>Start Date :</b> ${result.startDate}</span><br>
-                    <span><b>End Date :</b> ${result.endDate}</span><br>
-                    <span><b>Price :</b> ${result.price}</span><br>
-                    <span><b>Total :</b> ${result.total}</span><br>
-                    </div>
+                            html: `
+                    <div>House: ${house.name}</div>
+                    <div>Address: ${house.address}</div>
+                    <div>Start Date: ${result.startDate}</div>
+                    <div>End Date: ${result.endDate}</div>
+                    <div>Price: ${result.price}</div>
+                    <div>Total: ${result.total}</div>
                     `,
                             footer: '<a href="/user/booking-history">Click here to see booking list</a>'
                         });
@@ -242,19 +244,19 @@ export function HouseDetail() {
                                 </div>
                             </div>
                             <div className="bg-white border-bottom border-top mt-2">
-                                <div className="row mb-3 align-items-center border-bottom">
+                                <div className="row mb-2 align-items-center border-bottom">
                                     <div className="col-9 mt-2">
-                                        <h4 className={'mt-0 pt-0'}>
+                                        <h4>
                                             <b>Host {house.user ? house.user.firstName : ''} {house.user ? house.user.lastName : ''}</b>
                                         </h4>
-                                        {house.user && <span>
-                                            <BeenhereIcon fontSize="small"/>{house.user.createAt} &nbsp;<HomeIcon style={{paddingBottom:'2px'}}/>{house.user.numberOfHouse} houses
-                                        </span>}
+                                        <p>
+                                            <BedIcon />{house.totalBedrooms} Bed room . <BathtubIcon />{house.totalBathrooms} Bath room
+                                        </p>
                                     </div>
                                     <div className="col-3 text-md-right my-4">
                                         <img
                                             src={house.user ? house.user.profileImage : "https://cuongquach.com/wp-content/uploads/2016/05/linux-logo-356x220.png"}
-                                            style={{ width: '60px', height: '60px', borderRadius: '50%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.4)' }}
+                                            style={{ width: '60px', height: '60px', borderRadius: '50%' }}
                                             alt=""
                                         />
                                     </div>
@@ -335,10 +337,6 @@ export function HouseDetail() {
                 </div>
 
                 <br/>
-            </div>
-
-            <div>
-
             </div>
 
             <Footer/>
