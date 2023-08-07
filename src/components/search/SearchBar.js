@@ -36,7 +36,7 @@ function SearchBar() {
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const handleInputChange = (event) => {
-        if (minPrice > maxPrice) {
+        if ( parseInt(minPrice) > parseInt(maxPrice)) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops...',
