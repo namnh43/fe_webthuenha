@@ -89,10 +89,10 @@ function OwnerHouseList() {
     const navigate = useNavigate()
 
     const [houseList, setHouseList] = useState([])
-
+    const [searchHouse, setSearchHouse] = useState([]);
     //pagination
     const [pagesVisited, setPagesVisited] = useState(0);
-    const housesPerPage = 5;
+    const [housesPerPage,setHousesPerPage] = useState(5);
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -108,6 +108,7 @@ function OwnerHouseList() {
             .then((res) => {
                 console.log(res.data)
                 setHouseList(res.data.reverse())
+                setSearchHouse(res.data)
             });
     }, []);
 
@@ -185,6 +186,19 @@ function OwnerHouseList() {
     let handleCloseDialog = () => {
         setOpenDialog(false)
     }
+    function search(){
+        const search = document.getElementById('search').value.trim().toLowerCase();
+        const searchFilter = searchHouse.filter((house)=> {
+            if (
+                (!search || house.address.toLowerCase().includes(search)
+                    || house.name.toLowerCase().includes(search))
+            ) {
+                return true;
+            }
+            return false;
+        });
+        setHouseList(searchFilter);
+    }
 
     return (<>
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
@@ -196,6 +210,7 @@ function OwnerHouseList() {
                 <i className="material-icons">&#xf8eb;</i>
                 <span>Create new</span></button>
         </div>
+        <input onChange={search} id="search" name="search" type="text" placeholder="Enter keyword" required  />
         <section className="main">
             <div className="table-responsive">
                 <table className="table table-bordered table-striped table-hover border border-secondary-subtle">
@@ -266,6 +281,15 @@ function OwnerHouseList() {
                 </tbody>
             </table>
             </div>
+            <select onChange={(event)=>{
+                setHousesPerPage(event.target.value);
+            }} name="page" style={{width:'80px'}}>
+                <option value="">Page</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+            </select>
             <PaginationComponent data={houseList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
         </section>
     </>);

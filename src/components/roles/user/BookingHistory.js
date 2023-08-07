@@ -30,7 +30,7 @@ function BookingHistory() {
     };
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const bookingPerpage = 5;
+    const [bookingPerpage,setBookingPerpage] = useState(5);
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -90,12 +90,16 @@ function BookingHistory() {
 
 
     function search() {
-        const houseName = document.getElementById('house-name-input').value.trim().toLowerCase();
+        const search = document.getElementById('search').value.trim().toLowerCase();
         const status = document.getElementById('status-select').value;
         const searchFilter = searchBooking.filter((booking) => {
             if (
-                (!houseName || booking.house?.name?.toLowerCase().includes(houseName)
-                    || booking.house?.address?.toLowerCase().includes(houseName)) &&
+                (!search || booking.house?.name?.toLowerCase().includes(search)
+                    || booking.house?.address?.toLowerCase().includes(search)
+                    || formatDate(booking.startDate).includes(search)
+                    || formatDate(booking.endDate).includes(search)
+                    || booking.bookingStatus.toLowerCase().includes(search)
+                    || booking.total.toString().includes(search)) &&
                 (!status || booking.bookingStatus === status) &&
                 (selectedRange[0]==="" ||
                     ((selectedRange[1]>=booking.startDate && booking.startDate >= selectedRange[0] ) ||
@@ -124,6 +128,71 @@ function BookingHistory() {
         });
          setBookingList(sortedBooking);
     }
+    function addressClick(){
+        toggleAscending()
+        const sortedBooking = searchBooking.sort((a, b) => {
+            if (a.house?.address < b.house?.address) {
+                return ascending ? -1 : 1;
+            } else if (a.house.address > b.house.address) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setBookingList(sortedBooking);
+    }
+    function idClick(){
+        toggleAscending()
+        const sortedBooking = searchBooking.sort((a, b) => {
+            if (a.house?.id < b.house?.id) {
+                return ascending ? -1 : 1;
+            } else if (a.house.id > b.house.id) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setBookingList(sortedBooking);
+    }
+    function totalClick(){
+        toggleAscending()
+        const sortedBooking = searchBooking.sort((a, b) => {
+            if (a.total < b.total) {
+                return ascending ? -1 : 1;
+            } else if (a.total > b.total) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setBookingList(sortedBooking);
+    }
+    function sDateClick(){
+        toggleAscending()
+        const sortedBooking = searchBooking.sort((a, b) => {
+            if (a.startDate < b.startDate) {
+                return ascending ? -1 : 1;
+            } else if (a.startDate > b.startDate) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setBookingList(sortedBooking);
+    }
+    function eDateClick(){
+        toggleAscending()
+        const sortedBooking = searchBooking.sort((a, b) => {
+            if (a.endDate < b.endDate) {
+                return ascending ? -1 : 1;
+            } else if (a.endDate > b.endDate) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setBookingList(sortedBooking);
+    }
 
 
 
@@ -137,8 +206,9 @@ function BookingHistory() {
                 />
             ) : (
                 <>
+                    <h2>Booking List</h2>
                     <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <input id="house-name-input" name="house-name" type="text" placeholder="Enter keyword" required  />
+                        <input id="search" name="house-name" type="text" placeholder="Enter keyword" required  />
                         &nbsp;
                         <select id="status-select" name="status">
                             <option value="">-- Select status --</option>
@@ -158,15 +228,15 @@ function BookingHistory() {
                         <table  className="table table-striped table-hover ">
                             <thead>
                             <tr>
-                                <th className="text-left" style={{verticalAlign:'middle',width:"70px"}}>#</th>
+                                <th className="text-left" style={{verticalAlign:'middle',width:"70px"}}><button onClick={idClick}>#</button></th>
                                 <th className="text-left"></th>
-                                <th className="text-left">Start Date</th>
-                                <th className="text-left">End Date</th>
+                                <th className="text-left"><button onClick={sDateClick}>Start Date</button></th>
+                                <th className="text-left"><button onClick={eDateClick}>End Date</button></th>
                                 <th className="text-left"><button onClick={houseClick}>Name</button></th>
-                                <th className="text-left">Total</th>
-                                <th className="text-left">Address</th>
-                                <th className="text-left">Status</th>
-                                <th className="text-left">Action</th>
+                                <th className="text-left"><button onClick={totalClick}>Total</button></th>
+                                <th className="text-left"><button onClick={addressClick}>Address</button></th>
+                                <th className="text-left"><button>Status</button></th>
+                                <th className="text-left"><button>Action</button></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -176,7 +246,7 @@ function BookingHistory() {
                                     return (
                                         <tr key={key}>
                                             <td className="text-left" style={{verticalAlign:'middle',width:"70px"}}>{key + 1+ pagesVisited}</td>
-                                            <td className="text-left"><img src={item.house.images.length > 0 ? item.house.images[0].fileUrl : 'https://a0.muscache.com/im/pictures/prohost-api/Hosting-807647632904963046/original/6d41a0ce-a5a4-4d1f-bbca-5a3242f7834e.jpeg?im_w=1200'} style={{width:"80px",height:"80px", borderRadius:"50%"}}/></td>
+                                            <td className="text-left"><img src={item.house.images[0].fileUrl} style={{width:"80px",height:"80px", borderRadius:"50%"}}/></td>
                                             <td className="text-left" style={{verticalAlign:'middle'}}>{formatDate(item.startDate)}</td>
                                             <td className="text-left" style={{verticalAlign:'middle'}}>{formatDate(item.endDate)}</td>
                                             <td className="text-left" style={{verticalAlign:'middle'}}>{item.house.name}</td>
@@ -203,6 +273,15 @@ function BookingHistory() {
                                 })}
                             </tbody>
                         </table>
+                        <select onChange={(event)=>{
+                            setBookingPerpage(event.target.value);
+                        }} name="page" style={{width:'80px'}}>
+                            <option value="">Page</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
                         <PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>
                     </section>
                 </>
