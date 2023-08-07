@@ -155,10 +155,10 @@ export function AdminHostList() {
                         <thead>
                         <tr>
                             <th className="text-center">#</th>
-                            <th className="text-center">UserName</th>
+                            <th className="text-center">Username</th>
                             <th className="text-center">Phone number</th>
-                            <th className="text-center">Number home</th>
-                            <th className="text-center">Earn money($)</th>
+                            <th className="text-center">Houses</th>
+                            <th className="text-center">Earn money</th>
                             <th className="text-center">Created at</th>
                             <th className="text-center">Status</th>
                             <th className="text-center">Action</th>
@@ -175,8 +175,8 @@ export function AdminHostList() {
                                              className="avatar"/>{item.user.username}
                                     </td>
                                     <td>{item.user.phoneNumber}</td>
-                                    <td>{item.houseCount}</td>
-                                    <td>10000</td>
+                                    <td>{item.user.numberOfHouse}</td>
+                                    <td>{item.user.earnedMoney}</td>
                                     <td>{item.user.createAt}</td>
                                     {!item.user.blocked ?
                                         <td><span className="status text-success">&bull;</span> Active</td> :

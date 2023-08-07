@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import * as Yup from "yup";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import Swal from "sweetalert2";
 
@@ -28,7 +28,9 @@ const SignupSchema = Yup.object().shape({
 export function RegisterPage() {
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
-
+    useEffect(() => {
+        document.title = "Register";
+    },[])
 
     return (
         <Formik

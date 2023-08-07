@@ -16,7 +16,6 @@ export function SearchHouseResult() {
     let [searchParams, setSearchParams] = useSearchParams();
     let searchQuery={};
     useEffect(()=> {
-
     },[searchParams])
     useEffect(() => {
 

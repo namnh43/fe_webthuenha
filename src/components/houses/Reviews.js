@@ -159,12 +159,12 @@ const Reviews = ({ house }) => {
                 <div style={{ width: 'fit-content', margin: 'auto' }}>
                     {house.reviews && house.reviews.length > displayedReviews && (
                         <button onClick={() => setDisplayedReviews((prev) => prev + step)}
-                                className="btn btn-outline-primary mr-3">See More</button>
+                                className="btn btn-primary mr-3">See More</button>
                     )}
 
                     {displayedReviews > step && (
                         <button onClick={() => setDisplayedReviews(step)}
-                                className="btn btn-outline-success">Hide</button>
+                                className="btn btn-success">Hide</button>
                     )}
                 </div>
 

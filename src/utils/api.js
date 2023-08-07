@@ -31,6 +31,10 @@ export const formatDate = (dateString) => {
     return `${day}/${month}/${year}`;
 }
 
+export const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export const removeById = (list,id) => {
 
 }

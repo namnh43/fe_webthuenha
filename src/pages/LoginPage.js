@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import * as Yup from "yup";
-import React from "react";
+import React, {useEffect} from "react";
 import GoogleOAuth2Login from "../components/OAuth2/googleOAuth2";
 import Swal from "sweetalert2";
 
@@ -15,6 +15,9 @@ const LoginSchema = Yup.object().shape({
 
 export function LoginPage() {
     const navigate = useNavigate();
+    useEffect(() => {
+        document.title = "Login";
+    },[])
 
     return (
         <Formik

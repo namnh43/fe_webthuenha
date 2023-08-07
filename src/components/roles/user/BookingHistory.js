@@ -177,7 +177,7 @@ function BookingHistory() {
                                     return (
                                         <tr key={key}>
                                             <td className="text-left" style={{verticalAlign:'middle',width:"70px"}}>{key + 1+ pagesVisited}</td>
-                                            <td className="text-left"><img src={item.house.images[0].fileUrl} style={{width:"80px",height:"80px", borderRadius:"50%"}}/></td>
+                                            <td className="text-left"><img src={item.house.images.length > 0 ? item.house.images[0].fileUrl : 'https://a0.muscache.com/im/pictures/prohost-api/Hosting-807647632904963046/original/6d41a0ce-a5a4-4d1f-bbca-5a3242f7834e.jpeg?im_w=1200'} style={{width:"80px",height:"80px", borderRadius:"50%"}}/></td>
                                             <td className="text-left" style={{verticalAlign:'middle'}}>{formatDate(item.startDate)}</td>
                                             <td className="text-left" style={{verticalAlign:'middle'}}>{formatDate(item.endDate)}</td>
                                             <td className="text-left" style={{verticalAlign:'middle'}}>{item.house.name}</td>
