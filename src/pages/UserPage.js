@@ -13,7 +13,7 @@ export function UserPage() {
         <>
             <Menubar/>
             <Grid container spacing={1}>
-                <Grid item xs={3}>
+                <Grid item xs={2.5} className={'border-right'}>
                     <UserSidebar/>
                 </Grid>
                 <Divider

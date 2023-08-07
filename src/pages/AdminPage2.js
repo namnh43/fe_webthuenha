@@ -12,7 +12,7 @@ export function AdminPage2() {
         <>
             <Menubar/>
             <Grid container spacing={1}>
-                <Grid item xs={2.5}>
+                <Grid item xs={2.5} className={'border-right'}>
                     <AdminSidebar/>
                 </Grid>
                 <Divider

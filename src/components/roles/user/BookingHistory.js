@@ -92,7 +92,6 @@ function BookingHistory() {
     function search() {
         const houseName = document.getElementById('house-name-input').value.trim().toLowerCase();
         const status = document.getElementById('status-select').value;
-
         const searchFilter = searchBooking.filter((booking) => {
             if (
                 (!houseName || booking.house?.name?.toLowerCase().includes(houseName)

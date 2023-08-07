@@ -97,7 +97,7 @@ export function UserProfile() {
     }
 
     return (
-        <div className="mt-4 pl-2">
+        <div className="my-3">
             <h2 className='mb-3'>Profile</h2>
             <div className="container">
                 <div className="row">

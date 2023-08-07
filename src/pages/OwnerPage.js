@@ -12,7 +12,7 @@ function OwnerPage() {
         <>
             <Menubar/>
             <Grid container spacing={1}>
-                <Grid item xs={2.5}>
+                <Grid item xs={2.5} className="border-right">
                     <OwnerSideBar2/>
                 </Grid>
                 <Divider

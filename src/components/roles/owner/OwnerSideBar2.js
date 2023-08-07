@@ -15,7 +15,6 @@ function OwnerSideBar2() {
         setSelectedItem(currentUrl)
     });
 
-
     const drawer = (<div>
         <List>
             <ListItem key={'Houses'} className="">
