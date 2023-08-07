@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 // Hàm utility sử dụng Axios để lấy dữ liệu
 export const fetchData = async (url, params = {}) => {
@@ -38,3 +39,17 @@ export const capitalizeFirstLetter = (str) => {
 export const removeById = (list,id) => {
 
 }
+
+export const showLoadingAlert = () => {
+    Swal.fire({
+        title: 'Loading',
+        icon: 'info',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+            setTimeout(() => {
+                Swal.close();
+            }, 700);
+        }
+    });
+};

@@ -6,3 +6,34 @@
 .card-container:hover {
     transform: scale(1.08);
 }
+
+.skeleton-card {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.skeleton-media {
+    width: 200px;
+    height: 200px;
+}
+
+.skeleton-content {
+    padding: 8px;
+    flex: 1;
+}
+
+.skeleton-text {
+    width: 70%;
+    height: 15px;
+    background-color: #e0e0e0;
+    margin-bottom: 5px;
+}
+
+.skeleton-text:last-child {
+    width: 40%;
+}
+

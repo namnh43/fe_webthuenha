@@ -78,7 +78,7 @@ function SearchBar() {
 
     useEffect(() => {
         function handleScroll() {
-            setIsSticky(window.pageYOffset >= 60); // Set to true when the scroll position is 60px or more
+            setIsSticky(window.pageYOffset >= 60);
         }
 
         window.addEventListener("scroll", handleScroll);
@@ -89,7 +89,7 @@ function SearchBar() {
 
     return (
         <div className="search-sec col-8 m-auto my-5" style={{ position: 'sticky', top: "0px", left: '323px', zIndex: "1000", padding: "12px" }}>
-            <div className="row pl-4">
+            <div className="row pl-4" >
                 <div className="col-3 p-1">
                     <input
                         type="text"
@@ -112,7 +112,7 @@ function SearchBar() {
                         placeholder="Min price"
                         style={{border: 'none', padding: '0px', textAlign: 'right'}}
                     />
-                    <span style={{fontSize: '25px', color:'grey', margin: '0 5px'}}>-</span>
+                    <p style={{fontSize: '25px', color:'#A1A1A1FF', margin: '0 5px', paddingBottom: '5px'}}>-</p>
                     <input
                         type="text"
                         className="form-control search-slt"

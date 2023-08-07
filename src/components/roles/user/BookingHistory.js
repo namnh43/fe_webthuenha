@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import "./BookingList.css";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
 import ReviewForm from "../../ReviewForm";
 import '../../scroll/scroll.css';
 import {formatDate} from "../../../utils/api";
-import 'datatables.net';
-import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
-import 'datatables.net-select-bs4/css/select.bootstrap4.min.css';
-
+import {backdropClasses} from "@mui/material";
 
 function BookingHistory() {
     const [bookingList, setBookingList] = useState([]);
@@ -206,11 +202,11 @@ function BookingHistory() {
                 />
             ) : (
                 <>
-                    <h2>Booking List</h2>
-                    <div onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <input id="search" name="house-name" type="text" placeholder="Enter keyword" required  />
+                    <h2 className={'my-3'}>Booking List</h2>
+                    <div className={'mt-2 mb-4'} onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <input style={{border: '1px solid #bdbdbd', borderRadius: '5px', paddingLeft: '8px'}} id="search" name="house-name" type="text" placeholder="Search keyword" required  />
                         &nbsp;
-                        <select id="status-select" name="status">
+                        <select style={{border: '1px solid #bdbdbd', borderRadius: '5px'}} className={'custome-input'} id="status-select" name="status">
                             <option value="">-- Select status --</option>
                             <option value="CANCELLED">CANCELLED</option>
                             <option value="BOOKING">BOOKING</option>
@@ -218,70 +214,71 @@ function BookingHistory() {
                             <option value="CHECKED_OUT">CHECKED_OUT</option>
                         </select>
                         &nbsp;
-                        <div style={{border:"1px solid grey"}}>
+                        <div>
                             <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange} />
+                        </div>
+                        <div style={{marginLeft:'auto'}}>
+                            Entries/page &nbsp;
+                            <select onChange={(event)=>{
+                                setBookingPerpage(event.target.value);
+                            }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                                <option value="5">---</option>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
                         </div>
 
                     </div>
-                    <h2>Booking List</h2>
                     <section className="main">
-                        <table  className="table table-striped table-hover ">
-                            <thead>
-                            <tr>
-                                <th className="text-left" style={{verticalAlign:'middle',width:"70px"}}><button onClick={idClick}>#</button></th>
-                                <th className="text-left"></th>
-                                <th className="text-left"><button onClick={sDateClick}>Start Date</button></th>
-                                <th className="text-left"><button onClick={eDateClick}>End Date</button></th>
-                                <th className="text-left"><button onClick={houseClick}>Name</button></th>
-                                <th className="text-left"><button onClick={totalClick}>Total</button></th>
-                                <th className="text-left"><button onClick={addressClick}>Address</button></th>
-                                <th className="text-left"><button>Status</button></th>
-                                <th className="text-left"><button>Action</button></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {bookingList
-                                .slice(pagesVisited, pagesVisited + bookingPerpage)
-                                .map((item, key) => {
-                                    return (
-                                        <tr key={key}>
-                                            <td className="text-left" style={{verticalAlign:'middle',width:"70px"}}>{key + 1+ pagesVisited}</td>
-                                            <td className="text-left"><img src={item.house.images[0].fileUrl} style={{width:"80px",height:"80px", borderRadius:"50%"}}/></td>
-                                            <td className="text-left" style={{verticalAlign:'middle'}}>{formatDate(item.startDate)}</td>
-                                            <td className="text-left" style={{verticalAlign:'middle'}}>{formatDate(item.endDate)}</td>
-                                            <td className="text-left" style={{verticalAlign:'middle'}}>{item.house.name}</td>
-                                            <td className="text-left" style={{verticalAlign:'middle'}}>{item.total}</td>
-                                            <td className="text-left" style={{verticalAlign:'middle'}}>{item.house.address}</td>
-                                            <td className="text-left" style={{verticalAlign:'middle'}}>{item.bookingStatus}</td>
-                                            {(item.bookingStatus === "CHECKED_OUT" && item.review === null) ? (
-                                                <td  style={{verticalAlign:'middle'}}>
-                                                    <button className="btn btn-success" onClick={() => setReviewBookingId(item.id)}>
-                                                        Review
-                                                    </button>
+                        <div className={'table-container mb-3'}>
+                            <table  className="table table-bordered table-hover"  style={{verticalAlign:'middle', textAlign:'center'}}>
+                                <thead>
+                                <tr className={"table-head"}>
+                                    <th style={{ width:'20px',verticalAlign:'middle', textAlign:'center',padding:'10px'}}><button   onClick={idClick}><b>#</b></button></th>
+                                    <th colSpan="2" style={{verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button   onClick={houseClick}><b>House</b></button></th>
+                                    <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button   onClick={sDateClick}><b>Start Date</b></button></th>
+                                    <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button   onClick={eDateClick}><b>End Date</b></button></th>
+                                    <th style={{ width:'30px',verticalAlign:'middle', textAlign:'center',padding:'3px'}}><button   onClick={totalClick}><b>Total</b></button></th>
+                                    <th style={{ width:'160px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button   onClick={addressClick}><b>Address</b></button></th>
+                                    <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button  ><b>Status</b></button></th>
+                                    <th style={{ width:'75px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button  ><b>Action</b></button></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {bookingList
+                                    .slice(pagesVisited, pagesVisited + bookingPerpage)
+                                    .map((item, key) => {
+                                        return (
+                                            <tr key={key}>
+                                                <td style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}>{key + 1+ pagesVisited}</td>
+                                                <td style={{verticalAlign:'middle',width:"50px", padding:'5px 0px', borderRight:"none"}}><img src={item.house.images[0].fileUrl} style={{width:"60px",height:"60px", borderRadius:"50%"}}/></td>
+                                                <td className={'text-left'} style={{width:"150px", verticalAlign:'middle', padding:'0px', borderLeft:"none"}}>{item.house.name}</td>
+                                                <td style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}>{formatDate(item.startDate)}</td>
+                                                <td style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}>{formatDate(item.endDate)}</td>
+                                                <td style={{verticalAlign:'middle', padding:'0px'}}>{item.total}$</td>
+                                                <td style={{verticalAlign:'middle', padding:'6px', textAlign:'left'}}>{item.house.address}</td>
+                                                <td style={{verticalAlign:'middle', padding:'0px'}}>{item.bookingStatus}</td>
+                                                <td style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}>
+                                                    {(item.bookingStatus === "CHECKED_OUT" && item.review === null) ? (
+                                                        <button className="btn btn-success" onClick={() => setReviewBookingId(item.id)}>
+                                                            Review
+                                                        </button>
+                                                    ) : isCancellable(item.startDate) && item.bookingStatus === "BOOKING" ? (
+                                                        <button type="button" className="btn btn-danger" onClick={() => handleCancel(item.id)}>Cancel</button>
+                                                    ) : (
+                                                        <button type="button" className="btn btn-primary">Detail</button>
+                                                    )}
                                                 </td>
-                                            ) : isCancellable(item.startDate) && item.bookingStatus === "BOOKING" ? (
-                                                <td style={{verticalAlign:'middle'}}>
-                                                    <button type="button" className="btn btn-danger" onClick={() => handleCancel(item.id)}>Cancel</button>
-                                                </td>
-                                            ) : (
-                                                <td style={{verticalAlign:'middle'}}>
-                                                    <button type="button" className="btn btn-primary">Detail</button>
-                                                </td>
-                                            )}
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                        <select onChange={(event)=>{
-                            setBookingPerpage(event.target.value);
-                        }} name="page" style={{width:'80px'}}>
-                            <option value="">Page</option>
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
+
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+
+                        </div>
                         <PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>
                     </section>
                 </>

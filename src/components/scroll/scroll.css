@@ -1,16 +1,27 @@
-table tbody{
-    display:block;
-    height:490px;
-    overflow:auto;
+.table-container {
+    width: 100%;
+    height: 400px;
+    border: 1px solid #ccc;
+    overflow: auto;
+}
 
-}
-table thead, tbody tr {
-    display:table;
-    width:100%;
-    table-layout:fixed !important;
-}
-table{
-    font-family: arial, sans-serif;
+table {
+    width: 100%;
     border-collapse: collapse;
-    width:600px;
 }
+
+th, td {
+    border: 1px solid #ccc;
+    text-align: center;
+    width: fit-content;
+    vertical-align: middle;
+}
+
+.table-head {
+    background-color: #f2f2f2;
+    position: sticky;
+    top: -2px;
+    z-index: 1000;
+}
+
+

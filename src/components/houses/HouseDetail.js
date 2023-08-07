@@ -112,13 +112,14 @@ export function HouseDetail() {
                         Swal.fire({
                             icon: 'success',
                             title: 'Booking successful!',
-                            html: `
-                    <div>House: ${house.name}</div>
-                    <div>Address: ${house.address}</div>
-                    <div>Start Date: ${result.startDate}</div>
-                    <div>End Date: ${result.endDate}</div>
-                    <div>Price: ${result.price}</div>
-                    <div>Total: ${result.total}</div>
+                            html: `<div style="text-align: left; margin:auto" class="col-8">
+                    <span><b>House :</b> ${house.name}</span><br>
+                    <span><b>Address :</b> ${house.address}</span><br>
+                    <span><b>Start Date :</b> ${result.startDate}</span><br>
+                    <span><b>End Date :</b> ${result.endDate}</span><br>
+                    <span><b>Price :</b> ${result.price}</span><br>
+                    <span><b>Total :</b> ${result.total}</span><br>
+                    </div>
                     `,
                             footer: '<a href="/user/booking-history">Click here to see booking list</a>'
                         });
