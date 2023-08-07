@@ -83,7 +83,19 @@ export function Navbar() {
             setLogin(true)
         }
         console.log('initialize state', login)
-    }, []);
+    }, [notifies]);
+    useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+
+        axios.get('http://localhost:8080/notify_booking', config).then((res) => {
+            console.log('list notify', JSON.stringify(res.data))
+            setNotifies(res.data)
+        })
+    },[])
 
     const clearAllInfo = () => {
         axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
@@ -241,7 +253,7 @@ export function Navbar() {
                                             >
                                                 {notifies.map((item,key) => {
                                                     return (
-                                                        <MenuItem>{item}</MenuItem>
+                                                        <MenuItem>{item.message}</MenuItem>
                                                     )
                                                 })}
 
