@@ -59,13 +59,21 @@ export function Navbar() {
     const [notifies,setNotifies] = useState(['notify 1','notify 2']);
     const [anchorElNotify, setAnchorElNotify] = React.useState(null);
     const openNotify = Boolean(anchorElNotify);
-    const [read,setRead] = useState(false);
+    const [read,setRead] = useState(true);
     const handleClickNotify = (event) => {
-        console.log('click notify')
         setAnchorElNotify(event.currentTarget);
         //mark read
-        if (read == false) {
+        if (!read) {
             //call api to mark read
+            console.log('mark read all notify')
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+            axios.put('http://localhost:8080/notify',null, config).then((res) => {
+                setNotifies(res.data.reverse())
+            })
         }
         setRead(true);
     };
@@ -153,6 +161,7 @@ export function Navbar() {
         }
         setRead(false);
         axios.get('http://localhost:8080/notify', config).then((res) => {
+            console.log("update new notifies list")
             setNotifies(res.data.reverse())
         })
     }
@@ -265,19 +274,30 @@ export function Navbar() {
 
                                     <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
                                         <IconButton sx={{marginRight:'15px'}}>
-                                            {notifies.length == 0 ? <NotificationsNoneIcon
+                                            {notifies.filter((item) => {
+                                                return (item.read == false)
+                                            }).length == 0 ? <NotificationsNoneIcon
                                                 onClick={handleClickNotify}
                                                 size="small"
-                                                color={notifies.length > 0 ? "primary" : "default"}
+                                                color={notifies.filter((item) => {
+                                                    console.log('notify', item)
+                                                    return (item.read == false)
+                                                }).length > 0 ? "primary" : "default"}
                                                 aria-controls={ openNotify ? 'positioned-menu' : undefined}
                                                 aria-haspopup="true"
                                                 aria-expanded={openNotify ? 'true' : undefined}
                                             ></NotificationsNoneIcon> :
-                                                <Badge badgeContent={notifies.length > 5 ? '5+' : notifies.length} color="primary">
+                                                <Badge badgeContent={notifies.filter((item) => {
+                                                    return (item.read == false)
+                                                }).length > 5 ? '5+' : notifies.filter((item) => {
+                                                    return (item.read == false)
+                                                }).length} color="primary">
                                                     <NotificationsNoneIcon
                                                         onClick={handleClickNotify}
                                                         size="small"
-                                                        color={notifies.length > 0 ? "primary" : "default"}
+                                                        color={notifies.filter((item) => {
+                                                            return (item.read == false)
+                                                        }).length > 0 ? "primary" : "default"}
                                                         aria-controls={ openNotify ? 'positioned-menu' : undefined}
                                                         aria-haspopup="true"
                                                         aria-expanded={openNotify ? 'true' : undefined}
