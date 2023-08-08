@@ -10,8 +10,7 @@ import LocalHotelRoundedIcon from "@mui/icons-material/LocalHotelRounded";
 import BathtubIcon from "@mui/icons-material/Bathtub";
 import {ListComponent} from "../houses/ListComponent";
 import {showLoadingAlert} from "../../utils/api";
-
-// Import những thứ cần thiết ở đầu file
+import Constants from "../../utils/constants";
 
 export function SearchHouseResult() {
     const [listSearch, setListSearch] = useState([]);
@@ -26,7 +25,7 @@ export function SearchHouseResult() {
         const startDate = searchParams.get('startdate') ? searchParams.get('startdate') : '2023-01-01';
         const endDate = searchParams.get('enddate') ? searchParams.get('enddate') : '2023-01-01';
 
-        axios.get(`http://localhost:8080/house/search?address=${addressQuery}&minPrice=${minPriceQuery}&maxPrice=${maxPriceQuery}&totalBedrooms=${0}&totalBathrooms=${0}&startDate=${startDate}&endDate=${endDate}`)
+        axios.get(Constants.BASE_API+`/house/search?address=${addressQuery}&minPrice=${minPriceQuery}&maxPrice=${maxPriceQuery}&totalBedrooms=${0}&totalBathrooms=${0}&startDate=${startDate}&endDate=${endDate}`)
             .then((res) => {
                 setListSearch(res.data);
             });

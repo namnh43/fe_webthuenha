@@ -8,6 +8,8 @@ import UserProfileDialog from "../../dialog/UserProfileDialog";
 import RuleIcon from '@mui/icons-material/Rule';
 import IconButton from '@mui/material/IconButton';
 import {PaginationComponent} from "../../pagination/PaginationComponent";
+import '../../scroll/scroll.css'
+import Constants from "../../../utils/constants";
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
@@ -16,7 +18,8 @@ export function AdminWaitingHost() {
 
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const hostsPerPage = 2;
+    const [hostsPerPage,setHostsPerPage] = useState(5);
+
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -34,7 +37,7 @@ export function AdminWaitingHost() {
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
-                const url = 'http://localhost:8080/admin/apply-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
+                const url = Constants.BASE_API+'/admin/apply-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -63,8 +66,8 @@ export function AdminWaitingHost() {
             denyButtonText: 'Deny',
         }).then(data => {
             if (data.isConfirmed || data.isDenied) {
-                const url = data.isConfirmed ? 'http://localhost:8080/admin/accept-host/' + id :
-                    'http://localhost:8080/admin/reject-host/' + id;
+                const url = data.isConfirmed ? Constants.BASE_API+'/admin/accept-host/' + id :
+                    Constants.BASE_API+'/admin/reject-host/' + id;
                 console.log('url ', url);
                 const msg = {msg: data.value};
                 const params = {
@@ -176,17 +179,32 @@ export function AdminWaitingHost() {
 
     return (
         <>
+                <h2 className="my-3">Waiting confirmation hosts</h2>
+                <div className={'mt-2 mb-4'} onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
+                    <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
+                    <div style={{marginLeft:'auto'}}>
+                        Entries/page &nbsp;
+                        <select onChange={(event)=>{
+                            setHostsPerPage(event.target.value);
+                        }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                            <option value="5">---</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
             <section className="main">
-                <h2 className="mb-3">Waiting confirmation hosts</h2>
-                <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
-                <table className="table table-striped table-hover">
+            <div className={'table-container'}>
+                <table className="table table-bordered table-striped table-hover">
                     <thead>
-                    <tr>
-                        <th><button onClick={idClick}>#</button></th>
-                        <th><button onClick={userClick}>UserName</button></th>
-                        <th><button >Created at</button></th>
-                        <th><button onClick={phoneClick}>Phone number</button></th>
-                        <th><button >Action</button></th>
+                    <tr className={"table-head"}>
+                        <th className="text-center"><button onClick={idClick}>#</button></th>
+                        <th className="text-center"><button onClick={userClick}>UserName</button></th>
+                        <th className="text-center"><button >Created at</button></th>
+                        <th className="text-center"><button onClick={phoneClick}>Phone number</button></th>
+                        <th className="text-center"><button >Action</button></th>
                     </tr>
                     </thead>
                     {hosts.length <= 0 ? (
@@ -211,6 +229,7 @@ export function AdminWaitingHost() {
                     </tbody>
                     )}
                 </table>
+                </div>
                 <PaginationComponent data={hosts} numberPerpage={hostsPerPage} changeCurentPage={handlePageChange}/>
             </section>
             <UserProfileDialog open={openProfileDialog} onClose={handleCloseProfileDialog} id={currentUserId}/>

@@ -6,6 +6,7 @@ import {initializeApp} from "firebase/app";
 import {useNavigate} from "react-router";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import Constants from "../../../utils/constants";
 
 export function UserProfile() {
     const navigator = useNavigate();
@@ -122,7 +123,7 @@ export function UserProfile() {
                             }
                                     onSubmit={(values) => {
                                         console.log(values)
-                                        axios.post(`http://localhost:8080/user/change-password`, values, config).then((res) => {
+                                        axios.post(Constants.BASE_API+`/user/change-password`, values, config).then((res) => {
                                             let code;
                                             if (res.data == "Password changed successfully") code = "success";
                                             else code = "error";
@@ -199,7 +200,7 @@ export function UserProfile() {
                             }
                                     onSubmit={(values) => {
                                         uploadFileToFirebase().then((url) => {
-                                            axios.put(`http://localhost:8080/user/current`, {
+                                            axios.put(Constants.BASE_API+`/user/current`, {
                                                 ...values,
                                                 profileImage: url
                                             }, config).then((res) => {

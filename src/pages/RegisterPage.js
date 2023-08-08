@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import Swal from "sweetalert2";
+import Constants from "../utils/constants";
 
 const SignupSchema = Yup.object().shape({
     username: Yup.string()
@@ -38,7 +39,7 @@ export function RegisterPage() {
             validationSchema={SignupSchema}
             onSubmit={values => {
                 console.log(values)
-                axios.post('http://localhost:8080/jwt/signup', values)
+                axios.post(Constants.BASE_API+'/jwt/signup', values)
                     .then((res) =>{
                         console.log(res.data)
                         if(res.data.code === '201'){

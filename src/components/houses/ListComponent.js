@@ -35,7 +35,12 @@ export function ListComponent({ listHouse }) {
                             sx={{ borderRadius: '6px' }}
                             onClick={() => {
                                 const url = '/houses/' + item.id;
-                                navigate(url);
+                                const curUrl = window.location.href;
+                                if (curUrl.includes("houses")) {
+                                    window.location.href = url;
+                                } else {
+                                    navigate(url);
+                                }
                             }}
                         >
                             <CardActionArea>

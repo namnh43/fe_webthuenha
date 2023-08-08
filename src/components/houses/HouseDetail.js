@@ -17,6 +17,8 @@ import LocalHotelRoundedIcon from "@mui/icons-material/LocalHotelRounded";
 import {capitalizeFirstLetter} from "../../utils/api";
 import HouseDescription from "./HouseDescription";
 import BeenhereIcon from '@mui/icons-material/Beenhere';
+import Constants from "../../utils/constants";
+import ListComponent from "./ListComponent";
 
 export function HouseDetail() {
     const [listImages, setListImages] = useState([]);
@@ -27,6 +29,7 @@ export function HouseDetail() {
     const [day, setDay] = useState(0);
     const navigate = useNavigate();
     const [listBooking, setListBooking] = useState([]);
+    const [listRelated, setListRelated] = useState([]);
 
     let result = {
         startDate: "",
@@ -47,13 +50,14 @@ export function HouseDetail() {
     useEffect(() => {
         window.scrollTo(0, 0);
         console.log('get_house_id', id);
-        axios.get(`http://localhost:8080/house/` + id).then(res => {
+        axios.get(Constants.BASE_API+`/house/` + id).then(res => {
             console.log('get_data', res)
             setHouse(res.data)
             document.title = capitalizeFirstLetter(res.data.name);
             setListImages(res.data.images)
         })
         handleFetchBookingList();
+        handleFetchRelatedHouses();
     }, [])
 
     function booking() {
@@ -106,7 +110,7 @@ export function HouseDetail() {
                 confirmButtonText: 'Yes, book it!'
             }).then((confirm) => {
                 if (confirm.isConfirmed) {
-                    axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
+                    axios.post(Constants.BASE_API+'/booking/create', result, config).then((res) => {
                         handleFetchBookingList();
                         console.log(res.data);
                         Swal.fire({
@@ -152,8 +156,14 @@ export function HouseDetail() {
     }
 
     const handleFetchBookingList = () => {
-        axios.get(`http://localhost:8080/booking/house/` + id).then(res => {
+        axios.get(Constants.BASE_API+`/booking/house/` + id).then(res => {
             setListBooking(res.data)
+        })
+    }
+
+    const handleFetchRelatedHouses = () => {
+        axios.get(Constants.BASE_API+`/house/${id}/related`).then(res => {
+            setListRelated(res.data)
         })
     }
 
@@ -254,7 +264,7 @@ export function HouseDetail() {
                                     <div className="col-3 text-md-right my-4">
                                         <img
                                             src={house.user ? house.user.profileImage : "https://cuongquach.com/wp-content/uploads/2016/05/linux-logo-356x220.png"}
-                                            style={{ width: '60px', height: '60px', borderRadius: '50%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.4)' }}
+                                            style={{ width: '60px', height: '60px', borderRadius: '50%', boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.6)' }}
                                             alt=""
                                         />
                                     </div>
@@ -265,7 +275,7 @@ export function HouseDetail() {
                         </div>
                         <div className="col-4">
                             <div
-                                style={{ position: 'sticky', top: '100px', zIndex: '1001', borderRadius: '8px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}
+                                style={{ position: 'sticky', top: '100px', zIndex: '999', borderRadius: '8px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}
                                 className="bg-white p-4 border mb-2 borde"
                             >
                                 <h5 className="text-black mb-3" style={{ display: 'flex', alignItems: 'center' }}>
@@ -334,12 +344,14 @@ export function HouseDetail() {
 
                 </div>
 
-                <br/>
+                <div className={'row border-top mb-5'}>
+                    <h2 className={'mt-4 mb-2'}>Related houses</h2>
+                    <ListComponent listHouse={listRelated}/>
+                </div>
+
             </div>
 
-            <div>
 
-            </div>
 
             <Footer/>
         </>

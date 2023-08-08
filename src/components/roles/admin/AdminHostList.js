@@ -26,6 +26,7 @@ import Dialog from "@mui/material/Dialog";
 import HostProfileDialog from "../../dialog/HostProfileDialog";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import '../../scroll/scroll.css'
+import Constants from "../../../utils/constants";
 
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
@@ -43,7 +44,7 @@ export function AdminHostList() {
 
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const housesPerPage = 10;
+    const [housesPerPage,setHousesPerPage] = useState(5);
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -51,7 +52,7 @@ export function AdminHostList() {
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
-                const url = 'http://localhost:8080/admin/list-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
+                const url = Constants.BASE_API+'/admin/list-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -89,9 +90,9 @@ export function AdminHostList() {
     const handlleCloseDialogOK = (id, current_block) => {
         let url = '';
         if (current_block) {//is blocking -> then unlock
-            url = 'http://localhost:8080/admin/unlock-user/'+ id;
+            url = Constants.BASE_API+'/admin/unlock-user/'+ id;
         } else {
-            url = 'http://localhost:8080/admin/block-user/'+ id;
+            url = Constants.BASE_API+'/admin/block-user/'+ id;
         }
         const params = {
             headers: {
@@ -205,14 +206,27 @@ export function AdminHostList() {
 
     return (
         <>  <h2 className="my-3">Host List</h2>
+            <div className={'mt-2 mb-4'} onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
             <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
-            {hosts.length <= 0 ? <div className="my-3 alert alert-primary" role="alert">There no data</div> : (
+                <div style={{marginLeft:'auto'}}>
+                    Entries/page &nbsp;
+                    <select onChange={(event)=>{
+                        setHousesPerPage(event.target.value);
+                    }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                        <option value="5">---</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+            </div>
                 <section className="main">
-
+                    <div className='table-container'>
                     <table className="table table-bordered table-striped table-hover">
                         <thead>
-                        <tr>
-                            <th className="text-center"><button onClick={idClick}>#</button></th>
+                        <tr className={"table-head"}>
+                        <th className="text-center"><button onClick={idClick}>#</button></th>
                             <th className="text-center"><button onClick={userClick}>UserName</button></th>
                             <th className="text-center"><button onClick={phoneClick}>Phone number</button></th>
                             <th className="text-center"><button onClick={homeClick}>Number home</button></th>
@@ -254,10 +268,9 @@ export function AdminHostList() {
                         })}
                         </tbody>
                     </table>
+                    </div>
                     <PaginationComponent data={hosts} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
-                </section>)
-
-            }
+                </section>
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}

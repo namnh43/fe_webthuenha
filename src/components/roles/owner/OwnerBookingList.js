@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
+import ReactPaginate from "react-paginate";
 import axios from "axios";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import Swal from "sweetalert2";
 import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
 import {formatDate} from "../../../utils/api";
+import Constants from "../../../utils/constants";
+
 import '../../scroll/scroll.css';
 
 
@@ -28,7 +31,7 @@ function OwnerBookingList() {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8080/booking/owner', config)
+        axios.get(Constants.BASE_API + '/booking/owner', config)
             .then((res) => {
                 setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))
                 setSearchBooking(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))
@@ -71,7 +74,7 @@ function OwnerBookingList() {
                         })
                 } else {
                     Swal.fire(
-                        'Oops!',
+                        'Forbidden!',
                         'You must wait until start date on the booking to check in.',
                         'error'
                     );

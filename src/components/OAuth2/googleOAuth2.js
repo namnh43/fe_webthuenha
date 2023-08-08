@@ -2,12 +2,13 @@ import React from 'react';
 import {GoogleLogin} from '@react-oauth/google';
 import axios from "axios";
 import {useNavigate} from "react-router";
+import Constants from "../../utils/constants";
 
 const GoogleOAuth2Login = () => {
     const navigate = useNavigate();
     const handleSuccess = (response) => {
         console.log('Đăng nhập thành công:', response);
-        axios.post('http://localhost:8080/jwt/google', response.credential)
+        axios.post(Constants.BASE_API+'/jwt/google', response.credential)
             .then((res) => {
                 console.log(res)
                 localStorage.setItem("token", res.data.token)
