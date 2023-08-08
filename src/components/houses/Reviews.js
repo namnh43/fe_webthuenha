@@ -4,6 +4,7 @@ import HideSourceIcon from '@mui/icons-material/HideSource';
 import axios from "axios";
 import Swal from "sweetalert2";
 import Constants from "../../utils/constants";
+import {formatDate} from "../../utils/api";
 
 const Reviews = ({ house }) => {
     const step = 2;
@@ -61,8 +62,8 @@ const Reviews = ({ house }) => {
     return (
         <div className="row mb-4">
             <div className="col-12">
-                <h4>Reviews</h4>
-                <StarIcon fontSize="small" />
+                <h4 className={"fw-bold"}>Reviews</h4>
+                <StarIcon fontSize="small" className="pb-1"/>
                 {house.ratingScore} {" - " + house.numberOfReviews + " reviews"}
                 <br/><br />
 
@@ -74,8 +75,8 @@ const Reviews = ({ house }) => {
                             .map((review) => (
                                 <div
                                     key={review.id}
-                                    className="col-md-6 mb-4"
-                                    style={{ paddingLeft: '30px', paddingRight: '30px' }}
+                                    className="col-md-6 mb-4 pl-5"
+                                    style={{ paddingLeft: '20px', paddingRight: '20px' }}
                                 >
                                     <div className="media">
                                         {(currentUserId == house.user.id) && (
@@ -83,7 +84,7 @@ const Reviews = ({ house }) => {
                                                 style={{
                                                     position: "absolute",
                                                     top: "10px",
-                                                    right: "40px",
+                                                    right: "20px",
                                                     width: "fit-content",
                                                     height: "20px",
                                                     border: "none",
@@ -97,7 +98,7 @@ const Reviews = ({ house }) => {
                                                 type="button"
                                                 onClick={() => handleHideReview(review.id)}
                                             >
-                                                <HideSourceIcon style={{ color: "red" }} />
+                                                <HideSourceIcon style={{ color: "red", fontSize: "18px" }} />
                                             </button>
                                         )}
                                         <img
@@ -112,8 +113,8 @@ const Reviews = ({ house }) => {
                                             }}
                                         />
                                         <div className="media-body">
-                                            <h5 className="mt-0 mb-1">{review.user.username}</h5>
-                                            <span style={{ fontSize: '13px' }}>{review.createdAt}</span>
+                                            <h5 className="mt-0 mb-1"><b>{review.user.username}</b></h5>
+                                            <span style={{ fontSize: '13px' }}>{formatDate(review.createdAt)}</span>
                                             <br />
                                             <span>
                         {[...Array(5)].map((_, index) => (
@@ -126,33 +127,37 @@ const Reviews = ({ house }) => {
                             />
                         ))}
                       </span>
-                                            <p>
-                                                {getTruncatedContent(review.content, review.id)}
-                                                {!expandedReviewId && review.content.length > 300 && (
-                                                    <button
-                                                        className="btn-link"
-                                                        style={{ textDecoration: "none", backgroundColor: "white" }}
-                                                        onClick={() => handleSeeMore(review.id)}
-                                                    >
-                                                        <b>&nbsp;...</b>
-                                                    </button>
-                                                )}
-                                                {expandedReviewId === review.id && (
-                                                    <button
-                                                        className="btn-link"
-                                                        style={{
-                                                            textDecoration: "none",
-                                                            color: "red",
-                                                            backgroundColor: "white"
-                                                        }}
-                                                        onClick={handleUnSeeMore}
-                                                    >
-                                                        <b>&nbsp;x</b>
-                                                    </button>
-                                                )}
-                                            </p>
+
                                         </div>
                                     </div>
+                                    <p style={{
+                                        textAlign: 'justify',
+                                        textJustify: 'inter-word'
+                                    }}>
+                                        {getTruncatedContent(review.content, review.id)}
+                                        {!expandedReviewId && review.content.length > 300 && (
+                                            <button
+                                                className="btn-link"
+                                                style={{ textDecoration: "none", backgroundColor: "white" }}
+                                                onClick={() => handleSeeMore(review.id)}
+                                            >
+                                                <b>&nbsp;...</b>
+                                            </button>
+                                        )}
+                                        {expandedReviewId === review.id && (
+                                            <button
+                                                className="btn-link"
+                                                style={{
+                                                    textDecoration: "none",
+                                                    color: "red",
+                                                    backgroundColor: "white"
+                                                }}
+                                                onClick={handleUnSeeMore}
+                                            >
+                                                <b>&nbsp;x</b>
+                                            </button>
+                                        )}
+                                    </p>
                                 </div>
                             ))}
                 </div>
