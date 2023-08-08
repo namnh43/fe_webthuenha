@@ -179,17 +179,32 @@ export function AdminWaitingHost() {
 
     return (
         <>
+                <h2 className="my-3">Waiting confirmation hosts</h2>
+                <div className={'mt-2 mb-4'} onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
+                    <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
+                    <div style={{marginLeft:'auto'}}>
+                        Entries/page &nbsp;
+                        <select onChange={(event)=>{
+                            setHostsPerPage(event.target.value);
+                        }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                            <option value="5">---</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
             <section className="main">
-                <h2 className="mb-3">Waiting confirmation hosts</h2>
-                <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
-                <table className="table table-striped table-hover">
+            <div className={'table-container mb-3'}>
+                <table className="table table-bordered table-hover">
                     <thead>
                     <tr className={"table-head"}>
-                        <th><button onClick={idClick}>#</button></th>
-                        <th><button onClick={userClick}>UserName</button></th>
-                        <th><button >Created at</button></th>
-                        <th><button onClick={phoneClick}>Phone number</button></th>
-                        <th><button >Action</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'10px'}}><button onClick={idClick}>#</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button onClick={userClick}>Username</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button >Created at</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button onClick={phoneClick}>Phone number</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button >Action</button></th>
                     </tr>
                     </thead>
                     {hosts.length <= 0 ? (
@@ -199,11 +214,12 @@ export function AdminWaitingHost() {
                     {hosts.slice(pagesVisited, pagesVisited + hostsPerPage).map((item,key) => {
                         return (
                             <tr>
-                                <td>{key + 1 + pagesVisited}</td>
-                                <td><img src="./images/profile/user-1.jpg" alt=""
+                                <td style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}>{key + 1 + pagesVisited}</td>
+                                <td className={"text-left"} style={{ width:'220px',verticalAlign:'middle', textAlign:'center', padding:'0 0 0 6px'}}><img src={item.profileImage} alt=""
+                                         style={{width:"60px",height:"60px", borderRadius:"50%"}}
                                          className="avatar"/>{item.username}</td>
-                                <td>04/10/2013</td>
-                                <td>{item.phoneNumber}</td>
+                                <td style={{ width:'115px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}>{item.createAt}</td>
+                                <td style={{ width:'150px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}>{item.phoneNumber}</td>
                                 <td>
                                     <Tooltip title="info"><InfoIcon onClick={() => handleProfileEdit(item.id)}/></Tooltip>
                                     <IconButton title='confirm' color='inherit'><RuleIcon onClick={() => handleAction(item.id)}/></IconButton>
@@ -214,17 +230,6 @@ export function AdminWaitingHost() {
                     </tbody>
                     )}
                 </table>
-                <div style={{marginLeft:'auto'}}>
-                    Entries/page &nbsp;
-                    <select onChange={(event)=>{
-                        setHostsPerPage(event.target.value);
-                    }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
-                        <option value="5">---</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                    </select>
                 </div>
                 <PaginationComponent data={hosts} numberPerpage={hostsPerPage} changeCurentPage={handlePageChange}/>
             </section>

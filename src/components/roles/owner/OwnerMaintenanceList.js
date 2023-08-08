@@ -4,6 +4,7 @@ import ReactPaginate from "react-paginate";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import Constants from "../../../utils/constants";
+import '../../scroll/scroll.css';
 
 function OwnerMaintenanceList() {
     const [bookingList, setBookingList] = useState([])
@@ -63,38 +64,88 @@ function OwnerMaintenanceList() {
         <>
             <h2 className="my-3">Maintenance List</h2>
             <section className="main">
-                <table className="table table-bordered table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>House</th>
-                        <th>Booking date</th>
-                        <th>Duration</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {bookingList
-                        .slice(pagesVisited, pagesVisited + housesPerPage)
-                        .map((item, key) => {
-                            return (<tr style={{height: '80px'}}>
-                                <td className="pt-4">{key + 1 + pagesVisited}</td>
-                                <td className="pt-4">{item.house.name}</td>
-                                <td className="pt-4">{item.createAt}</td>
-                                <td className="pt-4">{item.startDate}/{item.endDate}</td>
-                                <td className="pt-4">{item.bookingStatus}</td>
-                                <td className="pt-4">
-                                    <button className="btn btn-danger"
-                                            onClick={() => cancelMaintenance(item.id)}>Cancel
-                                    </button>
-                                </td>
-                            </tr>)
-                        })}
+                <div className="table-container mb-3">
+                    <table className="table table-bordered table-hover"
+                            style={{verticalAlign: 'middle', textAlign: 'center'}}>
+                        <thead>
+                        <tr className={'table-head'}>
+                            <th style={{
+                                width: '20px',
+                                verticalAlign: 'middle',
+                                textAlign: 'center',
+                                padding: '10px'
+                            }}>#</th>
+                            <th style={{
+                                width: '80px',
+                                verticalAlign: 'middle',
+                                textAlign: 'center',
+                                padding: '0px',
+                                fontWeight: 'bold'
+                            }}>House</th>
+                            <th style={{
+                                width: '40px',
+                                verticalAlign: 'middle',
+                                textAlign: 'center',
+                                padding: '0px',
+                                fontWeight: 'bold'
+                            }}>Booking date</th>
+                            <th style={{
+                                width: '40px',
+                                verticalAlign: 'middle',
+                                textAlign: 'center',
+                                padding: '0px',
+                                fontWeight: 'bold'
+                            }}>Duration</th>
+                            <th style={{
+                                width: '40px',
+                                verticalAlign: 'middle',
+                                textAlign: 'center',
+                                padding: '0px',
+                                fontWeight: 'bold'
+                            }}>Status</th>
+                            <th style={{
+                                width: '40px',
+                                verticalAlign: 'middle',
+                                textAlign: 'center',
+                                padding: '0px',
+                                fontWeight: 'bold'
+                            }}>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {bookingList
+                            .slice(pageNumber, pageNumber + housesPerPage)
+                            .map((item, key) => {
+                                return (<tr style={{height: '80px'}}>
+                                    <td style={{
+                                        verticalAlign: 'middle',
+                                        textAlign: 'center',
+                                        padding: '0px'
+                                    }}>{key + 1 + pageNumber}</td>
+                                    <td className={'text-left'} style={{
+                                        width: "150px",
+                                        verticalAlign: 'middle',
+                                        borderLeft: "none"
+                                    }}>{item.house.name}</td>
+                                    <td style={{verticalAlign: 'middle', padding: '0px'}}>{item.createAt}</td>
+                                    <td style={{
+                                        verticalAlign: 'middle',
+                                        padding: '6px',
+                                    }}>{item.startDate} to {item.endDate}</td>
+                                    <td style={{verticalAlign: 'middle', padding: '0px'}}>{item.bookingStatus}</td>
+                                    <td style={{verticalAlign: 'middle', padding: '0px'}}>
+                                        <button className="btn btn-danger"
+                                                onClick={() => cancelMaintenance(item.id)}>Cancel
+                                        </button>
+                                    </td>
+                                </tr>)
+                            })}
 
-                    </tbody>
-                </table>
-                <PaginationComponent data={bookingList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
+                        </tbody>
+                    </table>
+                </div>
+                <PaginationComponent data={bookingList} numberPerpage={housesPerPage}
+                                     changeCurentPage={handlePageChange}/>
 
             </section>
         </>

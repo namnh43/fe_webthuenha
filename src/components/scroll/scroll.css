@@ -21,7 +21,7 @@ th, td {
     background-color: buttonface;
     position: sticky;
     top: -2px;
-    z-index: 1000;
+    z-index: 1;
 }
 
 
