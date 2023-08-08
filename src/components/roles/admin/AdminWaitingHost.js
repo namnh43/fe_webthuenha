@@ -9,6 +9,7 @@ import RuleIcon from '@mui/icons-material/Rule';
 import IconButton from '@mui/material/IconButton';
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import '../../scroll/scroll.css'
+import Constants from "../../../utils/constants";
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
@@ -213,7 +214,6 @@ export function AdminWaitingHost() {
                     </tbody>
                     )}
                 </table>
-                </div>
                 <div style={{marginLeft:'auto'}}>
                     Entries/page &nbsp;
                     <select onChange={(event)=>{
