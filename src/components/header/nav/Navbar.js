@@ -28,7 +28,7 @@ import Stomp from "stompjs";
 import { useSnackbar } from 'notistack';
 import Badge from '@mui/material/Badge';
 
-export function Navbar() {
+export function Navbar({isSticky}) {
     const menuBarStyle = {
         fontFamily: 'Roboto, sans-serif',
         color: 'blue',
@@ -60,13 +60,11 @@ export function Navbar() {
     const [anchorElNotify, setAnchorElNotify] = React.useState(null);
     const openNotify = Boolean(anchorElNotify);
     const [read,setRead] = useState(true);
-    const [isSticky, setIsSticky] = useState(false);
     const handleClickNotify = (event) => {
         setAnchorElNotify(event.currentTarget);
         //mark read
         if (!read) {
             //call api to mark read
-            console.log('mark read all notify')
             const config = {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -103,18 +101,6 @@ export function Navbar() {
         if (localStorage.getItem("currentUser") !== null) {
             setLogin(true)
         }
-    }, []);
-
-    //handle color of ringtone
-    useEffect(() => {
-        function handleScroll() {
-            setIsSticky(window.scrollY >= window.innerHeight);
-        }
-
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
     }, []);
 
     useEffect(() => {
