@@ -96,7 +96,8 @@ export function Navbar() {
         }
         axios.get('http://localhost:8080/notify_booking', config).then((res) => {
             // console.log('list notify', JSON.stringify(res.data))
-            setNotifies(res.data)
+            console.log()
+            setNotifies(res.data.reverse())
         })
     },[])
 
@@ -296,7 +297,7 @@ export function Navbar() {
                                                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                                                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                                             >
-                                                {notifies.length <=0 ? <></> : notifies.map((item,key) => {
+                                                {notifies.length <=0 ? <></> : notifies.slice(0, 5).map((item,key) => {
                                                     return (
                                                         <MenuItem onClick={() => navigate("/owner/booking")}>{item.message}</MenuItem>
                                                     )
