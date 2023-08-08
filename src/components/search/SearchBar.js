@@ -88,7 +88,7 @@ function SearchBar() {
     }, []);
 
     return (
-        <div className="search-sec col-8 m-auto my-5" style={{ position: 'sticky', top: "0px", left: '323px', zIndex: "1000", padding: "12px" }}>
+        <div className="search-sec col-8 m-auto my-5" style={{ position: 'sticky', top: "0px", left: '323px', zIndex: "11", padding: "12px" }}>
             <div className="row pl-4" >
                 <div className="col-3 p-1">
                     <input

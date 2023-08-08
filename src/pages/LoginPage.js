@@ -28,6 +28,14 @@ export function LoginPage() {
                 axios.post(Constants.BASE_API+'/jwt/signin', values)
                     .then((res) => {
                         console.log(res)
+                        if (res.data == "") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Log in failed',
+                                text: 'User is blocked',
+                            })
+                            return
+                        }
                         localStorage.setItem("token", res.data.token)
                         localStorage.setItem("currentUser", JSON.stringify(res.data.user))
                         localStorage.setItem("currentUserId", res.data.user.id)

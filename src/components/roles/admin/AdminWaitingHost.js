@@ -196,15 +196,15 @@ export function AdminWaitingHost() {
                     </div>
                 </div>
             <section className="main">
-            <div className={'table-container'}>
-                <table className="table table-bordered table-striped table-hover">
+            <div className={'table-container mb-3'}>
+                <table className="table table-bordered table-hover">
                     <thead>
                     <tr className={"table-head"}>
-                        <th className="text-center"><button onClick={idClick}>#</button></th>
-                        <th className="text-center"><button onClick={userClick}>UserName</button></th>
-                        <th className="text-center"><button >Created at</button></th>
-                        <th className="text-center"><button onClick={phoneClick}>Phone number</button></th>
-                        <th className="text-center"><button >Action</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'10px'}}><button onClick={idClick}>#</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button onClick={userClick}>Username</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button >Created at</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button onClick={phoneClick}>Phone number</button></th>
+                        <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button >Action</button></th>
                     </tr>
                     </thead>
                     {hosts.length <= 0 ? (
@@ -214,11 +214,12 @@ export function AdminWaitingHost() {
                     {hosts.slice(pagesVisited, pagesVisited + hostsPerPage).map((item,key) => {
                         return (
                             <tr>
-                                <td>{key + 1 + pagesVisited}</td>
-                                <td><img src="./images/profile/user-1.jpg" alt=""
+                                <td style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}>{key + 1 + pagesVisited}</td>
+                                <td className={"text-left"} style={{ width:'220px',verticalAlign:'middle', textAlign:'center', padding:'0 0 0 6px'}}><img src={item.profileImage} alt=""
+                                         style={{width:"60px",height:"60px", borderRadius:"50%"}}
                                          className="avatar"/>{item.username}</td>
-                                <td>04/10/2013</td>
-                                <td>{item.phoneNumber}</td>
+                                <td style={{ width:'115px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}>{item.createAt}</td>
+                                <td style={{ width:'150px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}>{item.phoneNumber}</td>
                                 <td>
                                     <Tooltip title="info"><InfoIcon onClick={() => handleProfileEdit(item.id)}/></Tooltip>
                                     <IconButton title='confirm' color='inherit'><RuleIcon onClick={() => handleAction(item.id)}/></IconButton>
