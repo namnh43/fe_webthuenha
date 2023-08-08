@@ -153,7 +153,19 @@ export function HouseDetail() {
                     }).then((booking_id) => {
                         const currentUserId = localStorage.getItem('currentUserId');
                         console.log('stomp client ', stompClient)
-                        stompClient.send("/app/notify",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                        if (stompClient && !stompClient.connected) {
+                            console.log('re-connect to socket 0')
+                            const socket =new SockJS(Constants.WS_URL);
+                            const stomp = Stomp.over(socket);
+                            stomp.connect({}, () => {
+                                setStompClient(stomp)
+                                console.log('re-connect to socket')
+                                stomp.send("/app/notify",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                            });
+                        } else {
+                            stompClient.send("/app/notify",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                        }
+
                     }).catch((error) => {
                         if (error.response && error.response.status === 400) {
                             Swal.fire({
