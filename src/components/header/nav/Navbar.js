@@ -26,6 +26,7 @@ import SockJS from "sockjs-client";
 import Constants from "../../../utils/constants";
 import Stomp from "stompjs";
 import { useSnackbar } from 'notistack';
+import Badge from '@mui/material/Badge';
 
 export function Navbar() {
     const menuBarStyle = {
@@ -86,7 +87,6 @@ export function Navbar() {
         if (localStorage.getItem("currentUser") !== null) {
             setLogin(true)
         }
-        // console.log('initialize state', login)
     }, []);
     useEffect(() => {
         const config = {
@@ -94,39 +94,47 @@ export function Navbar() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }
-        axios.get('http://localhost:8080/notify_booking', config).then((res) => {
-            // console.log('list notify', JSON.stringify(res.data))
-            console.log()
-            setNotifies(res.data.reverse())
-        })
+        if (localStorage.getItem('token')) {
+            axios.get('http://localhost:8080/notify', config).then((res) => {
+                setNotifies(res.data.reverse())
+            })
+        }
     },[])
 
     useEffect(() => {
-        console.log('create new connection here')
-        const socket =new SockJS(Constants.WS_URL);
-        const stompClient = Stomp.over(socket);
         const currentUserId = localStorage.getItem('currentUserId');
-        const onConnect = () => {
-            console.log('Connected to WebSocket server');
+        console.log('current user', currentUserId)
+        if (currentUserId) {
+            const socket =new SockJS(Constants.WS_URL);
+            const stompClient = Stomp.over(socket);
+            const onConnect = () => {
+                console.log('Connected to WebSocket server');
 
-            // Subscribe to the desired destination (topic or queue)
-            const subscribeURL = "/users/" + currentUserId + "/booking"
-            stompClient.subscribe(subscribeURL,updateNotify);
-        };
-        const onDisconnect = () => {
-            console.log('Disconnected from WebSocket server');
-            // Perform any cleanup or handling when the socket is disconnected.
-        };
+                // Subscribe to the desired destination (topic or queue)
+                const subscribeURL = "/users/" + currentUserId + "/booking"
+                stompClient.subscribe(subscribeURL,updateNotify);
+            };
+            const onDisconnect = () => {
+                console.log('Disconnected from WebSocket server');
+                // Perform any cleanup or handling when the socket is disconnected.
+            };
 
-        const onError = (error) => {
-            console.error('WebSocket error:', error);
-            // Handle any WebSocket errors.
-        };
-        // Connect to the WebSocket server
-        stompClient.connect({}, onConnect, onError);
-        return () => {
-            stompClient.disconnect()
-        };
+            const onError = (error) => {
+                console.error('WebSocket error:', error);
+                // Handle any WebSocket errors.
+            };
+            // Connect to the WebSocket server
+            let config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            }
+            if (currentUserId != 'null')
+                stompClient.connect({config}, onConnect, onError);
+            return () => {
+                stompClient.disconnect()
+            };
+        }
     },[])
 
     const updateNotify = (message) => {
@@ -137,9 +145,8 @@ export function Navbar() {
             }
         }
 
-        axios.get('http://localhost:8080/notify_booking', config).then((res) => {
-            // console.log('list notify', JSON.stringify(res.data))
-            setNotifies(res.data)
+        axios.get('http://localhost:8080/notify', config).then((res) => {
+            setNotifies(res.data.reverse())
         })
     }
 
@@ -250,22 +257,33 @@ export function Navbar() {
                                                          }}> <ListItemText>Login </ListItemText></ListItemButton> :
 
                                     <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                                        <ListItemIcon>
-                                            <NotificationsNoneIcon
+                                        <IconButton sx={{marginRight:'15px'}}>
+                                            {notifies.length == 0 ? <NotificationsNoneIcon
                                                 onClick={handleClickNotify}
                                                 size="small"
-                                                sx={{ml: 2}}
+                                                color={notifies.length > 0 ? "primary" : "default"}
                                                 aria-controls={ openNotify ? 'positioned-menu' : undefined}
                                                 aria-haspopup="true"
                                                 aria-expanded={openNotify ? 'true' : undefined}
-                                            >
+                                            ></NotificationsNoneIcon> :
+                                            <Badge badgeContent={notifies.length > 5 ? '5+' : notifies.length} color="primary">
+                                                <NotificationsNoneIcon
+                                                    onClick={handleClickNotify}
+                                                    size="small"
+                                                    color={notifies.length > 0 ? "primary" : "default"}
+                                                    aria-controls={ openNotify ? 'positioned-menu' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={openNotify ? 'true' : undefined}
+                                                >
+                                                </NotificationsNoneIcon>
+                                            </Badge>
+                                            }
 
-                                            </NotificationsNoneIcon>
                                             <Menu
                                                 id="positioned-menu"
                                                 aria-labelledby="demo-positioned-button"
                                                 anchorEl={anchorElNotify}
-                                                open={openNotify}
+                                                open={notifies.length > 0 ? openNotify : 'false'}
                                                 onClose={handleCloseNotify}
                                                 onClick={handleCloseNotify}
                                                 PaperProps={{
@@ -297,14 +315,14 @@ export function Navbar() {
                                                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                                                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                                             >
-                                                {notifies.length <=0 ? <></> : notifies.slice(0, 5).map((item,key) => {
+                                                {notifies.length <=0 ? <></> : notifies.slice(0, 8).map((item,key) => {
                                                     return (
                                                         <MenuItem onClick={() => navigate("/owner/booking")}>{item.message}</MenuItem>
                                                     )
                                                 })}
 
                                             </Menu>
-                                        </ListItemIcon>
+                                        </IconButton>
                                         <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
                                         <Tooltip title="Account settings">
                                             <IconButton
