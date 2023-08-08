@@ -103,7 +103,7 @@ function OwnerEditHouseForm() {
                 >
                     {({ isSubmitting }) => (
                         <Form>
-                            <h2>Edit house</h2>
+                            <h2 className={'my-3'}>Edit house</h2>
                             <div className="d-flex">
                                 <div className="col-6 p-0">
                                     <div className="form-group" style={{height: 72}}>

@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import ReactPaginate from "react-paginate";
-import "./OwnerHouseList.css"
 import {useNavigate} from "react-router";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -12,6 +10,7 @@ import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import Tooltip from "@mui/material/Tooltip";
+import '../../scroll/scroll.css';
 
 function MaintenanceDialog(props) {
 
@@ -76,7 +75,21 @@ function MaintenanceDialog(props) {
                         "bookingStatus": "MAINTENANCE"
                     }
                     axios.post(`http://localhost:8080/booking/create`, data, config)
-                        .then(() => props.handleCloseDialog())
+                        .then(() => {
+                            Swal.fire({
+                                title: 'Success',
+                                icon: 'success'
+                            })
+                            props.handleCloseDialog()
+                        })
+                        .catch(() => {
+                            Swal.fire(
+                                'Oops!',
+                                'This property is in service these days',
+                                'error'
+                            )
+                            props.handleCloseDialog()
+                        })
                 }}>Schedule</Button>
             </DialogActions>
         </Dialog>
@@ -90,7 +103,7 @@ function OwnerHouseList() {
     const [searchHouse, setSearchHouse] = useState([]);
     //pagination
     const [pagesVisited, setPagesVisited] = useState(0);
-    const [housesPerPage,setHousesPerPage] = useState(5);
+    const [housesPerPage, setHousesPerPage] = useState(5);
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -104,7 +117,6 @@ function OwnerHouseList() {
     useEffect(() => {
         axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
             .then((res) => {
-                console.log(res.data)
                 setHouseList(res.data.reverse())
                 setSearchHouse(res.data)
             });
@@ -184,9 +196,10 @@ function OwnerHouseList() {
     let handleCloseDialog = () => {
         setOpenDialog(false)
     }
-    function search(){
+
+    function search() {
         const search = document.getElementById('search').value.trim().toLowerCase();
-        const searchFilter = searchHouse.filter((house)=> {
+        const searchFilter = searchHouse.filter((house) => {
             if (
                 (!search || house.address.toLowerCase().includes(search)
                     || house.name.toLowerCase().includes(search)
@@ -205,92 +218,173 @@ function OwnerHouseList() {
         <MaintenanceDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} maintain
                            maintainedHouseId={maintainedHouseId}/>
         <div className="d-flex justify-content-between my-3">
-            <h2>House List</h2>
+            <h2 className={'m-0'}>House List</h2>
             <button className="btn btn-light d-flex align-items-center"
                     onClick={() => navigate('/owner/add-house-form')}>
                 <i className="material-icons">&#xf8eb;</i>
                 <span>Create new</span></button>
         </div>
-        <input onChange={search} id="search" name="search" type="text" placeholder="Enter keyword" required  />
-        <section className="main">
-            <div className="table-responsive">
-                <table className="table table-bordered table-striped table-hover border border-secondary-subtle">
-                <thead>
-                <tr>
-                    <th style={{width: '60px'}}>#</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Address</th>
-                    <th>Rented</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {houseList
-                    .slice(pagesVisited, pagesVisited + housesPerPage)
-                    .map((item, index) => {
-                        return (<tr key={item.id} style={{height: '80px'}}>
-                            <td className="pt-4">{index + 1 + pagesVisited}</td>
-                            {item.images.length > 0 ?
-                                <td style={{width: '80px'}}><img className={'w-100'} src={item.images[0].fileUrl} alt={item.name}/>
-                                </td> : <td></td>}
-                            <td className="pt-4">{item.name}</td>
-                            <td className="pt-4">{item.price}</td>
-                            <td className="pt-4">{item.address}</td>
-                            <td className="pt-4">{item.numberOfRented}</td>
-                            {item.blocked === false ?
-                                (<td className="pt-4"><span style={{
-                                    display: 'inline-block',
-                                    backgroundColor: '#198754',
-                                    height: '8px',
-                                    width: '8px',
-                                    borderRadius: '50%',
-                                    marginBottom: '2px',
-                                    marginRight: '5px'
-                                }}></span>Active</td>)
-                                : (<td className="pt-4"><span style={{
-                                    display: 'inline-block',
-                                    backgroundColor: '#dc3545',
-                                    height: '8px',
-                                    width: '8px',
-                                    borderRadius: '50%',
-                                    marginBottom: '2px',
-                                    marginRight: '5px'
-                                }}></span>Blocked</td>)}
-                            <td className="col-2 pt-4">
-                                <button style={{backgroundColor: 'transparent'}}
-                                        onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>
-                                    <Tooltip title={'EDIT'}><i className="material-icons">&#xe3c9;</i></Tooltip></button>
-                                <button style={{backgroundColor: 'transparent'}} className="ml-3 mr-3" onClick={() => {
-                                    setMaintainedHouseId(item.id)
-                                    setOpenDialog(true)
-                                }}><Tooltip title={'MAINTENANCE'}><i className="material-icons">&#xea3c;</i></Tooltip></button>
-                                {item.blocked === false ?
-                                    (<button style={{backgroundColor: 'transparent'}}
-                                             onClick={() => blockHouse(item.id)}>
-                                        <Tooltip title={'BLOCK'}><i className="material-icons">&#xe897;</i></Tooltip></button>)
-                                    : (<button style={{backgroundColor: 'transparent'}}
-                                               onClick={() => unBlockHouse(item.id)}>
-                                        <Tooltip title={'UN_BLOCK'}><i className="material-icons">&#xe898;</i></Tooltip></button>)}
-
-                            </td>
-                        </tr>)
-                    })}
-
-                </tbody>
-            </table>
+        <div className={'d-flex justify-content-between'}>
+            <input onChange={search} id="search" name="search" type="text" className={'form-control d-inline-block col-6'}
+                   placeholder="Enter keyword"/>
+            <div className={'form-group col-2 d-flex p-0'}>
+                <label htmlFor="" className={'d-inline-block mb-0 mr-2 pt-2'}>Entries/page</label>
+                <select onChange={(event) => {
+                    setHousesPerPage(event.target.value);
+                }} name="page" className={'form-control d-inline-block'}>
+                    {/*<option value="5">---</option>*/}
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
             </div>
-            <select onChange={(event)=>{
-                setHousesPerPage(event.target.value);
-            }} name="page" style={{width:'80px'}}>
-                <option value="">Page</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-            </select>
+        </div>
+        <section className="main">
+            <div className="table-container mb-3">
+                <table className="table table-bordered table-hover"
+                       style={{verticalAlign: 'middle', textAlign: 'center'}}>
+                    <thead>
+                    <tr className={'table-head'}>
+                        <th style={{
+                            width: '20px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '10px'
+                        }}>#
+                        </th>
+                        {/*<th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}>Image</th>*/}
+                        <th style={{
+                            width: '80px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>
+                            <button>Name</button>
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Price
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Address
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Rented
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Status
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Action
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {houseList
+                        .slice(pagesVisited, pagesVisited + housesPerPage)
+                        .map((item, index) => {
+                            return (<tr key={item.id} style={{height: '80px'}}>
+                                <td style={{
+                                    verticalAlign: 'middle',
+                                    textAlign: 'center',
+                                    padding: '0px'
+                                }}>{index + 1 + pagesVisited}</td>
+                                <td className={'text-left'} style={{
+                                    width: "150px",
+                                    verticalAlign: 'middle',
+                                    padding: '0px',
+                                    borderLeft: "none"
+                                }}>{item.images.length > 0 ?
+                                        <img style={{display: 'inline-block', margin: '0px 16px', width: "60px", height: "60px", borderRadius: "50%"}}
+                                             src={item.images[0].fileUrl} alt={item.name}/>
+                                     : <img style={{display: 'inline-block', margin: '0px 16px',width: "60px", height: "60px", borderRadius: "50%"}}
+                                            src={'https://clipground.com/images/white-home-icon-transparent-png-6.png'} alt={item.name}/>}{item.name}</td>
+                                <td style={{verticalAlign: 'middle', padding: '0px'}}>{item.price}</td>
+                                <td style={{
+                                    verticalAlign: 'middle',
+                                    padding: '6px',
+                                    textAlign: 'left'
+                                }}>{item.address}</td>
+                                <td style={{verticalAlign: 'middle', padding: '0px'}}>{item.numberOfRented}</td>
+                                {item.blocked === false ?
+                                    (<td style={{verticalAlign: 'middle', padding: '0px'}}><span style={{
+                                        display: 'inline-block',
+                                        backgroundColor: '#198754',
+                                        height: '8px',
+                                        width: '8px',
+                                        borderRadius: '50%',
+                                        marginBottom: '2px',
+                                        marginRight: '5px'
+                                    }}></span>Active</td>)
+                                    : (<td style={{verticalAlign: 'middle', padding: '0px'}}><span style={{
+                                        display: 'inline-block',
+                                        backgroundColor: '#dc3545',
+                                        height: '8px',
+                                        width: '8px',
+                                        borderRadius: '50%',
+                                        marginBottom: '2px',
+                                        marginRight: '5px'
+                                    }}></span>Blocked</td>)}
+                                <td style={{
+                                    verticalAlign: 'middle',
+                                    textAlign: 'center',
+                                    padding: '0px',
+                                    backgroundColor: 'transparent'
+                                }}>
+                                    <button style={{backgroundColor: 'transparent'}}
+                                            onClick={() => navigate(`/owner/edit-house-form/${item.id}`)}>
+                                        <Tooltip title={'EDIT'}><i className="material-icons">&#xe3c9;</i></Tooltip>
+                                    </button>
+                                    <button style={{backgroundColor: 'transparent'}} className="ml-3 mr-3"
+                                            onClick={() => {
+                                                setMaintainedHouseId(item.id)
+                                                setOpenDialog(true)
+                                            }}><Tooltip title={'MAINTENANCE'}><i className="material-icons">&#xea3c;</i></Tooltip>
+                                    </button>
+                                    {item.blocked === false ?
+                                        (<button style={{backgroundColor: 'transparent'}}
+                                                 onClick={() => blockHouse(item.id)}>
+                                            <Tooltip title={'BLOCK'}><i
+                                                className="material-icons">&#xe897;</i></Tooltip></button>)
+                                        : (<button style={{backgroundColor: 'transparent'}}
+                                                   onClick={() => unBlockHouse(item.id)}>
+                                            <Tooltip title={'UN_BLOCK'}><i
+                                                className="material-icons">&#xe898;</i></Tooltip></button>)}
+
+                                </td>
+                            </tr>)
+                        })}
+
+                    </tbody>
+                </table>
+            </div>
+
             <PaginationComponent data={houseList} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
         </section>
     </>);
