@@ -10,16 +10,20 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 import {Provider} from "react-redux";
 import {store} from "./components/redux/store";
+import {SnackbarProvider} from "notistack";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <Provider store={store}>
-        <GoogleOAuthProvider clientId="696354615975-8ivuevdnm3gh9anklroh9kq3mfh4nkog.apps.googleusercontent.com">
-            <BrowserRouter>
-                <App/>
-            </BrowserRouter>
-        </GoogleOAuthProvider>
-    </Provider>
+    <SnackbarProvider maxSnack={30}>
+        <Provider store={store}>
+            <GoogleOAuthProvider clientId="696354615975-8ivuevdnm3gh9anklroh9kq3mfh4nkog.apps.googleusercontent.com">
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
+            </GoogleOAuthProvider>
+        </Provider>
+    </SnackbarProvider>
+
 
 );
 

@@ -17,8 +17,10 @@ import LocalHotelRoundedIcon from "@mui/icons-material/LocalHotelRounded";
 import {capitalizeFirstLetter} from "../../utils/api";
 import HouseDescription from "./HouseDescription";
 import BeenhereIcon from '@mui/icons-material/Beenhere';
-import Constants from "../../utils/constants";
 import ListComponent from "./ListComponent";
+import SockJS from "sockjs-client";
+import Constants from "../../utils/constants";
+import Stomp from "stompjs";
 
 export function HouseDetail() {
     const [listImages, setListImages] = useState([]);
@@ -30,6 +32,7 @@ export function HouseDetail() {
     const navigate = useNavigate();
     const [listBooking, setListBooking] = useState([]);
     const [listRelated, setListRelated] = useState([]);
+    const [stompClient,setStompClient] = useState(null);
 
     let result = {
         startDate: "",
@@ -46,7 +49,6 @@ export function HouseDetail() {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
     }
-
     useEffect(() => {
         window.scrollTo(0, 0);
         console.log('get_house_id', id);
@@ -59,6 +61,37 @@ export function HouseDetail() {
         handleFetchBookingList();
         handleFetchRelatedHouses();
     }, [])
+    useEffect(()=> {
+        const currentUserId = localStorage.getItem('currentUserId');
+        if (currentUserId) {
+            const socket =new SockJS(Constants.WS_URL);
+            const stomp = Stomp.over(socket);
+            const onConnect = () => {
+                console.log('Connected to WebSocket server');
+                setStompClient(stomp)
+            };
+            const onDisconnect = () => {
+                console.log('Disconnected from WebSocket server');
+                // Perform any cleanup or handling when the socket is disconnected.
+            };
+
+            const onError = (error) => {
+                console.error('WebSocket error:', error);
+                // Handle any WebSocket errors.
+            };
+            // Connect to the WebSocket server
+            let config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            }
+            if (currentUserId)
+                stomp.connect({config}, onConnect, onError);
+            return () => {
+                stomp.disconnect()
+            };
+        }
+    },[])
 
     function booking() {
         if (localStorage.getItem("currentUser") == null) {
@@ -116,17 +149,38 @@ export function HouseDetail() {
                         Swal.fire({
                             icon: 'success',
                             title: 'Booking successful!',
-                            html: `<div style="text-align: left; margin:auto" class="col-8">
-                    <span><b>House :</b> ${house.name}</span><br>
-                    <span><b>Address :</b> ${house.address}</span><br>
-                    <span><b>Start Date :</b> ${result.startDate}</span><br>
-                    <span><b>End Date :</b> ${result.endDate}</span><br>
-                    <span><b>Price :</b> ${result.price}</span><br>
-                    <span><b>Total :</b> ${result.total}</span><br>
-                    </div>
+                            html: `
+                    <div>House: ${house.name}</div>
+                    <div>Address: ${house.address}</div>
+                    <div>Start Date: ${result.startDate}</div>
+                    <div>End Date: ${result.endDate}</div>
+                    <div>Price: ${result.price}</div>
+                    <div>Total: ${result.total}</div>
                     `,
                             footer: '<a href="/user/booking-history">Click here to see booking list</a>'
                         });
+                        return res.data.id;
+                    }).then((booking_id) => {
+                        const currentUserId = localStorage.getItem('currentUserId');
+                        console.log('stomp client ', stompClient)
+                        if (!stompClient || (stompClient && !stompClient.connected)) {
+                            console.log('re-connect to socket 0')
+                            const socket =new SockJS(Constants.WS_URL);
+                            const stomp = Stomp.over(socket);
+                            let config = {
+                                headers: {
+                                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                }
+                            }
+                            stomp.connect({config}, () => {
+                                setStompClient(stomp)
+                                console.log('re-connect to socket')
+                                stomp.send("/app/booking",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                            });
+                        } else {
+                            stompClient.send("/app/booking",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                        }
+
                     }).catch((error) => {
                         if (error.response && error.response.status === 400) {
                             Swal.fire({
@@ -252,14 +306,14 @@ export function HouseDetail() {
                                 </div>
                             </div>
                             <div className="bg-white border-bottom border-top mt-2">
-                                <div className="row mb-3 align-items-center border-bottom">
+                                <div className="row mb-2 align-items-center border-bottom">
                                     <div className="col-9 mt-2">
-                                        <h4 className={'mt-0 pt-0'}>
+                                        <h4>
                                             <b>Host {house.user ? house.user.firstName : ''} {house.user ? house.user.lastName : ''}</b>
                                         </h4>
-                                        {house.user && <span>
-                                            <BeenhereIcon fontSize="small"/>{house.user.createAt} &nbsp;<HomeIcon style={{paddingBottom:'2px'}}/>{house.user.numberOfHouse} houses
-                                        </span>}
+                                        <p>
+                                            <BedIcon />{house.totalBedrooms} Bed room . <BathtubIcon />{house.totalBathrooms} Bath room
+                                        </p>
                                     </div>
                                     <div className="col-3 text-md-right my-4">
                                         <img
@@ -338,21 +392,15 @@ export function HouseDetail() {
                             </div>
                         </div>
                     </div>
-
                     <br/>
                     <Reviews house={house}/>
-
                 </div>
-
                 <div className={'row border-top mb-5'}>
                     <h2 className={'mt-4 mb-2'}>Related houses</h2>
                     <ListComponent listHouse={listRelated}/>
                 </div>
 
             </div>
-
-
-
             <Footer/>
         </>
     )

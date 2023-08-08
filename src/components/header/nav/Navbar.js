@@ -21,7 +21,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import {useNavigate} from "react-router";
 import Swal from "sweetalert2";
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import SockJS from "sockjs-client";
 import Constants from "../../../utils/constants";
+import Stomp from "stompjs";
+import { useSnackbar } from 'notistack';
+import Badge from '@mui/material/Badge';
 
 export function Navbar() {
     const menuBarStyle = {
@@ -40,7 +45,6 @@ export function Navbar() {
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const handleClick = (event) => {
-        console.log(event)
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
@@ -49,6 +53,36 @@ export function Navbar() {
 
     const [openDialog, setOpenDialog] = useState(false);
     const [openOwnerRequestSentDialog, setOpenOwnerRequestSentDialog] = useState(false);
+
+    //handle notifycation
+    const { enqueueSnackbar } = useSnackbar();
+    const [notifies,setNotifies] = useState(['notify 1','notify 2']);
+    const [anchorElNotify, setAnchorElNotify] = React.useState(null);
+    const openNotify = Boolean(anchorElNotify);
+    const [read,setRead] = useState(true);
+    const [isSticky, setIsSticky] = useState(false);
+    const handleClickNotify = (event) => {
+        setAnchorElNotify(event.currentTarget);
+        //mark read
+        if (!read) {
+            //call api to mark read
+            console.log('mark read all notify')
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+            axios.put('http://localhost:8080/notify',null, config).then((res) => {
+                setNotifies(res.data.reverse())
+            })
+        }
+        setRead(true);
+    };
+    const handleCloseNotify = () => {
+        console.log('close notify')
+        setAnchorElNotify(null);
+    };
+
     const handleClickOpenDialog = () => {
         if (localStorage.getItem('currentUserApplyHost') === 'false') {
             setOpenDialog(true);
@@ -69,8 +103,81 @@ export function Navbar() {
         if (localStorage.getItem("currentUser") !== null) {
             setLogin(true)
         }
-        console.log('initialize state', login)
     }, []);
+
+    //handle color of ringtone
+    useEffect(() => {
+        function handleScroll() {
+            setIsSticky(window.scrollY >= window.innerHeight);
+        }
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+    useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        if (localStorage.getItem('token')) {
+            axios.get('http://localhost:8080/notify', config).then((res) => {
+                setNotifies(res.data.reverse())
+            })
+        }
+    },[])
+
+    useEffect(() => {
+        const currentUserId = localStorage.getItem('currentUserId');
+        console.log('current user', currentUserId)
+        if (currentUserId) {
+            const socket =new SockJS(Constants.WS_URL);
+            const stompClient = Stomp.over(socket);
+            const onConnect = () => {
+                console.log('Connected to WebSocket server');
+
+                // Subscribe to the desired destination (topic or queue)
+                const subscribeURL = "/users/" + currentUserId + "/booking"
+                stompClient.subscribe(subscribeURL,updateNotify);
+            };
+            const onDisconnect = () => {
+                console.log('Disconnected from WebSocket server');
+                // Perform any cleanup or handling when the socket is disconnected.
+            };
+
+            const onError = (error) => {
+                console.error('WebSocket error:', error);
+                // Handle any WebSocket errors.
+            };
+            // Connect to the WebSocket server
+            let config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            }
+            if (currentUserId != 'null')
+                stompClient.connect({config}, onConnect, onError);
+            return () => {
+                stompClient.disconnect()
+            };
+        }
+    },[])
+
+    const updateNotify = (message) => {
+        enqueueSnackbar('You have a new message!', { variant: 'success' });
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        setRead(false);
+        axios.get('http://localhost:8080/notify', config).then((res) => {
+            setNotifies(res.data.reverse())
+        })
+    }
 
     const clearAllInfo = () => {
         axios.post(Constants.BASE_API+'/jwt/logout', {token: localStorage.getItem('token')})
@@ -86,7 +193,6 @@ export function Navbar() {
 
     const handleLoginClick = () => {
         setLogin(true)
-        console.log('login state', login)
     }
 
     function openSearchBox() {
@@ -178,102 +284,204 @@ export function Navbar() {
                                                              handleLoginClick();
                                                              navigate("/login");
                                                          }}> <ListItemText>Login </ListItemText></ListItemButton> :
+
                                     <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                                        <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
-                                        <Tooltip title="Account settings">
-                                            <IconButton
-                                                onClick={handleClick}
+                                        <IconButton sx={{marginRight:'15px'}}>
+                                            {notifies.filter((item) => {
+                                                return (item.read == false)
+                                            }).length == 0 ? <NotificationsNoneIcon
+                                                onClick={handleClickNotify}
                                                 size="small"
-                                                sx={{ml: 1}}
-                                                aria-controls={ open ? 'account-menu' : undefined}
+                                                color={notifies.filter((item) => {
+                                                    return (item.read == false)
+                                                }).length > 0 ? "primary" : (isSticky ? "default" : "primary")}
+                                                aria-controls={ openNotify ? 'positioned-menu' : undefined}
                                                 aria-haspopup="true"
-                                                aria-expanded={open ? 'true' : undefined}
-                                            >
-                                                {JSON.parse(localStorage.getItem('currentUser')).profileImage ?
-                                                    <img
-                                                        src={JSON.parse(localStorage.getItem('currentUser')).profileImage}
-                                                        alt="avatar" width="35"
-                                                        height="35" className="rounded-circle"
-                                                        onClick={handleLoginClick}/>
-                                                    : <img src="/images/profile/user-1.jpg" alt="" width="35"
-                                                           height="35" className="rounded-circle"
-                                                           onClick={handleLoginClick}/>}
-                                            </IconButton>
-                                        </Tooltip>
-                                    </Box>
+                                                aria-expanded={openNotify ? 'true' : undefined}
+                                            ></NotificationsNoneIcon> :
+                                                <Badge badgeContent={notifies.filter((item) => {
+                                                    return (item.read == false)
+                                                }).length > 5 ? '5+' : notifies.filter((item) => {
+                                                    return (item.read == false)
+                                                }).length} color="primary">
+                                                    <NotificationsNoneIcon
+                                                        onClick={handleClickNotify}
+                                                        size="small"
+                                                        color={notifies.filter((item) => {
+                                                            return (item.read == false)
+                                                        }).length > 0 ? "primary" : (isSticky ? "default" : "primary")}
+                                                        aria-controls={ openNotify ? 'positioned-menu' : undefined}
+                                                        aria-haspopup="true"
+                                                        aria-expanded={openNotify ? 'true' : undefined}
+                                                    >
+                                                    </NotificationsNoneIcon>
+                                                </Badge>
+                                            }
 
-                            }
-                        </Box>
-                        <Menu
-                            anchorEl={anchorEl}
-                            id="account-menu"
-                            open={open}
-                            onClose={handleClose}
-                            onClick={handleClose}
-                            PaperProps={{
-                                elevation: 0,
-                                sx: {
-                                    overflow: 'visible',
-                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                    mt: 1.5,
-                                    '& .MuiAvatar-root': {
-                                        width: 32,
-                                        height: 32,
-                                        ml: -0.5,
-                                        mr: 1,
-                                    },
-                                    '&:before': {
-                                        content: '""',
-                                        display: 'block',
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 14,
-                                        width: 10,
-                                        height: 10,
-                                        bgcolor: 'background.paper',
-                                        transform: 'translateY(-50%) rotate(45deg)',
-                                        zIndex: 0,
-                                    },
-                                },
-                            }}
-                            transformOrigin={{horizontal: 'right', vertical: 'top'}}
-                            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                        >
-                            <MenuItem onClick={() => {
-                                navigate("/user")
-                            }}>
-                                <Avatar/> My Account
-                            </MenuItem>
-                            {localStorage.getItem('currentUserRole') === "ADMIN" &&
-                                <MenuItem onClick={() => {
-                                    navigate("/admin/users")
-                                }}>
-                                    <Avatar/> Admin Dashboard
-                                </MenuItem>
-                            }
-                            {
-                                localStorage.getItem('currentUserRole') === "USER" ?
-                                    <MenuItem onClick={handleClickOpenDialog}>
-                                        <Avatar/> Become Owner
-                                    </MenuItem> :
-                                    <MenuItem onClick={() => {
-                                        navigate("/owner")
-                                    }}>
-                                        <Avatar/> My Houses
-                                    </MenuItem>
-                            }
+                                        <Menu
+                                            id="positioned-menu"
+                                            aria-labelledby="demo-positioned-button"
+                                            anchorEl={anchorElNotify}
+                                            open={notifies.length > 0 ? openNotify : false}
+                                            onClose={handleCloseNotify}
+                                            onClick={handleCloseNotify}
+                                            PaperProps={{
+                                                elevation: 0,
+                                                sx: {
+                                                    overflow: 'visible',
+                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                    mt: 1.5,
+                                                    '& .MuiAvatar-root': {
+                                                        width: 32,
+                                                        height: 32,
+                                                        ml: -0.5,
+                                                        mr: 1,
+                                                    },
+                                                    '&:before': {
+                                                        content: '""',
+                                                        display: 'block',
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        right: 14,
+                                                        width: 10,
+                                                        height: 10,
+                                                        bgcolor: 'background.paper',
+                                                        transform: 'translateY(-50%) rotate(45deg)',
+                                                        zIndex: 0,
+                                                    },
+                                                },
+                                            }}
+                                            transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                                            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+                                        >
+                                            <div
+                                                style={{
+                                                    overflowY: 'auto',
+                                                    height: notifies.length > 10 ? '300px' : 'auto',
+                                                    width: 'auto'
+                                                }}>
+                                                <div>
+                                                    {notifies.length <= 0 ? <></> : (
+                                                        <div className='d-flex flex-column'>
+                                                            {notifies.map((item, key) => (
+                                                                <div key={key}>
+                                                                    <div className='d-flex'>
+                                                                    <img
+                                                                        src={item?.sourceUser?.profileImage}
+                                                                        style={{
+                                                                            height: '20px',
+                                                                            width: '20px',
+                                                                            borderRadius: '50%',
+                                                                            display: 'block',
+                                                                            marginTop: '8px',
+                                                                            marginLeft: '8px'
+                                                                        }}
+                                                                    />
+                                                                    <MenuItem onClick={() => navigate("/owner/booking")}>{item.message}</MenuItem>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                </Menu>
+            </IconButton>
+            <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
+            <Tooltip title="Account settings">
+                <IconButton
+                    onClick={handleClick}
+                    size="small"
+                    sx={{ml: 1}}
+                    aria-controls={open ? 'account-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                >
+                    {JSON.parse(localStorage.getItem('currentUser')).profileImage ?
+                        <img
+                            src={JSON.parse(localStorage.getItem('currentUser')).profileImage}
+                            alt="avatar" width="35"
+                            height="35" className="rounded-circle"
+                            onClick={handleLoginClick}/>
+                        : <img src="/images/profile/user-1.jpg" alt="" width="35"
+                               height="35" className="rounded-circle"
+                               onClick={handleLoginClick}/>}
+                </IconButton>
+            </Tooltip>
+        </Box>
 
-                            <Divider/>
-                            <MenuItem onClick={clearAllInfo}>
-                                <ListItemIcon>
-                                    <Logout fontSize="small"/>
-                                </ListItemIcon>
-                                Logout
-                            </MenuItem>
-                        </Menu>
-                    </React.Fragment>
-                </Box>
-            </Grid>
-        </>
-    )
+        }
+        </Box>
+    <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+            elevation: 0,
+            sx: {
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                mt: 1.5,
+                '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                },
+                '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                },
+            },
+        }}
+        transformOrigin={{horizontal: 'right', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+    >
+        <MenuItem onClick={() => {
+            navigate("/user")
+        }}>
+            <Avatar/> My Account
+        </MenuItem>
+        {localStorage.getItem('currentUserRole') === "ADMIN" &&
+            <MenuItem onClick={() => {
+                navigate("/admin/users")
+            }}>
+                <Avatar/> Admin Dashboard
+            </MenuItem>
+        }
+        {
+            localStorage.getItem('currentUserRole') === "USER" ?
+                <MenuItem onClick={handleClickOpenDialog}>
+                    <Avatar/> Become Owner
+                </MenuItem> :
+                <MenuItem onClick={() => {
+                    navigate("/owner")
+                }}>
+                    <Avatar/> My Houses
+                </MenuItem>
+        }
+
+        <Divider/>
+        <MenuItem onClick={clearAllInfo}>
+            <ListItemIcon>
+                <Logout fontSize="small"/>
+            </ListItemIcon>
+            Logout
+        </MenuItem>
+    </Menu>
+</React.Fragment>
+</Box>
+</Grid>
+</>
+)
 }
