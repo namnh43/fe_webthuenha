@@ -179,8 +179,7 @@ export function AdminWaitingHost() {
 
     return (
         <>
-            <section className="main">
-                <h2 className="mb-3">Waiting confirmation hosts</h2>
+                <h2 className="my-3">Waiting confirmation hosts</h2>
                 <div className={'mt-2 mb-4'} onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
                     <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
                     <div style={{marginLeft:'auto'}}>
@@ -196,15 +195,16 @@ export function AdminWaitingHost() {
                         </select>
                     </div>
                 </div>
-
-                <table className="table table-striped table-hover">
+            <section className="main">
+            <div className={'table-container'}>
+                <table className="table table-bordered table-striped table-hover">
                     <thead>
                     <tr className={"table-head"}>
-                        <th><button onClick={idClick}>#</button></th>
-                        <th><button onClick={userClick}>UserName</button></th>
-                        <th><button >Created at</button></th>
-                        <th><button onClick={phoneClick}>Phone number</button></th>
-                        <th><button >Action</button></th>
+                        <th className="text-center"><button onClick={idClick}>#</button></th>
+                        <th className="text-center"><button onClick={userClick}>UserName</button></th>
+                        <th className="text-center"><button >Created at</button></th>
+                        <th className="text-center"><button onClick={phoneClick}>Phone number</button></th>
+                        <th className="text-center"><button >Action</button></th>
                     </tr>
                     </thead>
                     {hosts.length <= 0 ? (
@@ -229,7 +229,7 @@ export function AdminWaitingHost() {
                     </tbody>
                     )}
                 </table>
-
+                </div>
                 <PaginationComponent data={hosts} numberPerpage={hostsPerPage} changeCurentPage={handlePageChange}/>
             </section>
             <UserProfileDialog open={openProfileDialog} onClose={handleCloseProfileDialog} id={currentUserId}/>

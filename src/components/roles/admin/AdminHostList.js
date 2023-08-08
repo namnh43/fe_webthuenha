@@ -206,9 +206,23 @@ export function AdminHostList() {
 
     return (
         <>  <h2 className="my-3">Host List</h2>
+            <div className={'mt-2 mb-4'} onChange={search} style={{ display: 'flex', flexWrap: 'wrap' }}>
             <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
+                <div style={{marginLeft:'auto'}}>
+                    Entries/page &nbsp;
+                    <select onChange={(event)=>{
+                        setHousesPerPage(event.target.value);
+                    }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                        <option value="5">---</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+            </div>
                 <section className="main">
-                    <div className={'table-container mb-3'}>
+                    <div className='table-container'>
                     <table className="table table-bordered table-striped table-hover">
                         <thead>
                         <tr className={"table-head"}>
@@ -254,18 +268,6 @@ export function AdminHostList() {
                         })}
                         </tbody>
                     </table>
-                    </div>
-                    <div style={{marginLeft:'auto'}}>
-                        Entries/page &nbsp;
-                        <select onChange={(event)=>{
-                            setHousesPerPage(event.target.value);
-                        }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
-                            <option value="5">---</option>
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
                     </div>
                     <PaginationComponent data={hosts} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
                 </section>
