@@ -36,7 +36,7 @@ function HomePageMenuBar() {
                 }}
                 alignItems="center"
             >
-                <Navbar/>
+                <Navbar isSticky={isSticky}/>
             </Grid>
         </div>
 

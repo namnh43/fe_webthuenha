@@ -20,7 +20,7 @@ export default function Menubar() {
                   }}
                 alignItems="center"
             >
-                <Navbar/>
+                <Navbar isSticky={true}/>
 
             </Grid>
         </div>
