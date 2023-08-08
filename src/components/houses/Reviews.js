@@ -60,7 +60,7 @@ const Reviews = ({ house }) => {
     }
 
     return (
-        <div className="row mb-4">
+        <div className="row mb-3">
             <div className="col-12">
                 <h4 className={"fw-bold"}>Reviews</h4>
                 <StarIcon fontSize="small" className="pb-1"/>
@@ -173,7 +173,6 @@ const Reviews = ({ house }) => {
                                 className="btn btn-success">Hide</button>
                     )}
                 </div>
-
             </div>
         </div>
     );

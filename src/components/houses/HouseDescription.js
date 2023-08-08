@@ -16,7 +16,7 @@ const HouseDescription = ({ houseDescription }) => {
     }
 
     return (
-        <div>
+        <div style={{marginTop: '35px', marginBottom: '15px'}}>
             <h4 className="mt-4 fw-bolder">More description</h4>
             {showFullDescription ? (
                 <p className={'m-0'}>{houseDescription}</p>

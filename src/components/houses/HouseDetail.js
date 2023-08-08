@@ -150,12 +150,33 @@ export function HouseDetail() {
                             icon: 'success',
                             title: 'Booking successful!',
                             html: `
-                    <div>House: ${house.name}</div>
-                    <div>Address: ${house.address}</div>
-                    <div>Start Date: ${result.startDate}</div>
-                    <div>End Date: ${result.endDate}</div>
-                    <div>Price: ${result.price}</div>
-                    <div>Total: ${result.total}</div>
+                    <div style="margin:auto" class="col-10">
+    <div style="display: flex; justify-content: space-between;">
+        <span><b>House</b></span>
+        <span>${house.name}</span>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        <span><b>Address</b></span>
+        <span>${house.address}</span>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        <span><b>Start Date</b></span>
+        <span>${result.startDate}</span>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        <span><b>End Date</b></span>
+        <span>${result.endDate}</span>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        <span><b>Price</b></span>
+        <span>${result.price}$</span>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        <span><b>Total</b></span>
+        <span>${result.total}$</span>
+    </div>
+</div>
+
                     `,
                             footer: '<a href="/user/booking-history">Click here to see booking list</a>'
                         });
@@ -243,13 +264,13 @@ export function HouseDetail() {
             <div className="container col-10">
                 <div className="row">
                     <div className="col-12 mt-1">
-                        <h3 className="text-capitalize mb-0 mt-3 text-black"><HomeIcon style={{paddingBottom: '5px', fontSize: '40px'}} color="primary"/>{house.name}</h3>
+                        <h3 className="text-capitalize mb-0 mt-4"><HomeIcon style={{paddingBottom: '5px', fontSize: '40px'}} color="primary"/><b>{house.name}</b></h3>
                         <p style={{fontSize: '17px'}} className="mb-0">&nbsp;<LocationOnIcon style={{paddingBottom: '5px', fontSize: '30px'}} color="error"/>{house.address}</p>
                         <p style={{fontSize: '15px', marginTop: '0px'}}>&nbsp; <LocalHotelRoundedIcon/> {house.totalBedrooms} Bed room &nbsp;  &nbsp;<BathtubIcon/> {house.totalBathrooms} Bath room</p>
                     </div>
                 </div>
                 <div className="container">
-                    <div className="row mt-1">
+                    <div className="row mt-2">
                         <div className="col-8">
                             <div className="row">
                                 {listImages.length > 0 && (
@@ -305,15 +326,15 @@ export function HouseDetail() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="bg-white border-bottom border-top mt-2">
+                            <div className="bg-white border-bottom border-top mt-3">
                                 <div className="row mb-2 align-items-center border-bottom">
                                     <div className="col-9 mt-2">
                                         <h4>
                                             <b>Host {house.user ? house.user.firstName : ''} {house.user ? house.user.lastName : ''}</b>
                                         </h4>
-                                        <p>
-                                            <BedIcon />{house.totalBedrooms} Bed room . <BathtubIcon />{house.totalBathrooms} Bath room
-                                        </p>
+                                        {house.user && <span>
+                                            <BeenhereIcon fontSize="small"/>{house.user.createAt} &nbsp;<HomeIcon style={{paddingBottom:'2px'}}/>{house.user.numberOfHouse} houses
+                                        </span>}
                                     </div>
                                     <div className="col-3 text-md-right my-4">
                                         <img
@@ -330,12 +351,10 @@ export function HouseDetail() {
                         <div className="col-4">
                             <div
                                 style={{ position: 'sticky', top: '100px', zIndex: '999', borderRadius: '8px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}
-                                className="bg-white p-4 border mb-2 borde"
+                                className="bg-white p-4 border mb-3 borde"
                             >
-                                <h5 className="text-black mb-3" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <b>
-                                        <span style={{ fontSize: '24px' }}>${house.price} /</span> night
-                                    </b>
+                                <h5 className="mb-3" style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span className={'fw-bold'} style={{ fontSize: '26px', color: 'green' }}>${house.price}</span>&nbsp;/ night
                                     <span style={{ marginLeft: 'auto', fontSize: '15px', paddingTop: '9px' }}><StarIcon style={{ marginBottom: '4px', fontSize: '16px' }} />
                                         {house.ratingScore} {' - ' + house.numberOfReviews + ' reviews'}</span>
                                 </h5>
@@ -396,7 +415,7 @@ export function HouseDetail() {
                     <Reviews house={house}/>
                 </div>
                 <div className={'row border-top mb-5'}>
-                    <h2 className={'mt-4 mb-2'}>Related houses</h2>
+                    <h2 className={'mt-4 mb-2 fw-bold'}>Related houses</h2>
                     <ListComponent listHouse={listRelated}/>
                 </div>
 

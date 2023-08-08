@@ -227,7 +227,7 @@ function OwnerHouseList() {
                 <span>Create new</span></button>
         </div>
         <div className={'d-flex justify-content-between'}>
-            <input onChange={search} id="search" name="search" type="text" className={'form-control d-inline-block col-6'}
+            <input onChange={search} id="search" name="search" type="text" className={'form-control d-inline-block col-4'}
                    placeholder="Enter keyword"/>
             <div className={'form-group col-2 d-flex p-0'}>
                 <label htmlFor="" className={'d-inline-block mb-0 mr-2 pt-2'}>Entries/page</label>

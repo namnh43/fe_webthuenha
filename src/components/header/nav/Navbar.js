@@ -190,7 +190,7 @@ export function Navbar({isSticky}) {
                 <Box
                     sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}
                 >
-                    <h1 className="mb-2 mr-5"><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
+                    <h1 className="mb-2 mr-5" style={{paddingBottom: "3px"}}><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
                         className="text-danger">.</span></strong></Link></h1>
                 </Box>
             </Grid>
@@ -272,7 +272,7 @@ export function Navbar({isSticky}) {
                                                          }}> <ListItemText>Login </ListItemText></ListItemButton> :
 
                                     <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                                        <IconButton sx={{marginRight:'15px'}}>
+                                        <IconButton sx={{marginRight:'15px', paddingBottom:'10px'}}>
                                             {notifies.filter((item) => {
                                                 return (item.read == false)
                                             }).length == 0 ? <NotificationsNoneIcon
@@ -373,12 +373,12 @@ export function Navbar({isSticky}) {
                                             </div>
                 </Menu>
             </IconButton>
-            <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
+            <ListItemText style={{paddingBottom: '5px'}}>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
             <Tooltip title="Account settings">
                 <IconButton
                     onClick={handleClick}
                     size="small"
-                    sx={{ml: 1}}
+                    sx={{ml: 1, mb:1}}
                     aria-controls={open ? 'account-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
@@ -386,11 +386,11 @@ export function Navbar({isSticky}) {
                     {JSON.parse(localStorage.getItem('currentUser')).profileImage ?
                         <img
                             src={JSON.parse(localStorage.getItem('currentUser')).profileImage}
-                            alt="avatar" width="35"
-                            height="35" className="rounded-circle"
+                            alt="avatar" width="40"
+                            height="40" className="rounded-circle"
                             onClick={handleLoginClick}/>
-                        : <img src="/images/profile/user-1.jpg" alt="" width="35"
-                               height="35" className="rounded-circle"
+                        : <img src="https://variety.com/wp-content/uploads/2021/04/Avatar.jpg?w=800&h=533&crop=1" alt="" width="40"
+                               height="40" className="rounded-circle"
                                onClick={handleLoginClick}/>}
                 </IconButton>
             </Tooltip>
