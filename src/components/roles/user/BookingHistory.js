@@ -7,6 +7,8 @@ import '../../scroll/scroll.css';
 import {formatDate} from "../../../utils/api";
 import {backdropClasses} from "@mui/material";
 import Constants from "../../../utils/constants";
+import ImportExportIcon from '@mui/icons-material/ImportExport';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 
 function BookingHistory() {
     const [bookingList, setBookingList] = useState([]);
@@ -192,7 +194,6 @@ function BookingHistory() {
     }
 
 
-
     return (
         <>
             {reviewBookingId !== null ? (
@@ -228,6 +229,7 @@ function BookingHistory() {
                                 <option value="10">10</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
+                                <option value="50">50</option>
                             </select>
                         </div>
                     </div>
@@ -237,12 +239,12 @@ function BookingHistory() {
                                 <thead>
                                 <tr className={"table-head"}>
                                     <th style={{ width:'20px',verticalAlign:'middle', textAlign:'center',padding:'10px'}}><button   onClick={idClick}><b>#</b></button></th>
-                                    <th colSpan="2" style={{verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button   onClick={houseClick}><b>House</b></button></th>
-                                    <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button   onClick={sDateClick}><b>Start Date</b></button></th>
-                                    <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button   onClick={eDateClick}><b>End Date</b></button></th>
-                                    <th style={{ width:'30px',verticalAlign:'middle', textAlign:'center',padding:'3px'}}><button   onClick={totalClick}><b>Total</b></button></th>
-                                    <th style={{ width:'160px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button   onClick={addressClick}><b>Address</b></button></th>
-                                    <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button  ><b>Status</b></button></th>
+                                    <th colSpan="2" style={{verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button   onClick={houseClick}><b>House<ImportExportIcon sx={{ fontSize: 17 }}/></b></button></th>
+                                    <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button   onClick={sDateClick}><b>Start Date<ImportExportIcon sx={{ fontSize: 17 }}/></b></button></th>
+                                    <th style={{ width:'40px',verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button   onClick={eDateClick}><b>End Date<ImportExportIcon sx={{ fontSize: 17 }}/></b></button></th>
+                                    <th style={{ width:'50px',verticalAlign:'middle', textAlign:'center',padding:'3px'}}><button   onClick={totalClick}><b>Total<ImportExportIcon sx={{ fontSize: 17 }}/></b></button></th>
+                                    <th style={{ width:'160px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button   onClick={addressClick}><b>Address<ImportExportIcon sx={{ fontSize: 17 }}/></b></button></th>
+                                    <th style={{ width:'115px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button  ><b>Status</b></button></th>
                                     <th style={{ width:'75px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button  ><b>Action</b></button></th>
                                 </tr>
                                 </thead>

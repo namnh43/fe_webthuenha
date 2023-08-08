@@ -17,7 +17,7 @@ const HouseDescription = ({ houseDescription }) => {
 
     return (
         <div>
-            <h4 className="mt-4">More description of the house</h4>
+            <h4 className="mt-4 fw-bolder">More description</h4>
             {showFullDescription ? (
                 <p className={'m-0'}>{houseDescription}</p>
             ) : (
@@ -28,7 +28,6 @@ const HouseDescription = ({ houseDescription }) => {
                     {showFullDescription ? <span>Collapse<ExpandLessIcon/></span> : <span>Show all<ExpandMoreIcon/></span>}
                 </button>
             )}
-            <br />
         </div>
     );
 };
