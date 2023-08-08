@@ -172,10 +172,10 @@ export function HouseDetail() {
                             stomp.connect({config}, () => {
                                 setStompClient(stomp)
                                 console.log('re-connect to socket')
-                                stomp.send("/app/notify/booking",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                                stomp.send("/app/booking",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
                             });
                         } else {
-                            stompClient.send("/app/notify/booking",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
+                            stompClient.send("/app/booking",{},JSON.stringify({fromId:currentUserId,booking:{id:booking_id},message:"You have new booking request"}));
                         }
 
                     }).catch((error) => {

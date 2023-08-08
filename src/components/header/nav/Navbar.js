@@ -60,6 +60,7 @@ export function Navbar() {
     const [anchorElNotify, setAnchorElNotify] = React.useState(null);
     const openNotify = Boolean(anchorElNotify);
     const [read,setRead] = useState(true);
+    const [isSticky, setIsSticky] = useState(false);
     const handleClickNotify = (event) => {
         setAnchorElNotify(event.currentTarget);
         //mark read
@@ -103,6 +104,19 @@ export function Navbar() {
             setLogin(true)
         }
     }, []);
+
+    //handle color of ringtone
+    useEffect(() => {
+        function handleScroll() {
+            setIsSticky(window.scrollY >= window.innerHeight);
+        }
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     useEffect(() => {
         const config = {
             headers: {
@@ -279,9 +293,8 @@ export function Navbar() {
                                                 onClick={handleClickNotify}
                                                 size="small"
                                                 color={notifies.filter((item) => {
-                                                    console.log('notify', item)
                                                     return (item.read == false)
-                                                }).length > 0 ? "primary" : "default"}
+                                                }).length > 0 ? "primary" : (isSticky ? "default" : "primary")}
                                                 aria-controls={ openNotify ? 'positioned-menu' : undefined}
                                                 aria-haspopup="true"
                                                 aria-expanded={openNotify ? 'true' : undefined}
@@ -296,7 +309,7 @@ export function Navbar() {
                                                         size="small"
                                                         color={notifies.filter((item) => {
                                                             return (item.read == false)
-                                                        }).length > 0 ? "primary" : "default"}
+                                                        }).length > 0 ? "primary" : (isSticky ? "default" : "primary")}
                                                         aria-controls={ openNotify ? 'positioned-menu' : undefined}
                                                         aria-haspopup="true"
                                                         aria-expanded={openNotify ? 'true' : undefined}

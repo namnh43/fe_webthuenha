@@ -101,10 +101,10 @@ function BookingHistory() {
                         stomp.connect({config}, () => {
                             setStompClient(stomp)
                             console.log('re-connect to socket')
-                            stomp.send("/app/notify/cancelbooking",{},JSON.stringify({fromId:currentUserId,booking:{id:bookingId},message:"You have new booking request"}));
+                            stomp.send("/app/cancelbooking",{},JSON.stringify({fromId:currentUserId,booking:{id:bookingId},message:"You have new booking request"}));
                         });
                     } else {
-                        stompClient.send("/app/notify/cancelbooking",{},JSON.stringify({fromId:currentUserId,booking:{id:bookingId},message:"You have new booking request"}));
+                        stompClient.send("/app/cancelbooking",{},JSON.stringify({fromId:currentUserId,booking:{id:bookingId},message:"You have new booking request"}));
                     }
                 })
                 .catch((error) => {
