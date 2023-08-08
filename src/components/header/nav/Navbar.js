@@ -44,7 +44,6 @@ export function Navbar() {
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const handleClick = (event) => {
-        console.log(event)
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
@@ -56,7 +55,6 @@ export function Navbar() {
 
     //handle notifycation
     const { enqueueSnackbar } = useSnackbar();
-    const [stompClient,setStompClient] = useState(null);
     const [notifies,setNotifies] = useState(['notify 1','notify 2']);
     const [anchorElNotify, setAnchorElNotify] = React.useState(null);
     const openNotify = Boolean(anchorElNotify);
@@ -88,7 +86,7 @@ export function Navbar() {
         if (localStorage.getItem("currentUser") !== null) {
             setLogin(true)
         }
-        console.log('initialize state', login)
+        // console.log('initialize state', login)
     }, []);
     useEffect(() => {
         const config = {
@@ -97,54 +95,40 @@ export function Navbar() {
             }
         }
         axios.get('http://localhost:8080/notify_booking', config).then((res) => {
-            console.log('list notify', JSON.stringify(res.data))
+            // console.log('list notify', JSON.stringify(res.data))
             setNotifies(res.data)
         })
     },[])
 
     useEffect(() => {
-        const connect_to_socket = async (userId,callback) => {
-            try {
-                if (!stompClient || (stompClient && !stompClient.connected)) {
-                    console.log('create new connection here')
-                    const socket =new SockJS(Constants.WS_URL);
-                    const stomp = Stomp.over(socket);
-                    await stomp.connect({},()=> {
-                        console.log("connect to socket",stomp )
-                        setStompClient(stomp);
-                        const subscribeURL = "/users/" + userId + "/booking"
-                        stomp.subscribe(subscribeURL,callback);
-                    })
-                    await setStompClient(stomp);
-                }
-                return stompClient;
-            }catch (error) {
-                console.log("error when connect to socket");
-                throw error;
-            }
-        }
-        // Function to disconnect from the WebSocket server
-        const disconnectFromWebSocket = () => {
-            if (stompClient) {
-                stompClient.disconnect(() => {
-                    console.log('Disconnected from WebSocket');
-                    setStompClient(null);
-                });
-            }
-        };
+        console.log('create new connection here')
+        const socket =new SockJS(Constants.WS_URL);
+        const stompClient = Stomp.over(socket);
         const currentUserId = localStorage.getItem('currentUserId');
-        disconnectFromWebSocket();
-        connect_to_socket(currentUserId,updateNotify).then((connection)=> {
-            console.log('finish booking');
-        })
+        const onConnect = () => {
+            console.log('Connected to WebSocket server');
+
+            // Subscribe to the desired destination (topic or queue)
+            const subscribeURL = "/users/" + currentUserId + "/booking"
+            stompClient.subscribe(subscribeURL,updateNotify);
+        };
+        const onDisconnect = () => {
+            console.log('Disconnected from WebSocket server');
+            // Perform any cleanup or handling when the socket is disconnected.
+        };
+
+        const onError = (error) => {
+            console.error('WebSocket error:', error);
+            // Handle any WebSocket errors.
+        };
+        // Connect to the WebSocket server
+        stompClient.connect({}, onConnect, onError);
         return () => {
-            console.log('disconnect')
-            disconnectFromWebSocket();
+            stompClient.disconnect()
         };
     },[])
 
     const updateNotify = (message) => {
-        console.log('call this function')
         enqueueSnackbar('You have a new message!', { variant: 'success' });
         const config = {
             headers: {
@@ -172,7 +156,6 @@ export function Navbar() {
 
     const handleLoginClick = () => {
         setLogin(true)
-        console.log('login state', login)
     }
 
     function openSearchBox() {
