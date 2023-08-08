@@ -8,7 +8,7 @@ import UserProfileDialog from "../../dialog/UserProfileDialog";
 import RuleIcon from '@mui/icons-material/Rule';
 import IconButton from '@mui/material/IconButton';
 import {PaginationComponent} from "../../pagination/PaginationComponent";
-import Constants from "../../../utils/constants";
+import '../../scroll/scroll.css'
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
@@ -17,7 +17,8 @@ export function AdminWaitingHost() {
 
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const hostsPerPage = 2;
+    const [hostsPerPage,setHostsPerPage] = useState(5);
+
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -182,7 +183,7 @@ export function AdminWaitingHost() {
                 <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
                 <table className="table table-striped table-hover">
                     <thead>
-                    <tr>
+                    <tr className={"table-head"}>
                         <th><button onClick={idClick}>#</button></th>
                         <th><button onClick={userClick}>UserName</button></th>
                         <th><button >Created at</button></th>
@@ -212,6 +213,19 @@ export function AdminWaitingHost() {
                     </tbody>
                     )}
                 </table>
+                </div>
+                <div style={{marginLeft:'auto'}}>
+                    Entries/page &nbsp;
+                    <select onChange={(event)=>{
+                        setHostsPerPage(event.target.value);
+                    }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                        <option value="5">---</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
                 <PaginationComponent data={hosts} numberPerpage={hostsPerPage} changeCurentPage={handlePageChange}/>
             </section>
             <UserProfileDialog open={openProfileDialog} onClose={handleCloseProfileDialog} id={currentUserId}/>

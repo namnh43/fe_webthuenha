@@ -3,7 +3,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {useNavigate} from "react-router";
-import Constants from "../../../utils/constants";
 
 
 export function AdminUserList() {
@@ -16,7 +15,8 @@ export function AdminUserList() {
 
     //pagination
     const [pagesVisited, setPagesVisited] = useState(0);
-    const userPerPage = 10;
+    const [userPerPage, setUserPerPage] = useState(5);
+
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -133,10 +133,11 @@ export function AdminUserList() {
         <h2>User List</h2>
         <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
         <section className="main">
+            <div className='table-container'>
             <table className="table table-bordered table-striped table-hover">
                 <thead>
-                <tr>
-                    <th className="text-left" style={{width:"50px"}} ><button onClick={idClick}>#</button></th>
+                <tr className={"table-head"}>
+                <th className="text-left" style={{width:"50px"}} ><button onClick={idClick}>#</button></th>
                     <th className="text-center"><button >Avata</button></th>
                     <th className="text-left"><button onClick={userClick}>UserName</button></th>
                     <th className="text-left" style={{width:"220px"}}><button onClick={emailClick}>E-mail</button></th>
@@ -196,8 +197,20 @@ export function AdminUserList() {
 
                 </tbody>
             </table>
+            </div>
+            <div style={{marginLeft:'auto'}}>
+                Entries/page &nbsp;
+                <select onChange={(event)=>{
+                    setUserPerPage(event.target.value);
+                }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                    <option value="5">---</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
             <PaginationComponent data={userList} numberPerpage={userPerPage} changeCurentPage={handlePageChange}/>
-
         </section>
     </>);
 }
