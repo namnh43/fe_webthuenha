@@ -22,7 +22,7 @@ function HomePageMenuBar() {
             style={{
                 position: "sticky",
                 top: "-16px",
-                zIndex: "1000",
+                zIndex: "2",
                 boxShadow: isSticky ? "0 1px 2px rgba(0, 0, 0, 0.12)" : "none"
             }}
         >

@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {useNavigate} from "react-router";
 import Constants from "../../../utils/constants";
+import '../../scroll/scroll.css';
+import CircleIcon from "@mui/icons-material/Circle";
 
 
 export function AdminUserList() {
@@ -131,22 +133,35 @@ export function AdminUserList() {
     }
 
     return (<>
-        <h2>User List</h2>
-        <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
+        <h2 className={'my-3'}>User List</h2>
+        <div className={'mt-2 mb-4'} style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <input onChange={search} style={{border: '1px solid #bdbdbd', borderRadius: '5px', paddingLeft: '8px'}} id="name-input" name="name" type="text" placeholder="Enter keyword" required />
+            <div style={{marginLeft:'auto'}}>
+                Entries/page &nbsp;
+                <select onChange={(event)=>{
+                    setUserPerPage(event.target.value);
+                }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                    <option value="5">---</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+        </div>
         <section className="main">
-            <div className='table-container'>
-            <table className="table table-bordered table-striped table-hover">
+            <div className='table-container mb-3'>
+            <table className="table table-bordered table-hover">
                 <thead>
                 <tr className={"table-head"}>
-                <th className="text-left" style={{width:"50px"}} ><button onClick={idClick}>#</button></th>
-                    <th className="text-center"><button >Avata</button></th>
-                    <th className="text-left"><button onClick={userClick}>UserName</button></th>
-                    <th className="text-left" style={{width:"220px"}}><button onClick={emailClick}>E-mail</button></th>
-                    <th className="text-left"><button onClick={phoneClick}>Phone number</button></th>
-                    <th className="text-left" style={{width:"80px"}}><button onClick={roleClick}>Role</button></th>
-                    <th className="text-left"><button >Created at</button></th>
-                    <th className="text-left"><button >Status</button></th>
-                    <th className="text-center"><button >Action</button></th>
+                    <th style={{ width:'20px',verticalAlign:'middle', textAlign:'center',padding:'10px'}} ><button onClick={idClick}>#</button></th>
+                    <th style={{width:'270px',verticalAlign:'middle', textAlign:'center',padding:'4px'}} colSpan="2" ><button onClick={userClick}>Username</button></th>
+                    <th style={{width:'240px',verticalAlign:'middle', textAlign:'center',padding:'4px'}}><button onClick={emailClick}>E-mail</button></th>
+                    <th style={{verticalAlign:'middle', textAlign:'center',padding:'6px'}}><button onClick={phoneClick}>Phone number</button></th>
+                    <th style={{width:'95px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button onClick={roleClick}>Role</button></th>
+                    <th style={{width:'90px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button >Created at</button></th>
+                    <th style={{verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button >Status</button></th>
+                    <th style={{width:'110px',verticalAlign:'middle', textAlign:'center',padding:'0px'}}><button >Action</button></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -154,32 +169,22 @@ export function AdminUserList() {
                     .slice(pagesVisited, pagesVisited + userPerPage)
                     .map((item, index) => {
                         return (<tr key={item.id}>
-                            <td style={{width:"50px"}} className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
-                                {index + 1 + pagesVisited}</span></td>
-                            {
-                                item.profileImage &&
-                                <td><img src={item.profileImage}
-                                         style={{height: '5rem', width: '6rem', borderRadius: '50%'}}/></td>
-                            }
-                            <td className="text-left"><span className="d-inline-block"
-                                                                  style={{paddingTop: '1.5rem'}}>
-                                {item.username}</span></td>
-                            <td style={{width:"220px"}} className="text-left "><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
-                                {item.email}</span></td>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
-                                {item.phoneNumber}</span></td>
-                            <td style={{width:"80px"}} className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
+                            <td style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}>{index + 1 + pagesVisited}</td>
+                            <td style={{verticalAlign:'middle',width:"50px", padding:'5px 5px', borderRight:"none"}}><img src={item.profileImage} style={{width:"60px",height:"60px", borderRadius:"50%"}}/></td>
+                            <td className="text-left" style={{ verticalAlign:'middle', padding:'0px', borderLeft:"none"}}>{item.username}</td>
+                            <td className="text-left" style={{verticalAlign:'middle', padding:'0px'}}>{item.email}</td>
+                            <td className="text-left" style={{verticalAlign:'middle', padding:'6px'}}>
+                                {item.phoneNumber}</td>
+                            <td style={{width:"80px"}} className="text-left"><span className="d-inline-block" style={{paddingTop: '0'}}>
                                 {item.role}</span></td>
-                            <td className="text-left"><span className="d-inline-block" style={{paddingTop: '1.5rem'}}>
-                                {item.createAt}</span></td>
+                            <td className="text-left">
+                                {item.createAt}</td>
 
                             {item.blocked === false ?
-                                (<td className="text-left"><span className="d-inline-block"
-                                                                 style={{paddingTop: '1.5rem'}}>
-                                <span style={signalLightStyle}></span>Active</span></td>)
-                                : (<td className="text-left"><span className="d-inline-block"
-                                                                   style={{paddingTop: '1.5rem'}}>
-                                <span style={signalLightStyle}></span>Blocked</span></td>)}
+                                <td><span className="status text-success" ><CircleIcon style={{paddingBottom: '2px'}} fontSize="15px"/></span> Active</td> :
+
+                                 <td><span className="status text-danger"><CircleIcon style={{paddingBottom: '2px'}} fontSize="15px"/></span> Blocked</td>
+                            }
 
                             <td className="">
                                 <span className="d-inline-block">
@@ -198,18 +203,6 @@ export function AdminUserList() {
 
                 </tbody>
             </table>
-            </div>
-            <div style={{marginLeft:'auto'}}>
-                Entries/page &nbsp;
-                <select onChange={(event)=>{
-                    setUserPerPage(event.target.value);
-                }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
-                    <option value="5">---</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                </select>
             </div>
             <PaginationComponent data={userList} numberPerpage={userPerPage} changeCurentPage={handlePageChange}/>
         </section>

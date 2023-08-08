@@ -5,19 +5,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
 import Tooltip from '@mui/material/Tooltip';
-// @mui
-import {
-    Grid,
-    IconButton,
-    CardHeader,
-    Card,
-    CardContent,
-    Radio,
-    FormControlLabel,
-    Typography,
-    FormControl,
-    Paper, Button, Stack, Snackbar
-} from '@mui/material';
+import '../../scroll/scroll.css';
+
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -27,6 +16,8 @@ import HostProfileDialog from "../../dialog/HostProfileDialog";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import '../../scroll/scroll.css'
 import Constants from "../../../utils/constants";
+import Button from "@mui/material/Button";
+import CircleIcon from '@mui/icons-material/Circle';
 
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
@@ -206,20 +197,35 @@ export function AdminHostList() {
 
     return (
         <>  <h2 className="my-3">Host List</h2>
-            <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
-                <section className="main">
+            <div className={'mt-2 mb-4'} style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <input onChange={search} style={{border: '1px solid #bdbdbd', borderRadius: '5px', paddingLeft: '8px'}} id="name-input" name="name" type="text" placeholder="Enter keyword" required />
+            <div style={{marginLeft:'auto'}}>
+                Entries/page &nbsp;
+                <select onChange={(event)=>{
+                    setHousesPerPage(event.target.value);
+                }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                    <option value="5">---</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+            </div>
+
+            <section className="main">
                     <div className={'table-container mb-3'}>
-                    <table className="table table-bordered table-striped table-hover">
+                    <table className="table table-bordered table-hover">
                         <thead>
                         <tr className={"table-head"}>
-                        <th className="text-center"><button onClick={idClick}>#</button></th>
-                            <th className="text-center"><button onClick={userClick}>UserName</button></th>
-                            <th className="text-center"><button onClick={phoneClick}>Phone number</button></th>
-                            <th className="text-center"><button onClick={homeClick}>Number home</button></th>
-                            <th className="text-center"><button onClick={moneyClick}>Earn money($)</button></th>
-                            <th className="text-center"><button >Created at</button></th>
-                            <th className="text-center"><button >Status</button></th>
-                            <th className="text-center"><button >Action</button></th>
+                            <th style={{ width:'20px',verticalAlign:'middle', textAlign:'center',padding:'10px'}}><button   onClick={idClick}><b>#</b></button></th>
+                            <th style={{width:'240px',verticalAlign:'middle', textAlign:'center',padding:'0px'}} colSpan="2" ><button onClick={userClick}>Username</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button onClick={phoneClick}>Phone number</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'3px'}}><button onClick={homeClick}>Houses</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button onClick={moneyClick}>Earned($)</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button >Created at</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button >Status</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}} className="text-center"><button >Action</button></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -228,18 +234,17 @@ export function AdminHostList() {
                             return (
 
                                 <tr key={key}>
-                                    <td>{key + 1 + pagesVisited}</td>
-                                    <td><img src="./images/profile/user-1.jpg" alt=""
-                                             className="avatar"/>{item.user.username}
-                                    </td>
-                                    <td>{item.user.phoneNumber}</td>
+                                    <td style={{verticalAlign:'middle', textAlign:'center', padding:'5px'}}>{key + 1 + pagesVisited}</td>
+                                    <td style={{verticalAlign:'middle',width:"50px", padding:'5px 5px', borderRight:"none"}}><img src={item.user.profileImage} style={{width:"60px",height:"60px", borderRadius:"50%"}}/></td>
+                                    <td className={'text-left'} style={{ verticalAlign:'middle', padding:'0px', borderLeft:"none"}}>{item.user.username}</td>
+                                    <td style={{verticalAlign:'middle', padding:'6px', textAlign:'left'}}>{item.user.phoneNumber}</td>
                                     <td>{item.houseCount}</td>
-                                    <td>{item.user.earnedMoney}</td>
+                                    <td style={{width: '100px'}}>${item.user.earnedMoney}</td>
                                     <td>{item.user.createAt}</td>
                                     {!item.user.blocked ?
-                                        <td><span className="status text-success">&bull;</span> Active</td> :
-                                        <td><span className="status text-danger">&bull;</span> Suspended</td>}
-                                    <td style={{width: '100px'}} className="text-center">
+                                        <td style={{width: '150px'}}><span className="status text-success"><CircleIcon style={{paddingBottom: '2px'}} fontSize="15px"/></span> Active</td> :
+                                        <td><span className="status text-danger"><CircleIcon style={{paddingBottom: '2px'}} fontSize="15px"/></span> Suspended</td>}
+                                    <td style={{width: '110px'}} className="text-center">
                                             <button onClick={() => handleProfileEdit(item.user.id)} style={{backgroundColor: 'transparent'}} className="mr-3">
                                                 <Tooltip title="INFO"><i className="material-icons">&#xe88e;</i></Tooltip></button>
 
@@ -255,18 +260,7 @@ export function AdminHostList() {
                         </tbody>
                     </table>
                     </div>
-                    <div style={{marginLeft:'auto'}}>
-                        Entries/page &nbsp;
-                        <select onChange={(event)=>{
-                            setHousesPerPage(event.target.value);
-                        }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
-                            <option value="5">---</option>
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
-                    </div>
+
                     <PaginationComponent data={hosts} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
                 </section>
             <Dialog
