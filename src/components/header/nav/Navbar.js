@@ -59,11 +59,18 @@ export function Navbar() {
     const [notifies,setNotifies] = useState(['notify 1','notify 2']);
     const [anchorElNotify, setAnchorElNotify] = React.useState(null);
     const openNotify = Boolean(anchorElNotify);
+    const [read,setRead] = useState(false);
     const handleClickNotify = (event) => {
-        console.log('click')
+        console.log('click notify')
         setAnchorElNotify(event.currentTarget);
+        //mark read
+        if (read == false) {
+            //call api to mark read
+        }
+        setRead(true);
     };
     const handleCloseNotify = () => {
+        console.log('close notify')
         setAnchorElNotify(null);
     };
 
@@ -144,7 +151,7 @@ export function Navbar() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }
-
+        setRead(false);
         axios.get('http://localhost:8080/notify', config).then((res) => {
             setNotifies(res.data.reverse())
         })
@@ -266,24 +273,24 @@ export function Navbar() {
                                                 aria-haspopup="true"
                                                 aria-expanded={openNotify ? 'true' : undefined}
                                             ></NotificationsNoneIcon> :
-                                            <Badge badgeContent={notifies.length > 5 ? '5+' : notifies.length} color="primary">
-                                                <NotificationsNoneIcon
-                                                    onClick={handleClickNotify}
-                                                    size="small"
-                                                    color={notifies.length > 0 ? "primary" : "default"}
-                                                    aria-controls={ openNotify ? 'positioned-menu' : undefined}
-                                                    aria-haspopup="true"
-                                                    aria-expanded={openNotify ? 'true' : undefined}
-                                                >
-                                                </NotificationsNoneIcon>
-                                            </Badge>
+                                                <Badge badgeContent={notifies.length > 5 ? '5+' : notifies.length} color="primary">
+                                                    <NotificationsNoneIcon
+                                                        onClick={handleClickNotify}
+                                                        size="small"
+                                                        color={notifies.length > 0 ? "primary" : "default"}
+                                                        aria-controls={ openNotify ? 'positioned-menu' : undefined}
+                                                        aria-haspopup="true"
+                                                        aria-expanded={openNotify ? 'true' : undefined}
+                                                    >
+                                                    </NotificationsNoneIcon>
+                                                </Badge>
                                             }
 
                                             <Menu
                                                 id="positioned-menu"
                                                 aria-labelledby="demo-positioned-button"
                                                 anchorEl={anchorElNotify}
-                                                open={notifies.length > 0 ? openNotify : 'false'}
+                                                open={notifies.length > 0 ? openNotify : false}
                                                 onClose={handleCloseNotify}
                                                 onClick={handleCloseNotify}
                                                 PaperProps={{
