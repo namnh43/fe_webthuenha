@@ -229,7 +229,6 @@ function BookingHistory() {
                                 <option value="20">20</option>
                             </select>
                         </div>
-
                     </div>
                     <section className="main">
                         <div className={'table-container mb-3'}>
