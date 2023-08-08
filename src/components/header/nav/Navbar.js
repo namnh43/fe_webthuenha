@@ -21,6 +21,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import {useNavigate} from "react-router";
 import Swal from "sweetalert2";
+import Constants from "../../../utils/constants";
 
 export function Navbar() {
     const menuBarStyle = {
@@ -72,7 +73,7 @@ export function Navbar() {
     }, []);
 
     const clearAllInfo = () => {
-        axios.post('http://localhost:8080/jwt/logout', {token: localStorage.getItem('token')})
+        axios.post(Constants.BASE_API+'/jwt/logout', {token: localStorage.getItem('token')})
             .then(() => localStorage.clear())
             .then(() => setLogin(false))
             .then(() => navigate('/'))
@@ -125,7 +126,7 @@ export function Navbar() {
                                     }
                                 }
 
-                                axios.post('http://localhost:8080/user/apply-host', {}, config)
+                                axios.post(Constants.BASE_API+'/user/apply-host', {}, config)
                                     .then((res) => {
                                         handleCloseDialog()
                                         Swal.fire({
@@ -135,7 +136,7 @@ export function Navbar() {
                                         })
                                         console.log('haha')
                                     })
-                                    .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
+                                    .then(() => axios.get(Constants.BASE_API+`/user/${localStorage.getItem('currentUserId')}`, config)
                                         .then((res) => {
                                             localStorage.setItem('currentUser', JSON.stringify(res.data))
                                             localStorage.setItem("currentUserId", res.data.id)

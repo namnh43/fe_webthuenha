@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
+import Constants from "../../../utils/constants";
 
 export function HomePageCarousel() {
     const [top5RentedHouse, setTop5RentedHouse] = useState([]);
 
     useEffect(() => {
         axios
-            .get("http://localhost:8080/house")
+            .get(Constants.BASE_API+"/house")
             .then((res) => {
                 const top5House = res.data
                     .sort((h1, h2) => h2.ratingScore - h1.ratingScore)

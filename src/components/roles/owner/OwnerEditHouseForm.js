@@ -4,6 +4,7 @@ import {Field, Form, Formik} from "formik";
 import {useNavigate, useParams} from "react-router";
 import UploadImageField from "../../upload";
 import Swal from "sweetalert2";
+import Constants from "../../../utils/constants";
 
 function OwnerEditHouseForm() {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ function OwnerEditHouseForm() {
         };
 
         axios
-            .get(`http://localhost:8080/house/${houseId}`, config)
+            .get(Constants.BASE_API+`/house/${houseId}`, config)
             .then((res) => {
                 setEditedHouse(res.data);
                 setBedrooms(res.data.totalBedrooms);
@@ -56,7 +57,7 @@ function OwnerEditHouseForm() {
 
         axios
             .put(
-                `http://localhost:8080/house/${houseId}`,
+                Constants.BASE_API+`/house/${houseId}`,
                 { ...editedHouse, ...values },
                 config
             )

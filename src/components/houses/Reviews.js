@@ -3,6 +3,7 @@ import StarIcon from "@mui/icons-material/Star";
 import HideSourceIcon from '@mui/icons-material/HideSource';
 import axios from "axios";
 import Swal from "sweetalert2";
+import Constants from "../../utils/constants";
 
 const Reviews = ({ house }) => {
     const step = 2;
@@ -43,7 +44,7 @@ const Reviews = ({ house }) => {
         });
 
         if (result.isConfirmed) {
-            axios.patch(`http://localhost:8080/review/${id}/hide`, null, config)
+            axios.patch(Constants.BASE_API+`/review/${id}/hide`, null, config)
                 .then((res) => {
                     console.log(res);
                     setHiddenReviews((prevHiddenReviews) => [...prevHiddenReviews, id]); // Thêm review đã ẩn vào danh sách

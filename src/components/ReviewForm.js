@@ -3,6 +3,7 @@ import ReactStars from 'react-rating-stars-component/dist/react-stars';
 import axios from "axios";
 import {useNavigate} from "react-router";
 import Swal from "sweetalert2";
+import Constants from "../utils/constants";
 
 const ReviewForm = ({ bookingId, onClose, refreshBookingList }) => {
     const [content, setContent] = useState('');
@@ -35,7 +36,7 @@ const ReviewForm = ({ bookingId, onClose, refreshBookingList }) => {
             rating: rating,
             content: content
         }
-        axios.post(`http://localhost:8080/review/bookings/${bookingId}`, data, config)
+        axios.post(Constants.BASE_API+`/review/bookings/${bookingId}`, data, config)
             .then((res) => {
                 Swal.fire({
                     icon: 'success',

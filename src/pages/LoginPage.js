@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import React, {useEffect} from "react";
 import GoogleOAuth2Login from "../components/OAuth2/googleOAuth2";
 import Swal from "sweetalert2";
+import Constants from "../utils/constants";
 
 const LoginSchema = Yup.object().shape({
     username: Yup.string().required('* Required'),
@@ -24,7 +25,7 @@ export function LoginPage() {
             initialValues={{username: '', password: ''}}
             validationSchema={LoginSchema}
             onSubmit={values => {
-                axios.post('http://localhost:8080/jwt/signin', values)
+                axios.post(Constants.BASE_API+'/jwt/signin', values)
                     .then((res) => {
                         console.log(res)
                         localStorage.setItem("token", res.data.token)

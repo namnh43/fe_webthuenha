@@ -1,3 +1,3 @@
 export default class Constants {
-    static BASE_API = 'http://localhost:8080';
+    static BASE_API = "http://localhost:8080";
 }

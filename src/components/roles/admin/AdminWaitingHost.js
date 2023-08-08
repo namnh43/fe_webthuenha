@@ -36,7 +36,7 @@ export function AdminWaitingHost() {
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
-                const url = 'http://localhost:8080/admin/apply-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
+                const url = Constants.BASE_API+'/admin/apply-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -65,8 +65,8 @@ export function AdminWaitingHost() {
             denyButtonText: 'Deny',
         }).then(data => {
             if (data.isConfirmed || data.isDenied) {
-                const url = data.isConfirmed ? 'http://localhost:8080/admin/accept-host/' + id :
-                    'http://localhost:8080/admin/reject-host/' + id;
+                const url = data.isConfirmed ? Constants.BASE_API+'/admin/accept-host/' + id :
+                    Constants.BASE_API+'/admin/reject-host/' + id;
                 console.log('url ', url);
                 const msg = {msg: data.value};
                 const params = {
@@ -181,7 +181,6 @@ export function AdminWaitingHost() {
             <section className="main">
                 <h2 className="mb-3">Waiting confirmation hosts</h2>
                 <input onChange={search}  id="name-input" name="name" type="text" placeholder="Enter keyword" required />
-                <div className={'table-container mb-3'}>
                 <table className="table table-striped table-hover">
                     <thead>
                     <tr className={"table-head"}>

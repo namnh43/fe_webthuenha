@@ -3,7 +3,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {useNavigate} from "react-router";
-import '../../scroll/scroll.css'
 
 
 export function AdminUserList() {
@@ -29,7 +28,7 @@ export function AdminUserList() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/user`, config)
+        axios.get(Constants.BASE_API+`/user`, config)
             .then((res) => {
                 setUserList(res.data.reverse())
                 setSearchList(res.data)
@@ -213,6 +212,5 @@ export function AdminUserList() {
             </div>
             <PaginationComponent data={userList} numberPerpage={userPerPage} changeCurentPage={handlePageChange}/>
         </section>
-
     </>);
 }

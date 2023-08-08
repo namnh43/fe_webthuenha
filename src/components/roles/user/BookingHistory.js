@@ -6,6 +6,7 @@ import ReviewForm from "../../ReviewForm";
 import '../../scroll/scroll.css';
 import {formatDate} from "../../../utils/api";
 import {backdropClasses} from "@mui/material";
+import Constants from "../../../utils/constants";
 
 function BookingHistory() {
     const [bookingList, setBookingList] = useState([]);
@@ -38,14 +39,14 @@ function BookingHistory() {
     };
     const handleCancel = (bookingId) => {
         const confirmCancel = window.confirm('Bạn có chắc chắn muốn hủy đặt phòng?');
-        let url = `http://localhost:8080/booking/cancel/${bookingId}`;
+        let url = Constants.BASE_API+`/booking/cancel/${bookingId}`;
         console.log(url);
         if (confirmCancel) {
             axios
                 .put(url,{}, config)
                 .then((res) => {
                     console.log('Hủy đặt phòng thành công!');
-                    axios.get(`http://localhost:8080/user/list-booking`, config)
+                    axios.get(Constants.BASE_API+`/user/list-booking`, config)
                         .then((res) => {
                             console.log(res.data);
                             setBookingList(res.data);
@@ -68,7 +69,7 @@ function BookingHistory() {
     }, [selectedRange,ascending]);
 
     const refreshBookingList = () => {
-        axios.get(`http://localhost:8080/user/list-booking`, config)
+        axios.get(Constants.BASE_API+`/user/list-booking`, config)
             .then((res) => {
                 console.log(res.data)
                 setSearchBooking(res.data);

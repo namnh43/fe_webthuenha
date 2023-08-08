@@ -47,7 +47,7 @@ export function HouseDetail() {
     useEffect(() => {
         window.scrollTo(0, 0);
         console.log('get_house_id', id);
-        axios.get(`http://localhost:8080/house/` + id).then(res => {
+        axios.get(Constants.BASE_API+`/house/` + id).then(res => {
             console.log('get_data', res)
             setHouse(res.data)
             document.title = capitalizeFirstLetter(res.data.name);
@@ -106,7 +106,7 @@ export function HouseDetail() {
                 confirmButtonText: 'Yes, book it!'
             }).then((confirm) => {
                 if (confirm.isConfirmed) {
-                    axios.post('http://localhost:8080/booking/create', result, config).then((res) => {
+                    axios.post(Constants.BASE_API+'/booking/create', result, config).then((res) => {
                         handleFetchBookingList();
                         console.log(res.data);
                         Swal.fire({
@@ -152,7 +152,7 @@ export function HouseDetail() {
     }
 
     const handleFetchBookingList = () => {
-        axios.get(`http://localhost:8080/booking/house/` + id).then(res => {
+        axios.get(Constants.BASE_API+`/booking/house/` + id).then(res => {
             setListBooking(res.data)
         })
     }
