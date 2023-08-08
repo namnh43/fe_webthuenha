@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import {useNavigate} from "react-router";
+import Constants from "../../../utils/constants";
 
 
 export function AdminUserList() {
@@ -27,7 +28,7 @@ export function AdminUserList() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/user`, config)
+        axios.get(Constants.BASE_API+`/user`, config)
             .then((res) => {
                 setUserList(res.data.reverse())
                 setSearchList(res.data)

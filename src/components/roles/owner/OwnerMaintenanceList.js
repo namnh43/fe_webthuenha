@@ -3,6 +3,7 @@ import axios from "axios";
 import ReactPaginate from "react-paginate";
 import Swal from "sweetalert2";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
+import Constants from "../../../utils/constants";
 
 function OwnerMaintenanceList() {
     const [bookingList, setBookingList] = useState([])
@@ -22,7 +23,7 @@ function OwnerMaintenanceList() {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8080/booking/owner', config)
+        axios.get(Constants.BASE_API+'/booking/owner', config)
             .then((res) => setBookingList(res.data.filter(item => item.bookingStatus === "MAINTENANCE")))
     }, []);
 
@@ -36,9 +37,9 @@ function OwnerMaintenanceList() {
             confirmButtonText: 'Yes'
         }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete(`http://localhost:8080/booking/maintenance-to-empty/${bookingId}`, config)
+                    axios.delete(Constants.BASE_API+`/booking/maintenance-to-empty/${bookingId}`, config)
                         .then(() => {
-                            axios.get('http://localhost:8080/booking/owner', config)
+                            axios.get(Constants.BASE_API+'/booking/owner', config)
                                 .then((res) => setBookingList(res.data.filter(item => item.bookingStatus === "MAINTENANCE")))
                         })
                         .then(() => {

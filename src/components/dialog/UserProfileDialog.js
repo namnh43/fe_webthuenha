@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {useEffect, useState} from "react";
 import {fetchData} from "../../utils/api";
 import {HostProfileContent} from "../roles/user/HostProfileContent";
+import Constants from "../../utils/constants";
 
 export default function UserProfileDialog({open, onClose, id}) {
     const [user, setUser] = useState(null);
@@ -15,7 +16,7 @@ export default function UserProfileDialog({open, onClose, id}) {
         const fetchDataAsync = async () => {
             console.log('id',id)
             try {
-                const url = 'http://localhost:8080/user/'+id; // Thay thế URL bằng API bạn muốn lấy dữ liệu
+                const url = Constants.BASE_API+'/user/'+id; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 console.log('url',url)
                 const params = {
                     headers: {

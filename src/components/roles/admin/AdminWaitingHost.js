@@ -8,6 +8,7 @@ import UserProfileDialog from "../../dialog/UserProfileDialog";
 import RuleIcon from '@mui/icons-material/Rule';
 import IconButton from '@mui/material/IconButton';
 import {PaginationComponent} from "../../pagination/PaginationComponent";
+import Constants from "../../../utils/constants";
 
 export function AdminWaitingHost() {
     const [hosts, setHosts] = useState([]);
@@ -34,7 +35,7 @@ export function AdminWaitingHost() {
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
-                const url = 'http://localhost:8080/admin/apply-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
+                const url = Constants.BASE_API+'/admin/apply-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -63,8 +64,8 @@ export function AdminWaitingHost() {
             denyButtonText: 'Deny',
         }).then(data => {
             if (data.isConfirmed || data.isDenied) {
-                const url = data.isConfirmed ? 'http://localhost:8080/admin/accept-host/' + id :
-                    'http://localhost:8080/admin/reject-host/' + id;
+                const url = data.isConfirmed ? Constants.BASE_API+'/admin/accept-host/' + id :
+                    Constants.BASE_API+'/admin/reject-host/' + id;
                 console.log('url ', url);
                 const msg = {msg: data.value};
                 const params = {

@@ -51,7 +51,7 @@ export function AdminHostList() {
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
-                const url = 'http://localhost:8080/admin/list-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
+                const url = Constants.BASE_API+'/admin/list-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -89,9 +89,9 @@ export function AdminHostList() {
     const handlleCloseDialogOK = (id, current_block) => {
         let url = '';
         if (current_block) {//is blocking -> then unlock
-            url = 'http://localhost:8080/admin/unlock-user/'+ id;
+            url = Constants.BASE_API+'/admin/unlock-user/'+ id;
         } else {
-            url = 'http://localhost:8080/admin/block-user/'+ id;
+            url = Constants.BASE_API+'/admin/block-user/'+ id;
         }
         const params = {
             headers: {
