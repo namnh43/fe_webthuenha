@@ -25,7 +25,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import SockJS from "sockjs-client";
 import Constants from "../../../utils/constants";
 import Stomp from "stompjs";
-import { useSnackbar } from 'notistack';
+import {useSnackbar} from 'notistack';
 import Badge from '@mui/material/Badge';
 
 export function Navbar() {
@@ -55,11 +55,11 @@ export function Navbar() {
     const [openOwnerRequestSentDialog, setOpenOwnerRequestSentDialog] = useState(false);
 
     //handle notifycation
-    const { enqueueSnackbar } = useSnackbar();
-    const [notifies,setNotifies] = useState(['notify 1','notify 2']);
+    const {enqueueSnackbar} = useSnackbar();
+    const [notifies, setNotifies] = useState(['notify 1', 'notify 2']);
     const [anchorElNotify, setAnchorElNotify] = React.useState(null);
     const openNotify = Boolean(anchorElNotify);
-    const [read,setRead] = useState(false);
+    const [read, setRead] = useState(false);
     const handleClickNotify = (event) => {
         console.log('click notify')
         setAnchorElNotify(event.currentTarget);
@@ -103,23 +103,24 @@ export function Navbar() {
         }
         if (localStorage.getItem('token')) {
             axios.get('http://localhost:8080/notify', config).then((res) => {
+                console.log(res.data)
                 setNotifies(res.data.reverse())
             })
         }
-    },[])
+    }, [])
 
     useEffect(() => {
         const currentUserId = localStorage.getItem('currentUserId');
         console.log('current user', currentUserId)
         if (currentUserId) {
-            const socket =new SockJS(Constants.WS_URL);
+            const socket = new SockJS(Constants.WS_URL);
             const stompClient = Stomp.over(socket);
             const onConnect = () => {
                 console.log('Connected to WebSocket server');
 
                 // Subscribe to the desired destination (topic or queue)
                 const subscribeURL = "/users/" + currentUserId + "/booking"
-                stompClient.subscribe(subscribeURL,updateNotify);
+                stompClient.subscribe(subscribeURL, updateNotify);
             };
             const onDisconnect = () => {
                 console.log('Disconnected from WebSocket server');
@@ -142,10 +143,10 @@ export function Navbar() {
                 stompClient.disconnect()
             };
         }
-    },[])
+    }, [])
 
     const updateNotify = (message) => {
-        enqueueSnackbar('You have a new message!', { variant: 'success' });
+        enqueueSnackbar('You have a new message!', {variant: 'success'});
         const config = {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -176,255 +177,282 @@ export function Navbar() {
     function openSearchBox() {
         console.log('open search dialog')
     }
+
     return (
         <>
-            <Grid item xs={2}>
-                <Box
-                    sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}
+        <Grid item xs={2}>
+            <Box
+                sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}
+            >
+                <h1 className="mb-2 mr-5"><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
+                    className="text-danger">.</span></strong></Link></h1>
+            </Box>
+        </Grid>
+        <Grid item xs={9}>
+            <Box sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}>
+                <Dialog
+                    open={openDialog}
+                    onClose={handleCloseDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
                 >
-                    <h1 className="mb-2 mr-5"><Link to="/" className="text-dark-light h2 mb-0"><strong>Homeland<span
-                        className="text-danger">.</span></strong></Link></h1>
-                </Box>
-            </Grid>
-            <Grid item xs={9}>
-                <Box sx={{display: "flex", justifyContent: "flex-end", alignItems: 'center'}}>
-                    <Dialog
-                        open={openDialog}
-                        onClose={handleCloseDialog}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {"Confirm"}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                You will send a request to the administrator to become an owner.
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => {
-                                const config = {
-                                    headers: {
-                                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                                    }
+                    <DialogTitle id="alert-dialog-title">
+                        {"Confirm"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            You will send a request to the administrator to become an owner.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => {
+                            const config = {
+                                headers: {
+                                    Authorization: `Bearer ${localStorage.getItem('token')}`
                                 }
+                            }
 
-                                axios.post('http://localhost:8080/user/apply-host', {}, config)
-                                    .then((res) => {
-                                        handleCloseDialog()
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'You are sent a request to become an owner!',
-                                            timer: 2500
-                                        })
-                                        console.log('haha')
+                            axios.post('http://localhost:8080/user/apply-host', {}, config)
+                                .then((res) => {
+                                    handleCloseDialog()
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'You are sent a request to become an owner!',
+                                        timer: 2500
                                     })
-                                    .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
-                                        .then((res) => {
-                                            localStorage.setItem('currentUser', JSON.stringify(res.data))
-                                            localStorage.setItem("currentUserId", res.data.id)
-                                            localStorage.setItem("currentUserRole", res.data.role)
-                                            localStorage.setItem("currentUserApplyHost", res.data.applyHost)
-                                            console.log(localStorage.getItem("currentUserApplyHost"))
-                                        }))
-                                    .catch(() => alert('Shit'))
-                            }} autoFocus>
-                                Confirm
-                            </Button>
-                            <Button className={'text-danger'} onClick={handleCloseDialog}>Cancel</Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Dialog
-                        open={openOwnerRequestSentDialog}
-                        onClose={handleCloseDialog}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {"Confirm"}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Your request has already sent. Please wait...
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleCloseDialog}>OK</Button>
+                                    console.log('haha')
+                                })
+                                .then(() => axios.get(`http://localhost:8080/user/${localStorage.getItem('currentUserId')}`, config)
+                                    .then((res) => {
+                                        localStorage.setItem('currentUser', JSON.stringify(res.data))
+                                        localStorage.setItem("currentUserId", res.data.id)
+                                        localStorage.setItem("currentUserRole", res.data.role)
+                                        localStorage.setItem("currentUserApplyHost", res.data.applyHost)
+                                        console.log(localStorage.getItem("currentUserApplyHost"))
+                                    }))
+                                .catch(() => alert('Shit'))
+                        }} autoFocus>
+                            Confirm
+                        </Button>
+                        <Button className={'text-danger'} onClick={handleCloseDialog}>Cancel</Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={openOwnerRequestSentDialog}
+                    onClose={handleCloseDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Confirm"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Your request has already sent. Please wait...
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog}>OK</Button>
 
-                        </DialogActions>
-                    </Dialog>
-                    <React.Fragment>
-                        <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                            {
-                                !login ? <ListItemButton sx={{minWidth: '100px', maxWidth: '100px'}}
-                                                         onClick={() => {
-                                                             handleLoginClick();
-                                                             navigate("/login");
-                                                         }}> <ListItemText>Login </ListItemText></ListItemButton> :
+                    </DialogActions>
+                </Dialog>
+                <React.Fragment>
+                    <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+                        {
+                            !login ? <ListItemButton sx={{minWidth: '100px', maxWidth: '100px'}}
+                                                     onClick={() => {
+                                                         handleLoginClick();
+                                                         navigate("/login");
+                                                     }}> <ListItemText>Login </ListItemText></ListItemButton> :
 
-                                    <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                                        <IconButton sx={{marginRight:'15px'}}>
-                                            {notifies.length == 0 ? <NotificationsNoneIcon
+                                <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+                                    <IconButton sx={{marginRight: '15px'}}>
+                                        {notifies.length == 0 ? <NotificationsNoneIcon
                                                 onClick={handleClickNotify}
                                                 size="small"
                                                 color={notifies.length > 0 ? "primary" : "default"}
-                                                aria-controls={ openNotify ? 'positioned-menu' : undefined}
+                                                aria-controls={openNotify ? 'positioned-menu' : undefined}
                                                 aria-haspopup="true"
                                                 aria-expanded={openNotify ? 'true' : undefined}
                                             ></NotificationsNoneIcon> :
-                                                <Badge badgeContent={notifies.length > 5 ? '5+' : notifies.length} color="primary">
-                                                    <NotificationsNoneIcon
-                                                        onClick={handleClickNotify}
-                                                        size="small"
-                                                        color={notifies.length > 0 ? "primary" : "default"}
-                                                        aria-controls={ openNotify ? 'positioned-menu' : undefined}
-                                                        aria-haspopup="true"
-                                                        aria-expanded={openNotify ? 'true' : undefined}
-                                                    >
-                                                    </NotificationsNoneIcon>
-                                                </Badge>
-                                            }
+                                            <Badge badgeContent={notifies.length > 5 ? '5+' : notifies.length}
+                                                   color="primary">
+                                                <NotificationsNoneIcon
+                                                    onClick={handleClickNotify}
+                                                    size="small"
+                                                    color={notifies.length > 0 ? "primary" : "default"}
+                                                    aria-controls={openNotify ? 'positioned-menu' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={openNotify ? 'true' : undefined}
+                                                >
+                                                </NotificationsNoneIcon>
+                                            </Badge>
+                                        }
 
-                                            <Menu
-                                                id="positioned-menu"
-                                                aria-labelledby="demo-positioned-button"
-                                                anchorEl={anchorElNotify}
-                                                open={notifies.length > 0 ? openNotify : false}
-                                                onClose={handleCloseNotify}
-                                                onClick={handleCloseNotify}
-                                                PaperProps={{
-                                                    elevation: 0,
-                                                    sx: {
-                                                        overflow: 'visible',
-                                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                                        mt: 1.5,
-                                                        '& .MuiAvatar-root': {
-                                                            width: 32,
-                                                            height: 32,
-                                                            ml: -0.5,
-                                                            mr: 1,
-                                                        },
-                                                        '&:before': {
-                                                            content: '""',
-                                                            display: 'block',
-                                                            position: 'absolute',
-                                                            top: 0,
-                                                            right: 14,
-                                                            width: 10,
-                                                            height: 10,
-                                                            bgcolor: 'background.paper',
-                                                            transform: 'translateY(-50%) rotate(45deg)',
-                                                            zIndex: 0,
-                                                        },
+                                        <Menu
+                                            id="positioned-menu"
+                                            aria-labelledby="demo-positioned-button"
+                                            anchorEl={anchorElNotify}
+                                            open={notifies.length > 0 ? openNotify : false}
+                                            onClose={handleCloseNotify}
+                                            onClick={handleCloseNotify}
+                                            PaperProps={{
+                                                elevation: 0,
+                                                sx: {
+                                                    overflow: 'visible',
+                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                    mt: 1.5,
+                                                    '& .MuiAvatar-root': {
+                                                        width: 32,
+                                                        height: 32,
+                                                        ml: -0.5,
+                                                        mr: 1,
                                                     },
-                                                }}
-                                                transformOrigin={{horizontal: 'right', vertical: 'top'}}
-                                                anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                                            >
-                                                {notifies.length <=0 ? <></> : notifies.slice(0, 8).map((item,key) => {
-                                                    return (
-                                                        <MenuItem onClick={() => navigate("/owner/booking")}>{item.message}</MenuItem>
-                                                    )
-                                                })}
+                                                    '&:before': {
+                                                        content: '""',
+                                                        display: 'block',
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        right: 14,
+                                                        width: 10,
+                                                        height: 10,
+                                                        bgcolor: 'background.paper',
+                                                        transform: 'translateY(-50%) rotate(45deg)',
+                                                        zIndex: 0,
+                                                    },
+                                                },
+                                            }}
+                                            transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                                            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+                                        >
+                                            <div
+                                                style={{
+                                                    overflowY: 'auto',
+                                                    height: notifies.length > 10 ? '300px' : 'auto',
+                                                    width: 'auto'
+                                                }}>
+                                                <div>
+                                                    {notifies.length <= 0 ? <></> : (
+                                                        <div className='d-flex flex-column'>
+                                                            {notifies.map((item, key) => (
+                                                                <div key={key}>
+                                                                    <div className='d-flex'>
+                                                                    <img
+                                                                        src={item?.sourceUser?.profileImage}
+                                                                        style={{
+                                                                            height: '20px',
+                                                                            width: '20px',
+                                                                            borderRadius: '50%',
+                                                                            display: 'block',
+                                                                            marginTop: '8px',
+                                                                            marginLeft: '8px'
+                                                                        }}
+                                                                    />
+                                                                    <MenuItem onClick={() => navigate("/owner/booking")}>{item.message}</MenuItem>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                </Menu>
+            </IconButton>
+            <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
+            <Tooltip title="Account settings">
+                <IconButton
+                    onClick={handleClick}
+                    size="small"
+                    sx={{ml: 1}}
+                    aria-controls={open ? 'account-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                >
+                    {JSON.parse(localStorage.getItem('currentUser')).profileImage ?
+                        <img
+                            src={JSON.parse(localStorage.getItem('currentUser')).profileImage}
+                            alt="avatar" width="35"
+                            height="35" className="rounded-circle"
+                            onClick={handleLoginClick}/>
+                        : <img src="/images/profile/user-1.jpg" alt="" width="35"
+                               height="35" className="rounded-circle"
+                               onClick={handleLoginClick}/>}
+                </IconButton>
+            </Tooltip>
+        </Box>
 
-                                            </Menu>
-                                        </IconButton>
-                                        <ListItemText>Welcome {JSON.parse(localStorage.getItem("currentUser")).firstName}</ListItemText>
-                                        <Tooltip title="Account settings">
-                                            <IconButton
-                                                onClick={handleClick}
-                                                size="small"
-                                                sx={{ml: 1}}
-                                                aria-controls={ open ? 'account-menu' : undefined}
-                                                aria-haspopup="true"
-                                                aria-expanded={open ? 'true' : undefined}
-                                            >
-                                                {JSON.parse(localStorage.getItem('currentUser')).profileImage ?
-                                                    <img
-                                                        src={JSON.parse(localStorage.getItem('currentUser')).profileImage}
-                                                        alt="avatar" width="35"
-                                                        height="35" className="rounded-circle"
-                                                        onClick={handleLoginClick}/>
-                                                    : <img src="/images/profile/user-1.jpg" alt="" width="35"
-                                                           height="35" className="rounded-circle"
-                                                           onClick={handleLoginClick}/>}
-                                            </IconButton>
-                                        </Tooltip>
-                                    </Box>
+        }
+        </Box>
+    <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+            elevation: 0,
+            sx: {
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                mt: 1.5,
+                '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                },
+                '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                },
+            },
+        }}
+        transformOrigin={{horizontal: 'right', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+    >
+        <MenuItem onClick={() => {
+            navigate("/user")
+        }}>
+            <Avatar/> My Account
+        </MenuItem>
+        {localStorage.getItem('currentUserRole') === "ADMIN" &&
+            <MenuItem onClick={() => {
+                navigate("/admin/users")
+            }}>
+                <Avatar/> Admin Dashboard
+            </MenuItem>
+        }
+        {
+            localStorage.getItem('currentUserRole') === "USER" ?
+                <MenuItem onClick={handleClickOpenDialog}>
+                    <Avatar/> Become Owner
+                </MenuItem> :
+                <MenuItem onClick={() => {
+                    navigate("/owner")
+                }}>
+                    <Avatar/> My Houses
+                </MenuItem>
+        }
 
-                            }
-                        </Box>
-                        <Menu
-                            anchorEl={anchorEl}
-                            id="account-menu"
-                            open={open}
-                            onClose={handleClose}
-                            onClick={handleClose}
-                            PaperProps={{
-                                elevation: 0,
-                                sx: {
-                                    overflow: 'visible',
-                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                    mt: 1.5,
-                                    '& .MuiAvatar-root': {
-                                        width: 32,
-                                        height: 32,
-                                        ml: -0.5,
-                                        mr: 1,
-                                    },
-                                    '&:before': {
-                                        content: '""',
-                                        display: 'block',
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 14,
-                                        width: 10,
-                                        height: 10,
-                                        bgcolor: 'background.paper',
-                                        transform: 'translateY(-50%) rotate(45deg)',
-                                        zIndex: 0,
-                                    },
-                                },
-                            }}
-                            transformOrigin={{horizontal: 'right', vertical: 'top'}}
-                            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                        >
-                            <MenuItem onClick={() => {
-                                navigate("/user")
-                            }}>
-                                <Avatar/> My Account
-                            </MenuItem>
-                            {localStorage.getItem('currentUserRole') === "ADMIN" &&
-                                <MenuItem onClick={() => {
-                                    navigate("/admin/users")
-                                }}>
-                                    <Avatar/> Admin Dashboard
-                                </MenuItem>
-                            }
-                            {
-                                localStorage.getItem('currentUserRole') === "USER" ?
-                                    <MenuItem onClick={handleClickOpenDialog}>
-                                        <Avatar/> Become Owner
-                                    </MenuItem> :
-                                    <MenuItem onClick={() => {
-                                        navigate("/owner")
-                                    }}>
-                                        <Avatar/> My Houses
-                                    </MenuItem>
-                            }
-
-                            <Divider/>
-                            <MenuItem onClick={clearAllInfo}>
-                                <ListItemIcon>
-                                    <Logout fontSize="small"/>
-                                </ListItemIcon>
-                                Logout
-                            </MenuItem>
-                        </Menu>
-                    </React.Fragment>
-                </Box>
-            </Grid>
-        </>
-    )
+        <Divider/>
+        <MenuItem onClick={clearAllInfo}>
+            <ListItemIcon>
+                <Logout fontSize="small"/>
+            </ListItemIcon>
+            Logout
+        </MenuItem>
+    </Menu>
+</React.Fragment>
+</Box>
+</Grid>
+</>
+)
 }
