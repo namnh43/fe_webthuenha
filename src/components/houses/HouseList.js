@@ -28,11 +28,11 @@ export function HouseList() {
         <>
             <div className="bg-light pt-4 pb-4 border-top">
                 <div className="container">
-                    <h2>Top Rented</h2>
+                    <h2 className={'mt-3'}><b>Top Rented</b></h2>
                     <div className="row">
                         <ListComponent listHouse={topHouse}/>
                     </div>
-                    <h2 className='mt-5'>Popular Houses</h2>
+                    <h2 className='mt-5'><b>Popular Houses</b></h2>
                     <div className="row">
                         <ListComponent listHouse={list}/>
                     </div>

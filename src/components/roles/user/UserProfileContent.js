@@ -7,6 +7,7 @@ import {useNavigate} from "react-router";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import Constants from "../../../utils/constants";
+import './profileCss.css'
 
 export function UserProfile() {
     const navigator = useNavigate();
@@ -71,6 +72,12 @@ export function UserProfile() {
         setShowForm(!showForm);
     }
 
+    useEffect(() => {
+        if (showForm) {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    }, [showForm]);
+
     function handleImageChange(event) {
         const file = event.target.files[0];
         if (file) {
@@ -86,6 +93,18 @@ export function UserProfile() {
     async function uploadFileToFirebase() {
         if (selectedFile) {
             try {
+                Swal.fire({
+                    title: "Please wait...",
+                    text: "Sending request...",
+                    icon: "info",
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
                 const storageRef = ref(storage, "md6/" + selectedFile.name);
                 const snapshot = await uploadBytes(storageRef, selectedFile);
                 const downloadURL = await getDownloadURL(snapshot.ref);
@@ -99,14 +118,28 @@ export function UserProfile() {
 
     return (
         <div className="my-3">
-            <h2 className='mb-3'>Profile</h2>
+            <h2 className='mb-3 fw-bold'>Profile</h2>
             <div className="container">
                 <div className="row">
                     <div className="col-6">
                         <div>
-                            <img style={{width: "80%", borderRadius: "6px"}}
-                                 src={selectedImage || user.profileImage}
-                            />
+                            <div className="outer-container">
+                                <img
+                                    className="avatar-image"
+                                    src={selectedImage || user.profileImage}
+                                    alt="Avatar"
+                                />
+                                <div className="inner-container">
+                                    <img
+                                        className="avatar-image"
+                                        style={{borderRadius: "50%", border: "2px Dashed white"}}
+                                        src={selectedImage || user.profileImage}
+                                        alt="Avatar"
+                                    />
+                                </div>
+                            </div>
+
+
                             <div>
                                 <label htmlFor="fileInput" className="btn btn-outline-success mt-2">Change
                                     Avatar</label>
