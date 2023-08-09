@@ -116,7 +116,7 @@ function OwnerHouseList() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
+        axios.get(`${Constants.BASE_API}/house/host/${localStorage.getItem('currentUserId')}`, config)
             .then((res) => {
                 console.log(res.data)
                 setHouseList(res.data.reverse())
@@ -134,9 +134,9 @@ function OwnerHouseList() {
             confirmButtonText: 'Yes, block it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.put(`http://localhost:8080/house/block/${itemId}`, null, config)
+                axios.put(`${Constants.BASE_API}/house/block/${itemId}`, null, config)
                     .then(res => console.log(res))
-                    .then(() => axios.get(`http://localhost:8080/house/host/${localStorage.getItem('currentUserId')}`, config)
+                    .then(() => axios.get(`${Constants.BASE_API}/house/host/${localStorage.getItem('currentUserId')}`, config)
                         .then(res => {
                             console.log(res.data)
                             setHouseList(res.data.reverse());

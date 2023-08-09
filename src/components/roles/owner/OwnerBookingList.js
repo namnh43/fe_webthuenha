@@ -56,8 +56,8 @@ function OwnerBookingList() {
                     return TODAY.getFullYear() + "-" + cd(TODAY.getMonth() + 1) + "-" + cd(TODAY.getDate())
                 }
                 if (formattedDate() >= item.startDate) {
-                    axios.put(`http://localhost:8080/booking/check-in/${item.id}`, null, config)
-                        .then(() => axios.get('http://localhost:8080/booking/owner', config)
+                    axios.put(`${Constants.BASE_API}/booking/check-in/${item.id}`, null, config)
+                        .then(() => axios.get(`${Constants.BASE_API}/booking/owner`, config)
                             .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))))
                         .then(() => {
                             Swal.fire({
@@ -93,8 +93,8 @@ function OwnerBookingList() {
     }).then((result) => {
         if (result.isConfirmed) {
 
-            axios.put(`http://localhost:8080/booking/check-out/${item.id}`, null, config)
-                .then(() => axios.get('http://localhost:8080/booking/owner', config)
+            axios.put(`${Constants.BASE_API}/booking/check-out/${item.id}`, null, config)
+                .then(() => axios.get(`${Constants.BASE_API}/booking/owner`, config)
                     .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))))
                 .then(() => {
                     Swal.fire({

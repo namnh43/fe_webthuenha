@@ -70,7 +70,7 @@ export function Navbar({isSticky}) {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             }
-            axios.put('http://localhost:8080/notify',null, config).then((res) => {
+            axios.put(`${Constants.BASE_API}/notify`,null, config).then((res) => {
                 setNotifies(res.data.reverse())
             })
         }
@@ -110,7 +110,7 @@ export function Navbar({isSticky}) {
             }
         }
         if (localStorage.getItem('token')) {
-            axios.get('http://localhost:8080/notify', config).then((res) => {
+            axios.get(`${Constants.BASE_API}/notify`, config).then((res) => {
                 setNotifies(res.data.reverse())
             })
         }
@@ -160,7 +160,7 @@ export function Navbar({isSticky}) {
             }
         }
         setRead(false);
-        axios.get('http://localhost:8080/notify', config).then((res) => {
+        axios.get(`${Constants.BASE_API}/notify`, config).then((res) => {
             setNotifies(res.data.reverse())
         })
     }

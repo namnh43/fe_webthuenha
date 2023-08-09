@@ -54,6 +54,16 @@ export function HouseDetail() {
         console.log('get_house_id', id);
         axios.get(Constants.BASE_API+`/house/` + id).then(res => {
             console.log('get_data', res)
+            if (res.data.blocked || res.data.user.blocked) {
+                Swal.fire({
+                    title: 'ERROR!',
+                    icon: 'error',
+                    text: 'This house is blocked',
+                }).then(() => {
+                    navigate('/')
+                    return
+                })
+            }
             setHouse(res.data)
             document.title = capitalizeFirstLetter(res.data.name);
             setListImages(res.data.images)
