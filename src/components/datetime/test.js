@@ -1,7 +1,7 @@
 import { Datepicker } from "@mobiscroll/react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Swal from "sweetalert2";
 import {formatDate} from "../../utils/api";
 
@@ -11,6 +11,18 @@ export default function TestDatePicker({startDate, endDate,listBooking, setStart
     let end = localStorage.getItem("endDate");
 
     const [selectedDate, setSelectedDate] = useState((start !== null && end !== null) ? [start, end] : []);
+
+    useEffect(() => {
+        if (start !== null && end !== null){
+            setStartDate(start);
+            setEndDate(end);
+            localStorage.setItem("startDate",start);
+            localStorage.setItem("endDate",end);
+            setSelectedDate([start, end]);
+            calculateDiff(start, end);
+        }
+    }, []);
+
 
     const handleDateChange = (event, inst) => {
         console.log(inst.value);
@@ -26,12 +38,12 @@ export default function TestDatePicker({startDate, endDate,listBooking, setStart
             inst.setVal([]);
             return
         }
+
         setStartDate(start);
         setEndDate(end);
         setSelectedDate(inst.value);
-        localStorage.setItem("startDate",formatDate(start));
-        localStorage.setItem("endDate",formatDate(end));
-
+        localStorage.setItem("startDate",start);
+        localStorage.setItem("endDate",end);
         calculateDiff(start, end);
     };
 

@@ -149,7 +149,7 @@ function UploadImageField({images, values, handleFormSubmit}) {
                 <span>
                     Drag and drop images here or click to select files &nbsp;
                 </span>
-                <input type="file" name="file" onChange={changeHandler} multiple style={{color: "transparent"}}
+                <input type="file" name="file" accept="image/*" onChange={changeHandler} multiple style={{color: "transparent"}}
                        id="fileInput"/>
                 <label htmlFor="fileInput" className="custom-file-button">Choose File</label>
             </div>

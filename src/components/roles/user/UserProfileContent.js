@@ -135,6 +135,7 @@ export function UserProfile() {
                                         style={{borderRadius: "50%", border: "2px Dashed white"}}
                                         src={selectedImage || user.profileImage}
                                         alt="Avatar"
+
                                     />
                                 </div>
                             </div>
@@ -143,7 +144,7 @@ export function UserProfile() {
                             <div>
                                 <label htmlFor="fileInput" className="btn btn-outline-success mt-2">Change
                                     Avatar</label>
-                                <input type="file" id="fileInput" onChange={handleImageChange}/>
+                                <input type="file" id="fileInput" accept="image/*" onChange={handleImageChange}/>
                                 <button className="btn btn-outline-danger ml-2 mb-2" onClick={changePassword}>
                                     Change password
                                 </button>
@@ -162,7 +163,7 @@ export function UserProfile() {
                                             else code = "error";
                                             Swal.fire({
                                                 icon: code,
-                                                title: "Error",
+                                                title: code.toUpperCase(),
                                                 text: res.data,
                                             })
                                         }).catch((error) => {

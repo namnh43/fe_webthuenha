@@ -115,7 +115,7 @@ export function HouseDetail() {
                 confirmButtonText: 'Login'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    navigate("/login")
+                    window.location.href = '/login';
                 }
             })
             return;
