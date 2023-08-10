@@ -5,8 +5,12 @@ import {Footer} from "../components/Footer";
 import Menubar from "../components/header/nav/Menubar";
 import {Divider} from "@mui/material";
 import {SearchHouseResult} from "../components/search/SearchHouseResult";
+import {useEffect} from "react";
 
 export function SearchPage() {
+    useEffect(() => {
+        document.title = "Search";
+    },[])
     return (
         <>
             <Menubar/>

@@ -7,7 +7,7 @@ const MapWithSearch = ({ initialAddress }) => {
     const [userLocation, setUserLocation] = useState(null);
     const [directions, setDirections] = useState(null);
     const [distance, setDistance] = useState(null);
-    const apiKey = 'AIzaSyB4iBYf4qOoWI7FGVSLNUggY5h_Y6mmlrU';
+    const apiKey = 'AIzaSyAS8dmq6SOjst1K0oYY-B-kwLz8zqlqUA0';
 
     useEffect(() => {
         handleSearch();
@@ -97,7 +97,7 @@ const MapWithSearch = ({ initialAddress }) => {
             {/*{userLocation && <p>Khoảng cách: {distance} km</p>}*/}
             <LoadScript googleMapsApiKey={apiKey}>
                 <GoogleMap
-                    mapContainerStyle={{ width: '100%', height: '400px' }}
+                    mapContainerStyle={{ width: '100%', height: '358px', borderRadius: '8px' }}
                     center={mapCenter}
                     zoom={15}
                 >

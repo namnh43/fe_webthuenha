@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import Swal from "sweetalert2";
 
 function createQueryString(params) {
     let queryString = '';
@@ -31,24 +32,30 @@ function SearchBar() {
     const [maxPrice, setMaxPrice] = useState('');
     const [selectedRange, setSelectedRange] = useState(['','']);
     let [searchParams, setSearchParams] = useSearchParams();
-    // const searchQuery = useSelector((state) => {
-    //     return state.search.searchQuery;
-    // });
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const handleInputChange = (event) => {
+        if ( parseInt(minPrice) > parseInt(maxPrice)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Min price must be less than max price!',
+            })
+            return;
+        }
         // dispatch(searchAction({address:address,minPrice:minPrice?minPrice:0,maxPrice:maxPrice?maxPrice:10000,startDate:selectedRange[0],endDate:selectedRange[1]}))
         const queryString = createQueryString({address:address,minprice:minPrice,maxprice:maxPrice,startdate:selectedRange[0],enddate:selectedRange[1]});
         console.log('query',queryString)
         navigate('/search?'+queryString)
+        window.scrollTo(0, 180);
     }
 
     const handleDateRangeChange = (ranges) => {
         if (ranges && ranges.length === 2)
             setSelectedRange([ranges[0].toLocaleDateString('en-CA'),ranges[1].toLocaleDateString('en-CA')]);
         else
-            setSelectedRange(null)
+            setSelectedRange(['',''])
     };
 
     useEffect(() => {
@@ -67,66 +74,68 @@ function SearchBar() {
         }
     }
 
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        function handleScroll() {
+            setIsSticky(window.pageYOffset >= 60);
+        }
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     return (
-        <section>
-            <Grid container spacing={2}>
-                <Grid item xs={2}/>
-                <Grid item xs={8}>
-                    <div className="search-sec">
-                        <table >
-                            <tbody >
-                            <tr>
-                                <td colSpan={2}>
-                                    <input
-                                        type="text"
-                                        className="form-control search-slt"
-                                        id="location"
-                                        value={address}
-                                        onChange={(e) => setAddress(e.target.value)}
-                                        placeholder="Location"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        className="form-control search-slt"
-                                        id="minPrice"
-                                        min="0"
-                                        value={minPrice}
-                                        onChange={(e) => setMinPrice(e.target.value)}
-                                        placeholder="Min Price($)"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        className="form-control search-slt"
-                                        id="maxPrice"
-                                        min="0"
-                                        value={maxPrice}
-                                        onChange={(e) => setMaxPrice(e.target.value)}
-                                        placeholder="Max Price($)"
-                                    />
-                                </td>
-                                <td>
-                                        <DateRangePickerComponent onChange={handleDateRangeChange} inputRange={selectedRange}/>
-                                </td>
-                                <td>
-                                    <Button variant="outlined" startIcon={<SearchIcon />}
-                                        onClick={handleInputChange}
-                                    >
-                                        Search
-                                    </Button>
-                                </td>
+        <div className="search-sec col-8 m-auto my-5" style={{ position: 'sticky', top: "0px", left: '323px', zIndex: "11", padding: "12px" }}>
+            <div className="row pl-4" >
+                <div className="col-3 p-1">
+                    <input
+                        type="text"
+                        className="form-control search-slt"
+                        id="location"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="Location"
+                        style={{ height: '42px', border: '1px solid #bdbdbd', borderRadius: '6px' }}
+                    />
+                </div>
+                <div className="col-3 mt-1" style={{padding : '0px',maxWidth: '180px',maxHeight: '42px', display: 'flex', alignItems: 'center', border: '1px solid #bdbdbd', borderRadius: '6px'}}>
+                    <input
+                        type="text"
+                        className="form-control search-slt"
+                        id="minPrice"
+                        min="0"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                        placeholder="Min price"
+                        style={{border: 'none', padding: '0px', textAlign: 'right'}}
+                    />
+                    <p style={{fontSize: '25px', color:'#A1A1A1FF', margin: '0 5px', paddingBottom: '5px'}}>-</p>
+                    <input
+                        type="text"
+                        className="form-control search-slt"
+                        id="maxPrice"
+                        min="0"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                        placeholder="max price"
+                        style={{border: 'none',padding: '0px',  textAlign: 'left' }}
+                    />
+                </div>
+                <div className="col-3 p-1">
+                    <DateRangePickerComponent onChange={handleDateRangeChange} inputRange={selectedRange} />
+                </div>
+                <div className="col-3 p-1">
+                    <Button variant="outlined" startIcon={<SearchIcon />} onClick={handleInputChange} style={{ height: '42px', marginLeft: '2px', borderRadius: '6px' }}>
+                        Search
+                    </Button>
+                </div>
+            </div>
+        </div>
 
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
 
-                </Grid>
-            </Grid>
-        </section>
     );
 }
 

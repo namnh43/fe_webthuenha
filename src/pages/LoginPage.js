@@ -3,9 +3,10 @@ import {Link} from "react-router-dom";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import * as Yup from "yup";
-import React from "react";
+import React, {useEffect} from "react";
 import GoogleOAuth2Login from "../components/OAuth2/googleOAuth2";
 import Swal from "sweetalert2";
+import Constants from "../utils/constants";
 
 const LoginSchema = Yup.object().shape({
     username: Yup.string().required('* Required'),
@@ -15,15 +16,26 @@ const LoginSchema = Yup.object().shape({
 
 export function LoginPage() {
     const navigate = useNavigate();
+    useEffect(() => {
+        document.title = "Login";
+    },[])
 
     return (
         <Formik
             initialValues={{username: '', password: ''}}
             validationSchema={LoginSchema}
             onSubmit={values => {
-                axios.post('http://localhost:8080/jwt/signin', values)
+                axios.post(Constants.BASE_API+'/jwt/signin', values)
                     .then((res) => {
                         console.log(res)
+                        if (res.data == "") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Log in failed',
+                                text: 'User is blocked',
+                            })
+                            return
+                        }
                         localStorage.setItem("token", res.data.token)
                         localStorage.setItem("currentUser", JSON.stringify(res.data.user))
                         localStorage.setItem("currentUserId", res.data.user.id)
@@ -49,7 +61,7 @@ export function LoginPage() {
             }}
         >
             {({ errors, touched }) => (
-            <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+            <div className="" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
                  data-sidebartype="full"
                  data-sidebar-position="fixed" data-header-position="fixed">
                 <div
@@ -87,11 +99,10 @@ export function LoginPage() {
                                                            id="flexCheckChecked" />
                                                         <label className="form-check-label text-dark"
                                                                htmlFor="flexCheckChecked">
-                                                            Remeber this Device
+                                                            Remeber me
                                                         </label>
                                                 </div>
-                                                <a className="text-primary fw-bold" href="./index.html">Forgot Password
-                                                    ?</a>
+                                                <a className="text-primary fw-bold" href="./index.html">Forgot Password ?</a>
                                             </div>
                                             <button
                                                className="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</button>

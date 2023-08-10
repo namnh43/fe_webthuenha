@@ -29,7 +29,7 @@ function App() {
               <Route path='' element={<HouseList/>}/>
           </Route>
           <Route path='/search' element={<SearchPage/>}/>
-          <Route path='/houses/:id/detail' element={<HouseDetailPage/>}/>
+          <Route path='/houses/:id' element={<HouseDetailPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/admin' element={<AdminPage2/>}>
@@ -50,6 +50,7 @@ function App() {
           </Route>
           <Route path='/test' element={<FormWithImageUpload/>}/>
       </Routes>
+        {/*<WebsocketComponent/>*/}
     </div>
   );
 }

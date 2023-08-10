@@ -5,19 +5,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
 import Tooltip from '@mui/material/Tooltip';
-// @mui
-import {
-    Grid,
-    IconButton,
-    CardHeader,
-    Card,
-    CardContent,
-    Radio,
-    FormControlLabel,
-    Typography,
-    FormControl,
-    Paper, Button, Stack, Snackbar
-} from '@mui/material';
+import '../../scroll/scroll.css';
+
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -25,11 +14,16 @@ import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
 import HostProfileDialog from "../../dialog/HostProfileDialog";
 import {PaginationComponent} from "../../pagination/PaginationComponent";
+import '../../scroll/scroll.css'
+import Constants from "../../../utils/constants";
+import Button from "@mui/material/Button";
+import CircleIcon from '@mui/icons-material/Circle';
 
 export function AdminHostList() {
     const [hosts, setHosts] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [searchHost, setSearchHost] = useState([]);
+    const [ascending,setAscending] = useState(true);
     const [message, setMessage] = useState({
         id: '',
         msg: '',
@@ -41,7 +35,7 @@ export function AdminHostList() {
 
     //pagination
     const [pagesVisited,setPagesVisited] = useState(0);
-    const housesPerPage = 2;
+    const [housesPerPage,setHousesPerPage] = useState(5);
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -49,7 +43,7 @@ export function AdminHostList() {
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
-                const url = 'http://localhost:8080/admin/list-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
+                const url = Constants.BASE_API+'/admin/list-host'; // Thay thế URL bằng API bạn muốn lấy dữ liệu
                 const params = {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -58,6 +52,7 @@ export function AdminHostList() {
                 const fetchedData = await fetchData(url, params);
                 setHosts(fetchedData);
                 setSearchHost(fetchedData);
+                console.log(fetchedData)
 
                 //set current pagination
                 // setCurrentDisplayNumber(fetchedData.slice(pageNumber*housesPerPage, pageNumber*housesPerPage + housesPerPage).length);
@@ -86,9 +81,9 @@ export function AdminHostList() {
     const handlleCloseDialogOK = (id, current_block) => {
         let url = '';
         if (current_block) {//is blocking -> then unlock
-            url = 'http://localhost:8080/admin/unlock-user/'+ id;
+            url = Constants.BASE_API+'/admin/unlock-user/'+ id;
         } else {
-            url = 'http://localhost:8080/admin/block-user/'+ id;
+            url = Constants.BASE_API+'/admin/block-user/'+ id;
         }
         const params = {
             headers: {
@@ -115,15 +110,14 @@ export function AdminHostList() {
         setOpenProfileDialog(true);
     }
     function search() {
-        const userName = document.getElementById('name-input').value.trim().toLowerCase();
-        const home = document.getElementById('home-input').value;
-        const numberPhone = document.getElementById('numberPhone-input').value;
-
+        const keyword = document.getElementById('name-input').value.trim().toLowerCase();
         const searchFilter = searchHost.filter((host) => {
-            if (
-                (!userName || host.user?.username?.toLowerCase().includes(userName)) &&
-                (!home || host.houseCount == home ) &&
-                (!numberPhone || host.user.phoneNumber === numberPhone )
+            if (!keyword
+                || host.user?.username?.toLowerCase().includes(keyword)
+                || host.user?.phoneNumber?.toString().includes(keyword)
+                || host.houseCount?.toString().includes(keyword)
+                || host.user?.earnedMoney?.toString().includes(keyword)
+                || host.user?.createAt?.toString().includes(keyword)
             ) {
                 return true;
             }
@@ -131,37 +125,108 @@ export function AdminHostList() {
         });
         setHosts(searchFilter);
     }
+    function toggleAscending() {
+        setAscending(prevAscending => !prevAscending);
+    }
+
+    function idClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.user?.id < b.user?.id) {
+                return ascending ? -1 : 1;
+            } else if (a.user?.id > b.user?.id) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function userClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.user?.username < b.user?.username) {
+                return ascending ? -1 : 1;
+            } else if (a.user?.username > b.user?.username) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function phoneClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.user?.phoneNumber < b.user?.phoneNumber) {
+                return ascending ? -1 : 1;
+            } else if (a.user?.phoneNumber > b.user?.phoneNumber) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function homeClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.houseCount < b.houseCount) {
+                return ascending ? -1 : 1;
+            } else if (a.houseCount > b.houseCount) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
+    function moneyClick(){
+        toggleAscending()
+        const sorted = searchHost.sort((a, b) => {
+            if (a.user?.earnedMoney < b.user?.earnedMoney) {
+                return ascending ? -1 : 1;
+            } else if (a.user?.earnedMoney > b.user?.earnedMoney) {
+                return ascending ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+        setHosts(sorted);
+    }
 
     return (
-        <>
-            <div className={'row g-3'} onChange={search}>
-                <div className="col-sm-7">
-                    <label htmlFor="name-input"></label>
-                    <input className={'form-control'} id="name-input" name="name" type="text" placeholder="Enter username" required />
-                </div>
-                <div className="col-sm">
-                    <label htmlFor="home-input"></label>
-                    <input className={'form-control'} id="home-input" name="name" type="number" placeholder="Enter total home" required />
-                </div>
-                <div className="col-sm">
-                    <label htmlFor="numberPhone-input"></label>
-                    <input className={'form-control'} id="numberPhone-input" name="numberPhone" type="number" placeholder="Enter number phone" required />
-                </div>
+        <>  <h2 className="my-3">Host List</h2>
+            <div className={'mt-2 mb-4'} style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <input onChange={search} style={{border: '1px solid #bdbdbd', borderRadius: '5px', paddingLeft: '8px'}} id="name-input" name="name" type="text" placeholder="Enter keyword" required />
+            <div style={{marginLeft:'auto'}}>
+                Entries/page &nbsp;
+                <select onChange={(event)=>{
+                    setHousesPerPage(event.target.value);
+                }} name="page" style={{border: '1px solid #bdbdbd', borderRadius: '5px', textAlign:'center', height:'40px', width:'60px'}}>
+                    <option value="5">---</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
             </div>
-            {hosts.length <= 0 ? <div className="my-3 alert alert-primary" role="alert">There no data</div> : (
-                <section className="main">
-                    <h2 className="my-3">Host List</h2>
-                    <table className="table table-bordered table-striped table-hover">
+            </div>
+
+            <section className="main">
+                    <div className={'table-container mb-3'}>
+                    <table className="table table-bordered table-hover">
                         <thead>
-                        <tr>
-                            <th className="text-center">#</th>
-                            <th className="text-center">UserName</th>
-                            <th className="text-center">Phone number</th>
-                            <th className="text-center">Number home</th>
-                            <th className="text-center">Earn money($)</th>
-                            <th className="text-center">Created at</th>
-                            <th className="text-center">Status</th>
-                            <th className="text-center">Action</th>
+                        <tr className={"table-head"}>
+                            <th style={{ width:'20px',verticalAlign:'middle', textAlign:'center',padding:'10px'}}><button   onClick={idClick}><b>#</b></button></th>
+                            <th style={{width:'240px',verticalAlign:'middle', textAlign:'center',padding:'0px'}} colSpan="2" ><button onClick={userClick}>Username</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button onClick={phoneClick}>Phone number</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'3px'}}><button onClick={homeClick}>Houses</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button onClick={moneyClick}>Earned($)</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button >Created at</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}}><button >Status</button></th>
+                            <th style={{verticalAlign:'middle', textAlign:'center', padding:'0px'}} className="text-center"><button >Action</button></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -170,18 +235,17 @@ export function AdminHostList() {
                             return (
 
                                 <tr key={key}>
-                                    <td>{key + 1 + pagesVisited}</td>
-                                    <td><img src="./images/profile/user-1.jpg" alt=""
-                                             className="avatar"/>{item.user.username}
-                                    </td>
-                                    <td>{item.user.phoneNumber}</td>
+                                    <td style={{verticalAlign:'middle', textAlign:'center', padding:'5px'}}>{key + 1 + pagesVisited}</td>
+                                    <td style={{verticalAlign:'middle',width:"50px", padding:'5px 5px', borderRight:"none"}}><img src={item.user.profileImage} style={{width:"60px",height:"60px", borderRadius:"50%"}}/></td>
+                                    <td className={'text-left'} style={{ verticalAlign:'middle', padding:'0px', borderLeft:"none"}}>{item.user.username}</td>
+                                    <td style={{verticalAlign:'middle', padding:'6px', textAlign:'left'}}>{item.user.phoneNumber}</td>
                                     <td>{item.houseCount}</td>
-                                    <td>10000</td>
+                                    <td style={{width: '100px'}}>${item.user.earnedMoney}</td>
                                     <td>{item.user.createAt}</td>
                                     {!item.user.blocked ?
-                                        <td><span className="status text-success">&bull;</span> Active</td> :
-                                        <td><span className="status text-danger">&bull;</span> Suspended</td>}
-                                    <td style={{width: '100px'}} className="text-center">
+                                        <td style={{width: '150px'}}><span className="status text-success"><CircleIcon style={{paddingBottom: '2px'}} fontSize="15px"/></span> Active</td> :
+                                        <td><span className="status text-danger"><CircleIcon style={{paddingBottom: '2px'}} fontSize="15px"/></span> Suspended</td>}
+                                    <td style={{width: '110px'}} className="text-center">
                                             <button onClick={() => handleProfileEdit(item.user.id)} style={{backgroundColor: 'transparent'}} className="mr-3">
                                                 <Tooltip title="INFO"><i className="material-icons">&#xe88e;</i></Tooltip></button>
 
@@ -196,10 +260,10 @@ export function AdminHostList() {
                         })}
                         </tbody>
                     </table>
-                    <PaginationComponent data={hosts} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
-                </section>)
+                    </div>
 
-            }
+                    <PaginationComponent data={hosts} numberPerpage={housesPerPage} changeCurentPage={handlePageChange}/>
+                </section>
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}

@@ -11,19 +11,17 @@ function OwnerSideBar2() {
     const navigate = useNavigate();
     const currentUrl = useLocation().pathname
 
-    console.log(currentUrl)
     useEffect(() => {
         setSelectedItem(currentUrl)
     });
 
-
     const drawer = (<div>
         <List>
-            <ListItem className="">
+            <ListItem key={'Houses'} className="">
                 <span><p className="h4">Houses</p></span>
             </ListItem>
             <ListItemButton
-                key='owner-list'
+                key='owner'
                 selected={selectedItem === '/owner'}
                 onClick={() => {
                     setSelectedItem('/owner');
@@ -36,7 +34,7 @@ function OwnerSideBar2() {
                 <span className="hide-menu">House List</span>
             </ListItemButton>
             <ListItemButton
-                key='owner-list'
+                key='booking'
                 selected={selectedItem === '/owner/booking'}
                 onClick={() => {
                     setSelectedItem('/owner/booking');
@@ -49,7 +47,7 @@ function OwnerSideBar2() {
                 <span className="hide-menu">Booking List</span>
             </ListItemButton>
             <ListItemButton
-                key='owner-list'
+                key='maintenance'
                 selected={selectedItem === '/owner/maintenance'}
                 onClick={() => {
                     setSelectedItem('/owner/maintenance');

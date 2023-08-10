@@ -6,6 +6,8 @@ import {initializeApp} from "firebase/app";
 import {useNavigate} from "react-router";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import Constants from "../../../utils/constants";
+import './profileCss.css'
 
 export function UserProfile() {
     const navigator = useNavigate();
@@ -70,6 +72,12 @@ export function UserProfile() {
         setShowForm(!showForm);
     }
 
+    useEffect(() => {
+        if (showForm) {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    }, [showForm]);
+
     function handleImageChange(event) {
         const file = event.target.files[0];
         if (file) {
@@ -85,6 +93,18 @@ export function UserProfile() {
     async function uploadFileToFirebase() {
         if (selectedFile) {
             try {
+                Swal.fire({
+                    title: "Please wait...",
+                    text: "Sending request...",
+                    icon: "info",
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
                 const storageRef = ref(storage, "md6/" + selectedFile.name);
                 const snapshot = await uploadBytes(storageRef, selectedFile);
                 const downloadURL = await getDownloadURL(snapshot.ref);
@@ -97,20 +117,35 @@ export function UserProfile() {
     }
 
     return (
-        <div className="mt-3">
-            <h2 className='mb-3'>User Profile</h2>
-            <div className="container emp-profile" style={{height: '700px'}}>
+        <div className="my-3">
+            <h2 className='mb-3 fw-bold'>Profile</h2>
+            <div className="container">
                 <div className="row">
-                    <div className="col-md-4">
-                        <div className="profile-img">
-                            <img style={{width: "400px", borderRadius: "6px"}}
-                                 src={selectedImage || user.profileImage}
-                            />
+                    <div className="col-6">
+                        <div>
+                            <div className="outer-container">
+                                <img
+                                    className="avatar-image"
+                                    src={selectedImage || user.profileImage}
+                                    alt="Avatar"
+                                />
+                                <div className="inner-container">
+                                    <img
+                                        className="avatar-image"
+                                        style={{borderRadius: "50%", border: "2px Dashed white"}}
+                                        src={selectedImage || user.profileImage}
+                                        alt="Avatar"
+
+                                    />
+                                </div>
+                            </div>
+
+
                             <div>
                                 <label htmlFor="fileInput" className="btn btn-outline-success mt-2">Change
                                     Avatar</label>
-                                <input type="file" id="fileInput" onChange={handleImageChange}/>
-                                <button className="btn btn-outline-danger ml-2" onClick={changePassword}>
+                                <input type="file" id="fileInput" accept="image/*" onChange={handleImageChange}/>
+                                <button className="btn btn-outline-danger ml-2 mb-2" onClick={changePassword}>
                                     Change password
                                 </button>
                             </div>
@@ -122,13 +157,13 @@ export function UserProfile() {
                             }
                                     onSubmit={(values) => {
                                         console.log(values)
-                                        axios.post(`http://localhost:8080/user/change-password`, values, config).then((res) => {
+                                        axios.post(Constants.BASE_API+`/user/change-password`, values, config).then((res) => {
                                             let code;
                                             if (res.data == "Password changed successfully") code = "success";
                                             else code = "error";
                                             Swal.fire({
                                                 icon: code,
-                                                title: "Error",
+                                                title: code.toUpperCase(),
                                                 text: res.data,
                                             })
                                         }).catch((error) => {
@@ -142,7 +177,7 @@ export function UserProfile() {
                                     }
                                     validationSchema={validationPasswords}
                                     enableReinitialize={true}>
-                                {showForm && <Form>
+                                {showForm && <Form className={'col-7'}>
                                     <div className="form-group">
                                         Current password
                                         <Field
@@ -187,11 +222,8 @@ export function UserProfile() {
                             </Formik>
                         </div>
                     </div>
-                    <div className="col-md-2">
-
-                    </div>
-                    <div className="col-md-4">
-                        <div>
+                    <div className="col-6">
+                        <div className='col-10'>
                             <Formik initialValues={
                                 {
                                     firstName: currentUser.firstName,
@@ -202,7 +234,7 @@ export function UserProfile() {
                             }
                                     onSubmit={(values) => {
                                         uploadFileToFirebase().then((url) => {
-                                            axios.put(`http://localhost:8080/user/current`, {
+                                            axios.put(Constants.BASE_API+`/user/current`, {
                                                 ...values,
                                                 profileImage: url
                                             }, config).then((res) => {
@@ -235,50 +267,46 @@ export function UserProfile() {
                                     }
                                     validationSchema={validationSchema}
                                     enableReinitialize={true}>
-                                <Form>
-                                    <div>
-                                        <div style={{border: "1px solid #ccc", padding: "15px", borderRadius: "5px"}}>
-                                            <div className="form-group">
-                                                UserName<br/>
-                                                < input className="form-control" value={currentUser.username}/>
+                                {({errors, isSubmitting}) => (
+                                    <Form>
+                                            <div>
+                                                <div style={{border: "1px solid #ccc", padding: "20px", borderRadius: "5px"}}>
+                                                    <div className="form-group">
+                                                        UserName<br/>
+                                                        < input className="form-control" value={currentUser.username} readOnly/>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        First Name<br/>
+                                                        <Field className="form-control" name={"firstName"}/>
+                                                        <ErrorMessage name="firstName" component="div" className="text-danger"/>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        Last Name<br/>
+                                                        <Field className="form-control" name={"lastName"}/>
+                                                        <ErrorMessage name="lastName" component="div" className="text-danger"/>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        Email<br/>
+                                                        <Field className="form-control" name={"email"}/>
+                                                        <ErrorMessage name="email" component="div" className="text-danger"/>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        Phone Number<br/>
+                                                        <Field className="form-control" name={"phoneNumber"}/>
+                                                        <ErrorMessage name="phoneNumber" component="div"
+                                                                      className="text-danger"/>
+                                                    </div>
+                                                    <button type="submit" className="btn btn-primary"
+                                                            disabled={isSubmitting || Object.keys(errors).length > 0}
+                                                    >Update</button>
+                                                </div>
                                             </div>
-                                            <div className="form-group">
-                                                FirstName<br/>
-                                                <Field className="form-control" name={"firstName"}/>
-                                                <ErrorMessage name="firstName" component="div" className="text-danger"/>
-                                            </div>
-                                            <div className="form-group">
-                                                LastName<br/>
-                                                <Field className="form-control" name={"lastName"}/>
-                                                <ErrorMessage name="lastName" component="div" className="text-danger"/>
-                                            </div>
-                                            <div className="form-group">
-                                                Email<br/>
-                                                <Field className="form-control" name={"email"}/>
-                                                <ErrorMessage name="email" component="div" className="text-danger"/>
-                                            </div>
-                                            <div className="form-group">
-                                                PhoneNumber<br/>
-                                                <Field className="form-control" name={"phoneNumber"}/>
-                                                <ErrorMessage name="phoneNumber" component="div"
-                                                              className="text-danger"/>
-                                            </div>
-                                            <button type="submit" className="btn btn-primary">Update</button>
-                                        </div>
-                                    </div>
-                                </Form>
+                                        </Form>
+                                    )}
                             </Formik>
                         </div>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-8">
-                        <div className="tab-content profile-tab" id="myTabContent">
-
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     );

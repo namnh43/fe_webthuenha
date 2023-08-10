@@ -3,7 +3,7 @@ import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-k
 
 export function Footer() {
     return (
-        <MDBFooter bgColor='light' className='text-center text-lg-start text-muted'>
+        <MDBFooter bgColor='light' className='text-center text-lg-start text-muted border-top mt-2'>
             <section className='d-flex justify-content-center justify-content-lg-between p-4 border-bottom'>
                 <div className='me-5 d-none d-lg-block'>
                     <span>Get connected with us on social networks:</span>
@@ -118,9 +118,9 @@ export function Footer() {
             </section>
 
             <div className='text-center p-4' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
-                © 2023 Copyright:
-                <a className='text-reset fw-bold' href='https://mdbootstrap.com/'>
-                   Homeland.com
+                © 2023 Copyright&nbsp;
+                <a className='text-reset fw-bold' href='http://www.webthuenha.shop/'>
+                    Homeland
                 </a>
             </div>
         </MDBFooter>

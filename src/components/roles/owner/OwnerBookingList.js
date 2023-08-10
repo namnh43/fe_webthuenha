@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import ReactPaginate from "react-paginate";
 import axios from "axios";
-import "./OwnerHouseList.css"
 import {PaginationComponent} from "../../pagination/PaginationComponent";
 import Swal from "sweetalert2";
 import DateRangePickerComponent from "../../datetime/DateRangePickerComponent";
+import {formatDate} from "../../../utils/api";
+import Constants from "../../../utils/constants";
+
+import '../../scroll/scroll.css';
+
 
 function OwnerBookingList() {
 
@@ -15,7 +19,7 @@ function OwnerBookingList() {
 
     //pagination
     const [pagesVisited, setPagesVisited] = useState(0);
-    const bookingPerpage = 5;
+    const [bookingPerpage, setBookingPerpage] = useState(5);
     const handlePageChange = (value) => {
         setPagesVisited(value)
     }
@@ -27,10 +31,11 @@ function OwnerBookingList() {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8080/booking/owner', config)
-            .then((res) =>
-                setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"),
-                    setSearchBooking(res.data)))
+        axios.get(Constants.BASE_API + '/booking/owner', config)
+            .then((res) => {
+                setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))
+                setSearchBooking(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))
+            })
     }, []);
 
     const checkIn = (item) =>
@@ -51,8 +56,8 @@ function OwnerBookingList() {
                     return TODAY.getFullYear() + "-" + cd(TODAY.getMonth() + 1) + "-" + cd(TODAY.getDate())
                 }
                 if (formattedDate() >= item.startDate) {
-                    axios.put(`http://localhost:8080/booking/check-in/${item.id}`, null, config)
-                        .then(() => axios.get('http://localhost:8080/booking/owner', config)
+                    axios.put(`${Constants.BASE_API}/booking/check-in/${item.id}`, null, config)
+                        .then(() => axios.get(`${Constants.BASE_API}/booking/owner`, config)
                             .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))))
                         .then(() => {
                             Swal.fire({
@@ -88,8 +93,8 @@ function OwnerBookingList() {
     }).then((result) => {
         if (result.isConfirmed) {
 
-            axios.put(`http://localhost:8080/booking/check-out/${item.id}`, null, config)
-                .then(() => axios.get('http://localhost:8080/booking/owner', config)
+            axios.put(`${Constants.BASE_API}/booking/check-out/${item.id}`, null, config)
+                .then(() => axios.get(`${Constants.BASE_API}/booking/owner`, config)
                     .then((res) => setBookingList(res.data.filter(item => item.bookingStatus !== "MAINTENANCE"))))
                 .then(() => {
                     Swal.fire({
@@ -138,13 +143,16 @@ function OwnerBookingList() {
     }
 
     return (<>
-        <div className={'row g-3 my-0'} onChange={search}>
-            <div className="col-4">
-                <input className={'form-control'} id="house-name-input" name="house-name" type="text" placeholder="Enter house name" required/>
-                {/*&nbsp;*/}
+
+        <h2 className={'my-3'}>Booking List</h2>
+
+        <div className={'row my-0'} onChange={search}>
+            <div className="col-4 form-group">
+                <input className={'form-control'} id="house-name-input" name="house-name" type="text"
+                       placeholder="Enter house name" style={{height: '41.6px'}}/>
             </div>
-            <div className="col-2">
-                <select className={'form-control'} id="status-select" name="status">
+            <div className="col-2 form-group">
+                <select className={'form-control'} style={{height: '41.6px'}} id="status-select" name="status">
                     <option value="">-- Select status --</option>
                     <option value="CANCELLED">CANCELLED</option>
                     <option value="BOOKING">BOOKING</option>
@@ -155,55 +163,130 @@ function OwnerBookingList() {
             <div className="col-4">
                 <DateRangePickerComponent id="date-range-picker" onChange={handleDateRangeChange}/>
             </div>
-
+            <div className={'form-group col-2 d-flex'}>
+                <label htmlFor="" className={'d-inline-block mb-0 mr-2 pt-2'}>Entries/page</label>
+                <select onChange={(event) => {
+                    setBookingPerpage(event.target.value);
+                }} name="page" className={'form-control d-inline-block'} style={{height: '41.6px'}}>
+                    {/*<option value="5">---</option>*/}
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
         </div>
-        <h2 className={'my-3'}>Booking List</h2>
-        <section className="main">
-            <table className="table table-bordered table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>House</th>
-                    <th>Booking date</th>
-                    <th>Duration</th>
-                    <th>Unit/Total Price</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {bookingList.reverse()
-                    .slice(pagesVisited, pagesVisited + bookingPerpage)
-                    .map((item, key) => {
-                        return (<tr style={{height: '80px'}}>
-                            <td className={'pt-4'}>{key + 1 + pagesVisited}</td>
-                            <td className={'text-start pt-4'}>{item.house.name}</td>
-                            <td className={'pt-4'}>{item.createAt}</td>
-                            <td className={'pt-4'}>{item.startDate}/{item.endDate}</td>
-                            <td className={'pt-4'}>{item.price}/{item.total}</td>
-                            <td className={'pt-4'}>{item.bookingStatus}</td>
-                            {item.bookingStatus === "BOOKING" && (
-                                <td className={'pt-4'}>
-                                    <button className="btn btn-primary" onClick={() => checkIn(item)}>Check in</button>
-                                </td>
-                            )}
-                            {item.bookingStatus === "CHECKED_IN" && (
-                                <td className={'pt-4'}>
-                                    <button className="btn btn-secondary" onClick={() => checkOut(item)}>Check out
-                                    </button>
-                                </td>
-                            )}
-                            {item.bookingStatus === "CANCELLED" && (
-                                <td></td>
-                            )}
-                            {item.bookingStatus === "CHECKED_OUT" && (
-                                <td></td>
-                            )}
-                        </tr>)
-                    })}
 
-                </tbody>
-            </table>
+        <section className="main">
+            <div className="table-container mb-3">
+                <table className="table table-bordered table-hover"
+                       style={{verticalAlign: 'middle', textAlign: 'center'}}>
+                    <thead>
+                    <tr className={'table-head'}>
+                        <th style={{
+                            width: '20px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '10px'
+                        }}>#
+                        </th>
+                        <th style={{
+                            width: '80px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>House
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Booking date
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Duration
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Unit/Total Price
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Status
+                        </th>
+                        <th style={{
+                            width: '40px',
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                            padding: '0px',
+                            fontWeight: 'bold'
+                        }}>Action
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {bookingList
+                        .slice(pagesVisited, pagesVisited + bookingPerpage)
+                        .map((item, key) => {
+                            return (<tr>
+                                <td style={{
+                                    verticalAlign: 'middle',
+                                    textAlign: 'center',
+                                    padding: '0px'
+                                }}>{key + 1 + pagesVisited}</td>
+                                <td className={'text-left'} style={{
+                                    width: "150px",
+                                    verticalAlign: 'middle',
+                                    borderLeft: "none"
+                                }}>{item.house.name}</td>
+                                <td style={{verticalAlign: 'middle', padding: '0px'}}>{formatDate(item.createAt)}</td>
+                                <td style={{
+                                    verticalAlign: 'middle',
+                                    padding: '6px',
+                                }}>{formatDate(item.startDate)} to {formatDate(item.endDate)}</td>
+                                <td style={{verticalAlign: 'middle', padding: '0px'}}>{item.price} / {item.total}</td>
+                                <td style={{verticalAlign: 'middle', padding: '0px'}}>{item.bookingStatus}</td>
+                                {item.bookingStatus === "BOOKING" && (
+                                    <td style={{verticalAlign: 'middle', padding: '0px'}}>
+                                        <button className="btn btn-primary" onClick={() => checkIn(item)}>Check in
+                                        </button>
+                                    </td>
+                                )}
+                                {item.bookingStatus === "CHECKED_IN" && (
+                                    <td style={{verticalAlign: 'middle', padding: '0px'}}>
+                                        <button className="btn btn-secondary" onClick={() => checkOut(item)}>Check out
+                                        </button>
+                                    </td>
+                                )}
+                                {item.bookingStatus === "CANCELLED" && (
+                                    <td style={{verticalAlign: 'middle', padding: '0px'}}></td>
+                                )}
+                                {item.bookingStatus === "CHECKED_OUT" && (
+                                    <td style={{verticalAlign: 'middle', padding: '0px'}}></td>
+                                )}
+                            </tr>)
+                        })}
+
+                    </tbody>
+                </table>
+            </div>
             <PaginationComponent data={bookingList} changeCurentPage={handlePageChange} numberPerpage={bookingPerpage}/>
 
         </section>

@@ -3,6 +3,8 @@ import axios from "axios";
 import {Field, Form, Formik} from "formik";
 import {useNavigate, useParams} from "react-router";
 import UploadImageField from "../../upload";
+import Swal from "sweetalert2";
+import Constants from "../../../utils/constants";
 
 function OwnerEditHouseForm() {
     const navigate = useNavigate();
@@ -21,7 +23,7 @@ function OwnerEditHouseForm() {
         };
 
         axios
-            .get(`http://localhost:8080/house/${houseId}`, config)
+            .get(Constants.BASE_API+`/house/${houseId}`, config)
             .then((res) => {
                 setEditedHouse(res.data);
                 setBedrooms(res.data.totalBedrooms);
@@ -55,19 +57,29 @@ function OwnerEditHouseForm() {
 
         axios
             .put(
-                `http://localhost:8080/house/${houseId}`,
+                Constants.BASE_API+`/house/${houseId}`,
                 { ...editedHouse, ...values },
                 config
             )
             .then((response) => {
-                alert("House updated successfully!");
+                Swal.fire({
+                    title: "Success",
+                    text: "House added successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
                 console.log("House updated successfully:", response.data);
 
                 setEditedHouse({...editedHouse, ...values});
                 navigate('/owner')
             })
             .catch((error) => {
-                console.error("Error updating house:", error);
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong, please try again later",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                })
 
             })
             .finally(() => {
@@ -92,7 +104,7 @@ function OwnerEditHouseForm() {
                 >
                     {({ isSubmitting }) => (
                         <Form>
-                            <h2>Edit house</h2>
+                            <h2 className={'my-3'}>Edit house</h2>
                             <div className="d-flex">
                                 <div className="col-6 p-0">
                                     <div className="form-group" style={{height: 72}}>

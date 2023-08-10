@@ -2,8 +2,10 @@ import {Link} from "react-router-dom";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import * as Yup from "yup";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
+import Swal from "sweetalert2";
+import Constants from "../utils/constants";
 
 const SignupSchema = Yup.object().shape({
     username: Yup.string()
@@ -27,7 +29,9 @@ const SignupSchema = Yup.object().shape({
 export function RegisterPage() {
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
-
+    useEffect(() => {
+        document.title = "Register";
+    },[])
 
     return (
         <Formik
@@ -35,12 +39,16 @@ export function RegisterPage() {
             validationSchema={SignupSchema}
             onSubmit={values => {
                 console.log(values)
-                axios.post('http://localhost:8080/jwt/signup', values)
+                axios.post(Constants.BASE_API+'/jwt/signup', values)
                     .then((res) =>{
                         console.log(res.data)
                         if(res.data.code === '201'){
                             setErrorMessage('')
-                            alert('Successfully registered')
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Account created successfully!',
+                                timer: 1500
+                            })
                             navigate('/login')
                         } else {
                             setErrorMessage(res.data.msg)

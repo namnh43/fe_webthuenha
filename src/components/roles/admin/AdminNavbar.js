@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 export function AdminNavbar() {
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light">
+            <nav className="navbar navbar-expand-lg navbar-light border-right">
                 <ul className="navbar-nav">
                     <li className="nav-item d-block d-xl-none">
                         <a className="nav-link sidebartoggler nav-icon-hover" id="headerCollapse"

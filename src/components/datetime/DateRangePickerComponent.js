@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {DateRangePicker} from 'rsuite';
 import {endOfDay, startOfDay} from "date-fns";
+import './style.css'
 
 const { beforeToday } = DateRangePicker;
 function createDateFromString(dateString) {
@@ -47,6 +48,7 @@ const DateRangePickerComponent = ({ onChange,inputRange }) => {
             <DateRangePicker
                 placeholder="Select Date Range"
                 value={selectedRange}
+                size='lg'
                 editable={false}
                 format='yyyy-MM-dd'
                 onChange={handleSelect}

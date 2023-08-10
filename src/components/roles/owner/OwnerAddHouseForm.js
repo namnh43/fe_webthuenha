@@ -4,8 +4,11 @@ import axios from "axios";
 import UploadImageField from "../../upload";
 import {useNavigate} from "react-router";
 import * as Yup from "yup";
+import Constants from "../../../utils/constants";
+import Swal from "sweetalert2";
 
 const HouseSchema = Yup.object().shape({
+    name: Yup.string().required('* Required'),
     price: Yup.number()
         .min(0, '* Price must be greater than 0')
         .max(1000000000, '* Too high price')
@@ -58,13 +61,26 @@ function OwnerAddHouseForm() {
         };
         axios
             .post(
-                `http://localhost:8080/house`,
+                `${Constants.BASE_API}/house`,
                 values,
                 config
             )
             .then((res) => {
-                alert("Added House");
+                Swal.fire({
+                    title: "Success",
+                    text: "House added successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
                 navigation("/owner");
+            })
+            .catch(() => {
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong, please try again later",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                })
             })
             .finally(() => {
             });
@@ -88,20 +104,21 @@ function OwnerAddHouseForm() {
             >
                 {({isSubmitting, values, errors, touched}) => (
                     <Form>
-                        <h2>Add a new house</h2>
+                        <h2 className={'my-3'}>Add a new house</h2>
                         <div className="d-flex">
                             <div className="col-6 p-0">
                                 <div className="form-group" style={{height: 72}}>
-                                    <label>House Name</label>
-                                    <Field type="text" className="form-control" name="name"
+                                    <label htmlFor={'houseName'}>House Name <span className={'text-danger'}>*</span></label>
+                                    <Field type="text" className="form-control" id={'houseName'} name="name"
                                            value={houseName} onChange={handleHouseNameChange}
                                            placeholder="Enter house name..."/>
-                                    {/*<small className="form-text text-muted">We'll never share your email with anyone*/}
-                                    {/*    else.</small>*/}
+                                    {errors.name && touched.name ? (
+                                        <small className="form-text text-danger">{errors.name}</small>
+                                    ) : null}
                                 </div>
                                 <div className="form-group h-8" style={{height: 72}}>
-                                    <label>Address</label>
-                                    <Field type="text" className="form-control" name="address"
+                                    <label htmlFor={'house-address'}>Address</label>
+                                    <Field type="text" className="form-control" id={'house-address'} name="address"
                                            value={address} onChange={handleAddressChange}
                                            placeholder="Address..."/>
                                     {/*<small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone*/}
@@ -141,7 +158,7 @@ function OwnerAddHouseForm() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Price (Dollars/night)</label>
+                                    <label>Price (Dollars/night) <span className={'text-danger'}>*</span></label>
                                     <Field type="text" className="form-control" name="price" placeholder="Price..."
                                            value={price} onChange={handlePriceChange}/>
                                     {/*<small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone*/}
@@ -169,7 +186,7 @@ function OwnerAddHouseForm() {
                             type="submit"
                             className="btn btn-primary"
                             style={{alignSelf: 'right'}}
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || Object.keys(errors).length > 0}
                         >
                             {isSubmitting ? "Submitting..." : "Add New House"}
                         </button>

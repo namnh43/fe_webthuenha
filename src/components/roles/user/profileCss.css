@@ -1,0 +1,21 @@
+.outer-container {
+    width: 444px;
+    height: 444px;
+    position: relative;
+}
+
+.inner-container {
+    width: 444px;
+    height: 444px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

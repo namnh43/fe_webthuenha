@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {initializeApp} from "firebase/app";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import './uploadCss.css';
+import Swal from "sweetalert2";
 
 function UploadImageField({images, values, handleFormSubmit}) {
 
@@ -70,6 +71,19 @@ function UploadImageField({images, values, handleFormSubmit}) {
         const newFiles = selectedFiles.filter((file) => !(typeof file === "string")); // Lọc ra những file mới từ máy tính
         const existingFiles = selectedFiles.filter((file) => typeof file === "string"); // Lọc ra những file đã có URL
 
+        Swal.fire({
+            title: "Please wait...",
+            text: "Sending request...",
+            icon: "info",
+            showCancelButton: false,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            onBeforeOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
         const promises = [];
 
         for (const file of newFiles) {
@@ -92,7 +106,12 @@ function UploadImageField({images, values, handleFormSubmit}) {
                 handleImageUpload(newImages);
             })
             .catch((error) => {
-                console.error("Error getting file URLs:", error);
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong, please try again later",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                })
             });
     };
 
@@ -130,7 +149,7 @@ function UploadImageField({images, values, handleFormSubmit}) {
                 <span>
                     Drag and drop images here or click to select files &nbsp;
                 </span>
-                <input type="file" name="file" onChange={changeHandler} multiple style={{color: "transparent"}}
+                <input type="file" name="file" accept="image/*" onChange={changeHandler} multiple style={{color: "transparent"}}
                        id="fileInput"/>
                 <label htmlFor="fileInput" className="custom-file-button">Choose File</label>
             </div>
